@@ -7,6 +7,9 @@ export const Wrapper = styled.div`
   width: 1250px;
   margin: 0 auto;
 `
+export const ContentPadding = styled.div`
+  padding: 0 15px;
+`
 
 export const FlexBox = styled.div`
   display: flex;
@@ -90,6 +93,51 @@ export const Button = styled.button<{blue?: boolean; orange?: boolean, white?: b
   z-index: 1;
   overflow: hidden;
   cursor: pointer;
+  -webkit-transition:0.3s all ease;
+  transition:0.3s ease all;
+  &:hover {
+    color:#FFF;
+  }
+  &:focus {
+    color:#FFF;
+  }
+  &::before {
+     -webkit-transition:0.5s all ease;
+    transition:0.5s all ease;
+    position:absolute;
+    top:0;
+    left:50%;
+    right:50%;
+    bottom:0;
+    opacity:0;
+    content:'';
+    background-color:#37D4D9;
+    z-index:-2;
+  }
+  &:hover {
+    &::before {
+      -webkit-transition:0.5s all ease;
+      transition:0.5s all ease;
+      left:0;
+      right:0;
+      opacity:1;
+    }
+  }
+  &:focus {
+    &::before {
+      transition:0.5s all ease;
+      left:0;
+      right:0;
+      opacity:1;
+    }
+  }
 `
+
+
+
+
+
+
+
 
 

@@ -66,6 +66,11 @@ const SearchIcon = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: transform 0.4s ease;
+
+    &:hover {
+        transform: scale(1.2);
+    }
 `;
 
 interface SideSearchProps {

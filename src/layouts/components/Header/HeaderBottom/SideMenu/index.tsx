@@ -55,7 +55,7 @@ const TitleDescr = styled(Title)`
     font-weight: 400;
 `;
 
-const SocialIcon = styled(BoxIcon)`
+export const SocialIcon = styled(BoxIcon)`
     border: 0.5px solid #FF681A;
     cursor: pointer;
 `;
