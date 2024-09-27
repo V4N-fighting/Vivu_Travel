@@ -1,7 +1,41 @@
-import styled from "styled-components";
-import { FlexBox, Title } from "../../../../../styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import styled from 'styled-components';
+import { FlexBox, Title } from '../../../../../styled';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+
+
+
+const Navigation: React.FC = () => {
+  return (
+    <NavList>
+      <FlexBoxPadding>
+        <NavItem>
+          <NavItemName small>Trang chủ</NavItemName>
+        </NavItem>
+        <NavItem>
+          <NavItemName small>
+            Tours
+            <DropDownIcon icon={faChevronDown} />
+          </NavItemName>
+          <SubNavBox>
+            <SubNavItemName small>Các điểm đến</SubNavItemName>
+            <SubNavItemName small>Các hoạt động</SubNavItemName>
+            <SubNavItemName small>Các loại tour</SubNavItemName>
+          </SubNavBox>
+        </NavItem>
+        <NavItem>
+          <NavItemName small>Về chúng tôi</NavItemName>
+        </NavItem>
+        <NavItem>
+          <NavItemName small>Blog</NavItemName>
+        </NavItem>
+        <NavItem>
+          <NavItemName small>Liên hệ</NavItemName>
+        </NavItem>
+      </FlexBoxPadding>
+    </NavList>
+  );
+};
 
 const NavList = styled.ul`
   width: 100%;
@@ -37,32 +71,34 @@ const SubNavBox = styled.div`
   opacity: 0;
   z-index: -1;
   border-bottom: 3px solid #ff681a;
-  box-shadow: 0px 10px 60px 0px rgba(0, 0, 0, 0.09), 0px 3px 0px 0px rgba(231, 13, 60, 0.004);
+  box-shadow: 0px 10px 60px 0px rgba(0, 0, 0, 0.09),
+    0px 3px 0px 0px rgba(231, 13, 60, 0.004);
   transform-origin: top center;
-  transition: margin-top 0.4s ease-in-out 0s, visibility 0.4s ease-in-out 0s, opacity 0.4s ease-in-out 0s, z-index 0s;
+  transition: margin-top 0.4s ease-in-out, visibility 0.4s ease-in-out,
+    opacity 0.4s ease-in-out, z-index 0s;
   padding: 18px 20px;
   left: -27px;
 
   &::before {
-        content: "";
-        position: absolute;
-        left: 24.5px;
-        top: 30px;
-        width: 1px;
-        background-color: #ededed;
-        height: calc(100% - 60px);
-    }
+    content: '';
+    position: absolute;
+    left: 24.5px;
+    top: 30px;
+    width: 1px;
+    background-color: #ededed;
+    height: calc(100% - 60px);
+  }
 `;
 
 const SubNavItemName = styled(NavItemName)`
-    display: block;
-    margin: 0 0;
-    padding: 3px 9px;
-    padding-left: 21px;
-    position: relative;
+  display: block;
+  margin: 0 0;
+  padding: 3px 9px;
+  padding-left: 21px;
+  position: relative;
 
-    &::before {
-    content: ".";
+  &::before {
+    content: '.';
     position: absolute;
     top: 10px;
     left: 0;
@@ -73,10 +109,10 @@ const SubNavItemName = styled(NavItemName)`
     display: inline-block;
     font-size: 0.7em;
     line-height: 5.5px;
-    color: #FF681A;
+    color: #ff681a;
     font-weight: 700;
     box-shadow: inset 0px 3px 4px 0px rgba(255, 104, 26, 0.4);
-    }
+  }
 `;
 
 const NavItem = styled.li`
@@ -104,44 +140,13 @@ const NavItem = styled.li`
 
       ${SubNavItemName} {
         color: #1c1c1c;
+
         &:hover {
-            color: #37d4d9;
+          color: #37d4d9;
         }
       }
     }
   }
 `;
-
-function Navigation() {
-  return (
-    <NavList>
-      <FlexBoxPadding>
-        <NavItem>
-          <NavItemName small>Trang chủ</NavItemName>
-        </NavItem>
-        <NavItem>
-          <NavItemName small>
-            Tours
-            <DropDownIcon icon={faChevronDown} />
-          </NavItemName>
-          <SubNavBox>
-            <SubNavItemName small>Các điểm đến</SubNavItemName>
-            <SubNavItemName small>Các hoạt động</SubNavItemName>
-            <SubNavItemName small>Các loại tour</SubNavItemName>
-          </SubNavBox>
-        </NavItem>
-        <NavItem>
-          <NavItemName small>Về chúng tôi</NavItemName>
-        </NavItem>
-        <NavItem>
-          <NavItemName small>Blog</NavItemName>
-        </NavItem>
-        <NavItem>
-          <NavItemName small>Liên hệ</NavItemName>
-        </NavItem>
-      </FlexBoxPadding>
-    </NavList>
-  );
-}
 
 export default Navigation;

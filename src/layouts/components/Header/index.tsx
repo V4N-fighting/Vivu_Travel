@@ -1,7 +1,7 @@
 import HeaderBottom from "./HeaderBottom";
 import HeaderTop from "./HeaderTop";
 
-function Header() {
+const Header: React.FC = () => {
     return ( 
         <>
             <HeaderTop />

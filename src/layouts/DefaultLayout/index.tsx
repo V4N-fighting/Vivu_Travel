@@ -7,6 +7,7 @@ interface DefaultLayoutProps {
     children: ReactNode;
 }
 
+
 function DefaultLayout({ children }: DefaultLayoutProps): JSX.Element {
     return (
         <>

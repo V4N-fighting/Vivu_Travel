@@ -2,16 +2,33 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled from "styled-components";
 
-// Define the type for the styled Icon component
-const Icon = styled(FontAwesomeIcon)`
-    width: 24px;
-    height: 24px;
-`;
+
 
 // Define the props type for the CloseButtonBox component
 interface CloseButtonBoxProps {
     rotate?: boolean;
 }
+
+
+
+// Define the props type for the CloseButton component
+interface CloseButtonProps {
+    onClick: () => void;
+}
+
+const CloseButton: React.FC<CloseButtonProps> = ({ onClick }) => {
+    return (
+        <CloseButtonBox rotate onClick={onClick}>
+            <Icon icon={faXmark} />
+        </CloseButtonBox>
+    );
+}
+
+// Define the type for the styled Icon component
+const Icon = styled(FontAwesomeIcon)`
+    width: 24px;
+    height: 24px;
+`;
 
 const CloseButtonBox = styled.div<CloseButtonBoxProps>`
     align-items: center;
@@ -34,21 +51,8 @@ const CloseButtonBox = styled.div<CloseButtonBoxProps>`
 
     &:hover {
         background-color: #37d4d9;
-        transform: ${props => props.rotate && 'rotate(90deg)'};
+        transform: ${props => props.rotate ? 'rotate(90deg)' : 'rotate(0)'};
     }
 `;
-
-// Define the props type for the CloseButton component
-interface CloseButtonProps {
-    onClick: () => void;
-}
-
-function CloseButton({ onClick }: CloseButtonProps) {
-    return (
-        <CloseButtonBox rotate onClick={onClick}>
-            <Icon icon={faXmark} />
-        </CloseButtonBox>
-    );
-}
 
 export default CloseButton;

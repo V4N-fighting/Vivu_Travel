@@ -1,17 +1,20 @@
 import styled from "styled-components";
+import Purity from "./Purity";
+import Banner from "./Banner";
 
-const HomePage = styled.div`
-    witdh: 100vh;
-    height: 500px;
-    background-color: rgba(233, 90, 45, 0.4)
-`
+
 
 function Home() {
     return ( 
         <HomePage>
-            aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+            <Banner></Banner>
         </HomePage>
     );
 }
+
+const HomePage = styled.div`
+    height: 5000px;
+    background-color: rgba(233, 90, 45, 0.4)
+`
 
 export default Home;

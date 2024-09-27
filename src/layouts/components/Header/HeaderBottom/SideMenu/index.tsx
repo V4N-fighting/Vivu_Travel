@@ -1,103 +1,20 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import CloseButton from "../../../../../Component/button/CloseButton";
-import { LogoLink, Logo } from "..";
-import { FlexBox, Title } from "../../../../../styled-components";
-import { BoxIcon, Icon } from "../../HeaderTop";
-import { faTwitter, faInstagram, faPinterestP } from "@fortawesome/free-brands-svg-icons";
-import BlogItem from "../../../../../Component/BlogItem";
-
-const SideMenuWrapper = styled.div<{ isVisible: boolean; isClosing: boolean }>`
-    position: fixed;
-    z-index: 99999;
-    right: ${props => (props.isClosing ? '-500px' : '0')};
-    top: 0;
-    height: 100%;
-    width: ${props => (props.isClosing ? '0%' : '100%')};
-    background-color: rgba(0, 0, 0, 0.75);
-    opacity: ${props => (props.isVisible ? '1' : '0')};
-    visibility: ${props => (props.isVisible ? 'visible' : 'hidden')};
-    transition: right 0.8s ease, opacity 0.8s ease, visibility 0.8s ease, width 0.8s ease;
-`;
-
-const CloseButtonBox = styled.div`
-    display: flex;
-    justify-content: end;
-`;
-
-const ContentWrapper = styled.div`
-    background-color: #ffffff;
-    width: 450px;
-    margin-left: auto;
-    padding: 50px 30px;
-    height: 100%;
-    overflow: scroll;
-    position: relative;
-    right: 0;
-    opacity: 1;
-    visibility: visible;
-    transition: right 1s ease;
-`;
-
-const Content = styled.div`
-    padding: 0 15px;
-`;
-
-const LogoBox = styled.div`
-    margin-bottom: 20px;
-`;
-
-const TextBox = styled.div`
-    margin-bottom: 20px;
-`;
-
-const TitleDescr = styled(Title)`
-    font-weight: 400;
-`;
-
-export const SocialIcon = styled(BoxIcon)`
-    border: 0.5px solid #FF681A;
-    cursor: pointer;
-`;
-
-const TitleMarginTop = styled(Title)`
-    margin-top: 46px;
-    padding-bottom: 15px;
-    position: relative;
-
-    &::before {
-        content: "";
-        height: 2px;
-        width: 15px;
-        left: 0;
-        border-radius: 50px;
-        background-color: #FF681A;
-        position: absolute;
-        bottom: 0;
-    }
-
-    &::after {
-        content: "";
-        height: 2px;
-        width: 55px;
-        left: 20px;
-        border-radius: 50px;
-        background-color: #FF681A;
-        position: absolute;
-        bottom: 0;
-    }
-`;
-
-const ListBlog = styled.div`
-    margin-top: 23px;
-`;
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import CloseButton from '../../../../../Component/button/CloseButton';
+import { LogoLink, Logo } from '..';
+import { FlexBox, Title } from '../../../../../styled';
+import { BoxIcon, Icon } from '../../HeaderTop';
+import { faTwitter, faInstagram, faPinterestP } from '@fortawesome/free-brands-svg-icons';
+import BlogItem from '../../../../../Component/BlogItem';
 
 interface SideMenuProps {
     onClose: () => void;
     isVisible: boolean;
 }
 
-function SideMenu({ onClose, isVisible }: SideMenuProps) {
+
+
+const SideMenu: React.FC<SideMenuProps> = ({ onClose, isVisible }) => {
     const [isClosing, setIsClosing] = useState(false);
 
     useEffect(() => {
@@ -107,7 +24,7 @@ function SideMenu({ onClose, isVisible }: SideMenuProps) {
             setIsClosing(true);
             const timer = setTimeout(() => {
                 onClose();
-            }, 800); // Thời gian khớp với độ dài của hoạt ảnh
+            }, 800); // Time matches the animation duration
             return () => clearTimeout(timer);
         }
     }, [isVisible, onClose]);
@@ -116,7 +33,7 @@ function SideMenu({ onClose, isVisible }: SideMenuProps) {
         setIsClosing(true);
         setTimeout(() => {
             onClose();
-        }, 800); // Thời gian khớp với độ dài của hoạt ảnh
+        }, 800); // Time matches the animation duration
     };
 
     const handleWrapperClick = () => {
@@ -124,7 +41,7 @@ function SideMenu({ onClose, isVisible }: SideMenuProps) {
     };
 
     const handleContentClick = (event: React.MouseEvent) => {
-        event.stopPropagation(); // Ngăn chặn sự kiện click từ ContentWrapper gây ra handleClose
+        event.stopPropagation(); // Prevents event from bubbling up to handleWrapperClick
     };
 
     return (
@@ -183,5 +100,90 @@ function SideMenu({ onClose, isVisible }: SideMenuProps) {
         </SideMenuWrapper>
     );
 }
+
+const SideMenuWrapper = styled.div<{ isVisible: boolean; isClosing: boolean }>`
+    position: fixed;
+    z-index: 99999;
+    right: ${({ isClosing }) => (isClosing ? '-500px' : '0')};
+    top: 0;
+    height: 100%;
+    width: ${({ isClosing }) => (isClosing ? '0%' : '100%')};
+    background-color: rgba(0, 0, 0, 0.75);
+    opacity: ${({ isVisible }) => (isVisible ? '1' : '0')};
+    visibility: ${({ isVisible }) => (isVisible ? 'visible' : 'hidden')};
+    transition: right 0.8s ease, opacity 0.8s ease, visibility 0.8s ease, width 0.8s ease;
+`;
+
+const CloseButtonBox = styled.div`
+    display: flex;
+    justify-content: end;
+`;
+
+const ContentWrapper = styled.div`
+    background-color: #ffffff;
+    width: 450px;
+    margin-left: auto;
+    padding: 50px 30px;
+    height: 100%;
+    overflow-y: auto;
+    position: relative;
+    right: 0;
+    opacity: 1;
+    visibility: visible;
+    transition: right 1s ease;
+`;
+
+const Content = styled.div`
+    padding: 0 15px;
+`;
+
+const LogoBox = styled.div`
+    margin-bottom: 20px;
+`;
+
+const TextBox = styled.div`
+    margin-bottom: 20px;
+`;
+
+const TitleDescr = styled(Title)`
+    font-weight: 400;
+`;
+
+export const SocialIcon = styled(BoxIcon)`
+    border: 0.5px solid #FF681A;
+    cursor: pointer;
+`;
+
+const TitleMarginTop = styled(Title)`
+    margin-top: 46px;
+    padding-bottom: 15px;
+    position: relative;
+
+    &::before {
+        content: '';
+        height: 2px;
+        width: 15px;
+        left: 0;
+        border-radius: 50px;
+        background-color: #FF681A;
+        position: absolute;
+        bottom: 0;
+    }
+
+    &::after {
+        content: '';
+        height: 2px;
+        width: 55px;
+        left: 20px;
+        border-radius: 50px;
+        background-color: #FF681A;
+        position: absolute;
+        bottom: 0;
+    }
+`;
+
+const ListBlog = styled.div`
+    margin-top: 23px;
+`;
 
 export default SideMenu;

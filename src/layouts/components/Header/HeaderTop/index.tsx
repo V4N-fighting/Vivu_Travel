@@ -1,5 +1,5 @@
 import React from "react";
-import { Wrapper, FlexBox, Title, FlexBoxBetween } from "../../../../styled-components";
+import { Wrapper, FlexBox, Title, FlexBoxBetween } from "../../../../styled";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUser, faEnvelope } from "@fortawesome/free-regular-svg-icons";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
@@ -9,6 +9,43 @@ import styled from "styled-components";
 interface ItemContentProps {
     icon: IconProp;
     text?: string;
+}
+
+
+
+const ItemContent: React.FC<ItemContentProps> = ({ icon, text }) => {
+    return (
+        <ItemWrapper>
+            <BoxIcon><Icon icon={icon} /></BoxIcon>
+            {text && <Text small white>{text}</Text>}
+        </ItemWrapper>
+    );
+};
+
+const UserContent: React.FC<ItemContentProps> = ({ icon }) => {
+    return (
+        <ItemWrapper>
+            <User><UserIcon icon={icon} /></User>
+        </ItemWrapper>
+    );
+};
+
+const HeaderTop: React.FC = () => {
+    return (
+        <Contain>
+            <Wrapper>
+                <FlexBoxBetween>
+                    <FlexBoxPadding>
+                        <ItemContent icon={faEnvelope} text='info@themona.global' />
+                        <ItemContent icon={faPhone} text='1900 636 648' />
+                    </FlexBoxPadding>
+                    <FlexBoxPadding>
+                        <UserContent icon={faCircleUser}  />
+                    </FlexBoxPadding>
+                </FlexBoxBetween>
+            </Wrapper>
+        </Contain>
+    );
 }
 
 const Contain = styled.div`
@@ -95,40 +132,5 @@ const ItemWrapper = styled.div`
 const FlexBoxPadding = styled(FlexBox)`
     padding: 0 15px;
 `;
-
-const ItemContent: React.FC<ItemContentProps> = ({ icon, text }) => {
-    return (
-        <ItemWrapper>
-            <BoxIcon><Icon icon={icon} /></BoxIcon>
-            {text && <Text small white>{text}</Text>}
-        </ItemWrapper>
-    );
-};
-
-const UserContent: React.FC<ItemContentProps> = ({ icon }) => {
-    return (
-        <ItemWrapper>
-            <User><UserIcon icon={icon} /></User>
-        </ItemWrapper>
-    );
-};
-
-function HeaderTop() {
-    return (
-        <Contain>
-            <Wrapper>
-                <FlexBoxBetween>
-                    <FlexBoxPadding>
-                        <ItemContent icon={faEnvelope} text='info@themona.global' />
-                        <ItemContent icon={faPhone} text='1900 636 648' />
-                    </FlexBoxPadding>
-                    <FlexBoxPadding>
-                        <UserContent icon={faCircleUser}  />
-                    </FlexBoxPadding>
-                </FlexBoxBetween>
-            </Wrapper>
-        </Contain>
-    );
-}
 
 export default HeaderTop;

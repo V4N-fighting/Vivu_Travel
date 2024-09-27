@@ -4,6 +4,51 @@ import CloseButton from "../../../../../Component/button/CloseButton";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+
+
+interface SideSearchProps {
+    onClose: () => void;
+    isVisible: boolean;
+}
+
+const SideSearch: React.FC<SideSearchProps> = ({ onClose, isVisible }) => {
+    const [isClosing, setIsClosing] = useState(false);
+
+    useEffect(() => {
+        if (isVisible) {
+            setIsClosing(false);
+        } else {
+            setIsClosing(true);
+            // Đảm bảo onClose chỉ được gọi sau khi hoạt ảnh đóng hoàn tất
+            const timer = setTimeout(() => {
+                onClose();
+            }, 800); // Thời gian khớp với độ dài của hoạt ảnh
+
+            // Cleanup khi component bị unmount hoặc trước khi gọi lại effect
+            return () => clearTimeout(timer);
+        }
+    }, [isVisible, onClose]);
+
+    const handleClose = () => {
+        setIsClosing(true);
+        setTimeout(() => {
+            onClose();
+        }, 800); // Thời gian khớp với độ dài của hoạt ảnh
+    };
+
+    return (
+        <SideSearchWrapper isVisible={isVisible} isClosing={isClosing}>
+            <CloseButtonBox>
+                <CloseButton onClick={handleClose} />
+            </CloseButtonBox>
+            <BoxSearch isVisible={isVisible}>
+                <InputSearch placeholder="Search Here"/>
+                <SearchIcon><FontAwesomeIcon icon={faMagnifyingGlass} /></SearchIcon>
+            </BoxSearch>
+        </SideSearchWrapper>
+    );
+}
+
 const SideSearchWrapper = styled.div<{ isVisible: boolean; isClosing: boolean }>`
     position: fixed;
     z-index: 99999;
@@ -72,48 +117,5 @@ const SearchIcon = styled.div`
         transform: scale(1.2);
     }
 `;
-
-interface SideSearchProps {
-    onClose: () => void;
-    isVisible: boolean;
-}
-
-function SideSearch({ onClose, isVisible }: SideSearchProps) {
-    const [isClosing, setIsClosing] = useState(false);
-
-    useEffect(() => {
-        if (isVisible) {
-            setIsClosing(false);
-        } else {
-            setIsClosing(true);
-            // Đảm bảo onClose chỉ được gọi sau khi hoạt ảnh đóng hoàn tất
-            const timer = setTimeout(() => {
-                onClose();
-            }, 800); // Thời gian khớp với độ dài của hoạt ảnh
-
-            // Cleanup khi component bị unmount hoặc trước khi gọi lại effect
-            return () => clearTimeout(timer);
-        }
-    }, [isVisible, onClose]);
-
-    const handleClose = () => {
-        setIsClosing(true);
-        setTimeout(() => {
-            onClose();
-        }, 800); // Thời gian khớp với độ dài của hoạt ảnh
-    };
-
-    return (
-        <SideSearchWrapper isVisible={isVisible} isClosing={isClosing}>
-            <CloseButtonBox>
-                <CloseButton onClick={handleClose} />
-            </CloseButtonBox>
-            <BoxSearch isVisible={isVisible}>
-                <InputSearch placeholder="Search Here"/>
-                <SearchIcon><FontAwesomeIcon icon={faMagnifyingGlass} /></SearchIcon>
-            </BoxSearch>
-        </SideSearchWrapper>
-    );
-}
 
 export default SideSearch;

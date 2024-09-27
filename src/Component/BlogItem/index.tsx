@@ -1,7 +1,32 @@
 import styled from "styled-components";
-import {  Title } from "../../styled-components";
+import {  Title } from "../../styled";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarDays } from "@fortawesome/free-regular-svg-icons";
+
+
+
+interface BlogItemProps {
+    imgUrl: string,
+    blogTitle: string,
+    timeText: string
+}
+
+const BlogItem: React.FC<BlogItemProps> = ({imgUrl, blogTitle, timeText}) => {
+    return ( 
+        <Wrapper>
+            <ImageWrapper>
+                <Image src={imgUrl}/>
+            </ImageWrapper>
+            <Content>
+                <TimeBox>
+                    <Icon icon={faCalendarDays} />
+                    <TimeText>{timeText}</TimeText>
+                </TimeBox>
+                <BlogTitle>{blogTitle}</BlogTitle>
+            </Content>
+        </Wrapper>
+     );
+}
 
 const Wrapper = styled.div`
     display: flex;
@@ -47,30 +72,6 @@ const TimeText = styled.p`
     font-weight: 500;
     color: #505050;
 `
-
-interface BlogItemProps {
-    imgUrl: string,
-    blogTitle: string,
-    timeText: string
-}
-
-const BlogItem: React.FC<BlogItemProps> = ({imgUrl, blogTitle, timeText}) => {
-    return ( 
-        <Wrapper>
-            <ImageWrapper>
-                <Image src={imgUrl}/>
-            </ImageWrapper>
-            <Content>
-                <TimeBox>
-                    <Icon icon={faCalendarDays} />
-                    <TimeText>{timeText}</TimeText>
-                </TimeBox>
-                <BlogTitle>{blogTitle}</BlogTitle>
-            </Content>
-        </Wrapper>
-     );
-}
-
 
 
 export default BlogItem;

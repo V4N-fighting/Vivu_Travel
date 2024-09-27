@@ -3,6 +3,39 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 
+
+
+const ScrollToTop: React.FC = () => {
+  const [showButton, setShowButton] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.pageYOffset > 100) {
+        setShowButton(true);
+      } else {
+        setShowButton(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  return (
+    <ScrollToTopButton show={showButton} onClick={scrollToTop}>
+      <Icon icon={faArrowUp} />
+    </ScrollToTopButton>
+    
+  );
+};
+
 // Define the type for the styled Icon component
 const Icon = styled(FontAwesomeIcon)`
     width: 16px;
@@ -62,36 +95,5 @@ const ScrollToTopButton = styled.div<{show? :boolean}>`
      border: 2px dashed #FF681A;
   }
 `;
-
-const ScrollToTop = () => {
-  const [showButton, setShowButton] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.pageYOffset > 300) {
-        setShowButton(true);
-      } else {
-        setShowButton(false);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  return (
-    <ScrollToTopButton show={showButton} onClick={scrollToTop}>
-      <Icon icon={faArrowUp} />
-    </ScrollToTopButton>
-    
-  );
-};
 
 export default ScrollToTop;
