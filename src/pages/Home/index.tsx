@@ -1,6 +1,7 @@
 import styled from "styled-components";
-import Purity from "./Purity";
 import Banner from "./Banner";
+import Tip from "./Tip";
+import ListCard from "./ListCard";
 
 
 
@@ -8,13 +9,14 @@ function Home() {
     return ( 
         <HomePage>
             <Banner></Banner>
+            <Tip></Tip>
+            <ListCard></ListCard>
         </HomePage>
     );
 }
 
 const HomePage = styled.div`
     height: 5000px;
-    background-color: rgba(233, 90, 45, 0.4)
 `
 
 export default Home;
