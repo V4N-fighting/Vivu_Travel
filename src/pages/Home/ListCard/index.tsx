@@ -2,6 +2,7 @@ import styled, { keyframes } from "styled-components";
 import { SubTitle, Text, Title } from "../../../styled";
 import Card from "./Card";
 import Carousel from "../../../Component/Carousel";
+import Button from "../../../Component/button/Button";
 
 
 interface ListCardProps {
@@ -35,7 +36,7 @@ const ListCard: React.FC<ListCardProps> = ({}) => {
         <ListCardText>Gói du lịch tốt nhất của chúng tôi đã được thiết kế đặc biệt để mang đến cho bạn trải nghiệm tuyệt vời nhất.</ListCardText>
       </Header>
       <Carousel slides={cards} autoSlide autoSlideInterval={3000}></Carousel>
-      
+      <Button orange>Xem thêm</Button>
     </Wrapper>
   );
 };
