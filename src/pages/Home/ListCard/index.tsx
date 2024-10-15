@@ -3,6 +3,7 @@ import { SubTitle, Text, Title } from "../../../styled";
 import Card from "./Card";
 import Carousel from "../../../Component/Carousel";
 import Button from "../../../Component/button/Button";
+import ScrollToShow from "../../../Component/ScrollToShow";
 
 
 interface ListCardProps {
@@ -31,12 +32,12 @@ const ListCard: React.FC<ListCardProps> = ({}) => {
       <Plane src='./images/Plane.png'></Plane>
       <Circle><CircleImage></CircleImage></Circle>
       <Header>
-        <SubTitle>Chuyến tham quan tuyệt vời</SubTitle>
-        <ListCardTitle>Gói du lịch tốt nhất</ListCardTitle>
-        <ListCardText>Gói du lịch tốt nhất của chúng tôi đã được thiết kế đặc biệt để mang đến cho bạn trải nghiệm tuyệt vời nhất.</ListCardText>
+        <ScrollToShow leftToRight><SubTitle>Chuyến tham quan tuyệt vời</SubTitle></ScrollToShow>
+        <ScrollToShow rightToLeft><ListCardTitle>Gói du lịch tốt nhất</ListCardTitle></ScrollToShow>
+        <ScrollToShow bottomToTop><ListCardText>Gói du lịch tốt nhất của chúng tôi đã được thiết kế đặc biệt để mang đến cho bạn trải nghiệm tuyệt vời nhất.</ListCardText></ScrollToShow>
       </Header>
-      <Carousel slides={cards} autoSlide autoSlideInterval={3000}></Carousel>
-      <Button orange>Xem thêm</Button>
+      <ScrollToShow scale><Carousel slides={cards} autoSlide autoSlideInterval={3000}></Carousel></ScrollToShow>
+      <ScrollToShow topToBottom><Button orange>Xem thêm</Button></ScrollToShow>
     </Wrapper>
   );
 };
@@ -107,18 +108,6 @@ const turnAround = keyframes`
     transform: rotate(360deg) ;
   }
 
-`;
-
-const turnUpTurnDown = keyframes`
-  0% {
-    transform: translateY(0) ;
-  }
-  50% {
-    transform: translateY(40px) ;
-  }
-  100% {
-    transform: translateY(0px) ;
-  }
 `;
 
 
