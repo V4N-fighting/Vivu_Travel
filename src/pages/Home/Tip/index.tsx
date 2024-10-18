@@ -3,6 +3,7 @@ import styled, { keyframes } from 'styled-components';
 import { Select } from 'antd';
 import TipItem from './TipItem';
 import { SubTitle, Title } from '../../../styled';
+import ScrollToShow from '../../../Component/ScrollToShow';
 
 const { Option } = Select;
 
@@ -17,12 +18,16 @@ const Tip: React.FC<TipProps> = ({}) => {
     <Wrapper>
       <Circle><CircleImage></CircleImage></Circle>
       <Header>
-        <SubTitle>Mẹo vặt cần thiết</SubTitle>
-        <TipTitle>Những Mẹo Tuyệt Vời Làm Cho Chuyến Đi Của Bạn</TipTitle>
+        <ScrollToShow topToBottom>
+          <SupTitle>Mẹo vặt cần thiết</SupTitle>
+          <TipTitle>Những Mẹo Tuyệt Vời Làm Cho Chuyến Đi Của Bạn</TipTitle>
+        </ScrollToShow>
       </Header>
-      <TipItem  url={'./images/6-2-705x540.jpg'} label={'Camera'} subtitle={'12 Tháng Mười Hai, 2023'} title={'10 Sun Hats For Beach Days, Long Hikes, And'} text={'Nulla porttitor accumsan tincidunt. Curabitur aliquet quam id dui posuere blandit. Vestibulum ac diam sit'} ></TipItem>
-      <TipItem reverse url={'./images/7-2-705x540.jpg'} label={'Camera'} subtitle={'12 Tháng Mười Hai, 2023'} title={'10 Sun Hats For Beach Days, Long Hikes, And'} text={'Nulla porttitor accumsan tincidunt. Curabitur aliquet quam id dui posuere blandit. Vestibulum ac diam sit'} ></TipItem>
-      <Dot><DotImage></DotImage></Dot>
+      <ScrollToShow leftToRight><TipItem  url={'./images/6-2-705x540.jpg'} label={'Camera'} subtitle={'12 Tháng Mười Hai, 2023'} title={'10 Sun Hats For Beach Days, Long Hikes, And'} text={'Nulla porttitor accumsan tincidunt. Curabitur aliquet quam id dui posuere blandit. Vestibulum ac diam sit'} ></TipItem></ScrollToShow>
+      <ScrollToShow rightToLeft>
+        <TipItem reverse url={'./images/7-2-705x540.jpg'} label={'Camera'} subtitle={'12 Tháng Mười Hai, 2023'} title={'10 Sun Hats For Beach Days, Long Hikes, And'} text={'Nulla porttitor accumsan tincidunt. Curabitur aliquet quam id dui posuere blandit. Vestibulum ac diam sit'} ></TipItem>
+        
+      </ScrollToShow><Dot><DotImage></DotImage></Dot>
     </Wrapper>
   );
 };
@@ -49,6 +54,9 @@ const TipTitle = styled(Title)`
   text-align: center;
   width: 700px;
   margin: 40px 0;
+`
+const SupTitle = styled(SubTitle)`
+  text-align: center;
 `
 const turnAround = keyframes`
     0% {

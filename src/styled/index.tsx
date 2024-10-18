@@ -11,6 +11,10 @@ export const ContentPadding = styled.div`
   padding: 0 15px;
 `
 
+export const Margin_15 = styled.div`
+  margin: 0 -15px;
+`
+
 export const FlexBox = styled.div`
   display: flex;
   align-items: center;

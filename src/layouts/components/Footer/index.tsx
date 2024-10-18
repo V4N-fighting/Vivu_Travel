@@ -13,6 +13,7 @@ const Footer: React.FC = () => {
 
 const FooterWrapper = styled.div`
     position: relative;
+    margin-top: 400px;
 `;
 
 
