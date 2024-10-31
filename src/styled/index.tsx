@@ -7,6 +7,11 @@ export const Wrapper = styled.div`
   width: 1250px;
   margin: 0 auto;
 `
+
+export const WrapperPadding = styled.div`
+  padding: 100px 0;
+`
+
 export const ContentPadding = styled.div`
   padding: 0 15px;
 `
@@ -38,9 +43,10 @@ export const FontBody = styled.p`
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 `;
 
-export const Title = styled(FontBody)<{small?: boolean, medium?: boolean, white?: boolean}>`
+export const Title = styled(FontBody)<{small?: boolean, medium?: boolean, big?: boolean, white?: boolean}>`
   font-size: ${ props => 
     props.small ? '16px' :
+    props.big ? '50px' :
     props.medium ? '24px' : '54px'
   };
   color: ${ props => 
@@ -53,8 +59,13 @@ export const Title = styled(FontBody)<{small?: boolean, medium?: boolean, white?
   user-select: none
 `;
 
-export const SubTitle = styled(FontBody)<{small?: boolean}>`
-  color: #FF681A;
+export const SubTitle = styled(FontBody)<{small?: boolean, white?: boolean, blue?: boolean}>`
+  
+  color: ${ props => 
+    props.white ? '#ffffff' : 
+    props.blue ? '#37D4D9' : 
+    '#FF681A'
+  };
   font-size: ${ props => 
     props.small ? '20px' : '24px'
   };
@@ -62,13 +73,17 @@ export const SubTitle = styled(FontBody)<{small?: boolean}>`
   user-select: none;
 `;
 
-export const Text = styled(FontBody)`
+export const Text = styled(FontBody)<{white?: boolean, small?: boolean}>`
   max-width: 521px; 
   margin-bottom: 24px;
-  font-size: 18px;
+  font-size: ${ props => 
+    props.small ? '16px' : '18px'
+  };
   font-weight: 400;
   margin: 0 0 18px 0;
-  color: #505050;
+  color: ${ props => 
+    props.white ? '#ffffff' : '#505050'
+  };
   line-height: 1.625;
 `
 

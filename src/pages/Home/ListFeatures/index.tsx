@@ -22,7 +22,7 @@ const ListFeatures: React.FC<ListFeaturesProps> = ({}) => {
 };
 
 const Wrap = styled(Wrapper)`
-    padding: 100px 0;
+    padding: 0 0 100px;
 `
 
 const MarginBottom = styled.div`

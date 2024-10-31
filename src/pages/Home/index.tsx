@@ -4,6 +4,11 @@ import Tip from "./Tip";
 import ListCard from "./ListCard";
 import BestCity from "./BestCity";
 import ListFeatures from "./ListFeatures";
+import SpecialOffer from "./SpecialOffer";
+import BeautiCity from "./BeautiCity";
+import Feedback from "./Feedback";
+import News from "./News";
+import Purify from "./Banner/Purify";
 
 
 
@@ -15,12 +20,15 @@ function Home() {
             <ListCard></ListCard>
             <BestCity></BestCity>
             <ListFeatures></ListFeatures>
+            <SpecialOffer></SpecialOffer>
+            <BeautiCity></BeautiCity>
+            <Feedback />
+            <News />
         </HomePage>
     );
 }
 
 const HomePage = styled.div`
-    height: 5000px;
 `
 
 export default Home;

@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 import { SubTitle, Title, Text, Wrapper } from '../../../styled';
 import Button from '../../../Component/button/Button';
+import Purify from './Purify';
 
 const contentBanner = [
   {
@@ -75,7 +76,9 @@ const Banner: React.FC = () => {
             })}
           </BannerPavigation>
         </WrapperPavigation>
+        
       </Wrapper>
+      <Purify />
     </BannerWrapper>
   );
 };
@@ -87,6 +90,7 @@ const BannerWrapper = styled.div<{ url: string }>`
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
+  position: relative;
 `;
 
 const Container = styled.div`
