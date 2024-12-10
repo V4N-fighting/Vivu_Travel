@@ -3,8 +3,11 @@
 
 const config = {
     routes: {
-        home: '/',
-        profile: '/profile'
+        home: '/home',
+        profile: '/profile',
+        about: '/about',
+        blog: '/blog',
+        contact: '/contact',
     },
 };
 

@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef } from 'react';
-import styled from 'styled-components';
+import React, { useEffect, useState } from 'react';
+import styled, { css } from 'styled-components';
 import { SubTitle, Title, Text, Wrapper } from '../../../styled';
 import Button from '../../../Component/button/Button';
 import Purify from './Purify';
@@ -22,71 +22,70 @@ const contentBanner = [
     textContent: "Lịch sử & văn hóa",
     img1: './images/banner-img-3-1.jpg',
     img2: './images/banner-img-3-2.jpg',
-  }
+  },
 ];
 
 const Banner: React.FC = () => {
   const [activeBtn, setActiveBtn] = useState<number>(1);
 
-  const title = contentBanner.find(value => value.index === activeBtn)?.textContent || '';
-  const img1 = contentBanner.find(value => value.index === activeBtn)?.img1 || '';
-  const img2 = contentBanner.find(value => value.index === activeBtn)?.img2 || '';
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveBtn(prevActiveBtn => (prevActiveBtn % contentBanner.length) + 1);
-    }, 2000);
-
-    return () => clearInterval(interval);
-  }, []);
-
   const handleClick = (value: number) => {
     setActiveBtn(value);
   };
 
- 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveBtn((prev) => (prev % contentBanner.length) + 1);
+    }, 5000); // Tự chuyển sau mỗi 5 giây
+
+    return () => clearInterval(interval); // Xóa bộ đếm thời gian khi unmount
+  }, [activeBtn]);
+
+  const { textContent, img1, img2 } = contentBanner[activeBtn - 1];
+
+  
 
   return (
-    <BannerWrapper url='./images/banner-bg-1.png'>
+    <BannerWrapper>
       <Wrapper>
         <Container>
           <Content>
             <SubTitle>Lên đường ngay</SubTitle>
-            <Title>{title}</Title>
+            <AnimatedTitle>{textContent}</AnimatedTitle>
             <Text>Thiên nhiên đẹp mê hồn với rừng cây xanh mướt, dòng suối trong vắt và những cánh hoa rực rỡ. Mỗi khoảnh khắc đều mang lại cảm giác bình yên và tươi mới.</Text>
             <Button orange>Đặt vé ngay</Button>
           </Content>
           <Content>
-            <ImgWrapper1><Img src={img1}></Img></ImgWrapper1>
-            <ImgWrapper2><Img src={img2}></Img></ImgWrapper2>
+            <ImgWrapper1>
+              <AnimatedImg src={img1} alt="Banner Image 1" />
+            </ImgWrapper1>
+            <ImgWrapper2>
+              <AnimatedImg src={img2} alt="Banner Image 2" />
+            </ImgWrapper2>
           </Content>
         </Container>
         <WrapperPavigation>
           <BannerPavigation>
-            {[1, 2, 3].map((value, index) => {
-              return (
-                <PavigationBtn 
-                  key={index} 
-                  isActive={activeBtn === value} 
-                  onClick={() => handleClick(value)}
-                >
-                  {value}
-                </PavigationBtn>
-              );
-            })}
+            {contentBanner.map((value) => (
+              <PavigationBtn
+                key={value.index}
+                isActive={activeBtn === value.index}
+                onClick={() => handleClick(value.index)}
+              >
+                {value.index}
+              </PavigationBtn>
+            ))}
           </BannerPavigation>
         </WrapperPavigation>
-        
       </Wrapper>
       <Purify />
     </BannerWrapper>
   );
 };
 
-const BannerWrapper = styled.div<{ url: string }>`
+const BannerWrapper = styled.div`
   padding-top: 100px;
   padding-bottom: 80px;
-  background-image: url(${props => props.url});
+  background-image: url('./images/banner-bg-1.png');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
@@ -109,11 +108,14 @@ const Content = styled.div`
   position: relative;
 `;
 
-const ImgWrapper1 = styled.div<{ small?: boolean }>`
+const AnimatedTitle = styled(Title)`
+`;
+
+const ImgWrapper1 = styled.div`
   width: 70%;
 `;
 
-const ImgWrapper2 = styled.div<{ small?: boolean }>`
+const ImgWrapper2 = styled.div`
   width: 50%;
   position: absolute;
   top: 60%;
@@ -121,7 +123,7 @@ const ImgWrapper2 = styled.div<{ small?: boolean }>`
   transform: translateY(-50%);
 `;
 
-const Img = styled.img`
+const AnimatedImg = styled.img`
   width: 100%;
   border-radius: 340px;
   background-color: white;
@@ -158,7 +160,6 @@ const PavigationBtn = styled.button<{ isActive: boolean }>`
   z-index: 1;
   overflow: hidden;
   cursor: pointer;
-  -webkit-transition: 0.3s all ease;
   transition: 0.3s ease all;
 
   &:hover {

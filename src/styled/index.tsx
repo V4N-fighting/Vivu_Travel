@@ -24,6 +24,10 @@ export const FlexBox = styled.div`
   display: flex;
   align-items: center;
 `
+export const FlexBoxStretch = styled.div`
+  display: flex;
+  align-items: stretch;
+`
 
 export const FlexBoxBetween = styled(FlexBox)`
     justify-content: space-between;

@@ -14,3 +14,31 @@
     inset: 0;
     overflow: scroll; */
 }
+
+/* WebKit (Chrome, Safari, Edge) */
+/* Bo tròn thanh cuộn trên WebKit */
+::-webkit-scrollbar {
+    width: 10px; /* Độ rộng của thanh cuộn */
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px; /* Bo tròn phần nền thanh cuộn */
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #ff6600;
+    border-radius: 10px; /* Bo tròn thanh trượt */
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #e65300;
+  }
+  
+  
+  /* Firefox */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #ff6600 #f1f1f1;
+  }
+  

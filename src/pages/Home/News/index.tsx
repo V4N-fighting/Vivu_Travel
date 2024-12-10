@@ -13,10 +13,6 @@ interface NewsProps {
 
 const News: React.FC<NewsProps> = ({}) => {
 
-  
-
-
-
   return (
     <Wrapper >
       <Header>
