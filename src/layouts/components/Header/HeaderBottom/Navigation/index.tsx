@@ -1,16 +1,19 @@
 import styled from 'styled-components';
-import { FlexBox, Title } from '../../../../../styled';
+import { FlexBox, SubTitle, Title } from '../../../../../styled';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 
-
+const handleScroll = () => {
+  window.scrollTo({ top: 200, behavior: 'smooth' });
+}
 
 const Navigation: React.FC = () => {
   return (
     <NavList>
       <FlexBoxPadding>
         <NavItem>
-          <NavItemName small>Trang chủ</NavItemName>
+          <NavItemName small><LinkElement to="/">Trang chủ</LinkElement></NavItemName>
         </NavItem>
         <NavItem>
           <NavItemName small>
@@ -18,24 +21,29 @@ const Navigation: React.FC = () => {
             <DropDownIcon icon={faChevronDown} />
           </NavItemName>
           <SubNavBox>
-            <SubNavItemName small>Các điểm đến</SubNavItemName>
-            <SubNavItemName small>Các hoạt động</SubNavItemName>
-            <SubNavItemName small>Các loại tour</SubNavItemName>
+            <SubNavItemName small><LinkElement to="/destinations" onClick={handleScroll}>Các điểm đến</LinkElement></SubNavItemName>
+            <SubNavItemName small><LinkElement to="/activities" onClick={handleScroll}>Các hoạt động</LinkElement></SubNavItemName>
+            <SubNavItemName small><LinkElement to="/tours" onClick={handleScroll}>Các loại tour</LinkElement></SubNavItemName>
           </SubNavBox>
         </NavItem>
         <NavItem>
-          <NavItemName small>Về chúng tôi</NavItemName>
+          <NavItemName small><LinkElement to="/about" onClick={handleScroll}>Về chúng tôi</LinkElement></NavItemName>
         </NavItem>
         <NavItem>
-          <NavItemName small>Blog</NavItemName>
+          <NavItemName small><LinkElement to="/blog" onClick={handleScroll}>Blog</LinkElement></NavItemName>
         </NavItem>
         <NavItem>
-          <NavItemName small>Liên hệ</NavItemName>
+          <NavItemName small><LinkElement to="/contact" onClick={handleScroll}>Liên hệ</LinkElement></NavItemName>
         </NavItem>
       </FlexBoxPadding>
     </NavList>
   );
 };
+
+const LinkElement = styled(Link)`
+  text-decoration: none;
+  color: inherit;
+`
 
 const NavList = styled.ul`
   width: 100%;
@@ -125,6 +133,10 @@ const NavItem = styled.li`
 
   &:hover {
     ${NavItemName} {
+      color: #37d4d9;
+    }
+
+    ${LinkElement} {
       color: #37d4d9;
     }
 

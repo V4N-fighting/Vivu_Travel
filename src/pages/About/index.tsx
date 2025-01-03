@@ -28,6 +28,7 @@ function About() {
 }
 
 const AboutPage = styled.div`
+    overflow: hidden;
 `
 
 export default About;

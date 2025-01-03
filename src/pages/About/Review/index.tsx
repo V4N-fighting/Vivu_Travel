@@ -33,12 +33,13 @@ const Review: React.FC<ReviewProps> = ({}) => {
 
 const Wrapper = styled.div<{background: string}>`
     position: relative;
-    padding: 100px 0;
+    padding: 150px 0 100px;
     background-image: url(${props => props.background});
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
+    /* overflow-x: hidden; */
 
     &::before {
         content: '';

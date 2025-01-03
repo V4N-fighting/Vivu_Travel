@@ -1,7 +1,7 @@
 import styled, { keyframes } from "styled-components";
 import { SubTitle, Text, Title } from "../../../styled";
 import ScrollToShow from "../../../Component/ScrollToShow";
-import NewsCard from "./NewsCard";
+import NewsCard from "../../../Component/NewsCard";
 import Button from "../../../Component/button/Button";
 
 
@@ -22,9 +22,9 @@ const News: React.FC<NewsProps> = ({}) => {
       </Header>
       <ScrollToShow scale>
         <Content>
-            <NewsCard key='1' url={"./images/4-900x490.jpg"} title={"Maldives: The Travel and Experience of the Lifetime"} textLocation={"a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg "} textTime={"12 tháng Năm, 2024"} ></NewsCard>
-            <NewsCard key='2' url={"./images/5-1-900x490.jpg"} title={"Maldives: The Travel and Experience of the Lifetime"} textLocation={"a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg "} textTime={"2 tháng Năm, 2024"}></NewsCard>
-            <NewsCard key='3' url={"./images/6-1-900x490.jpg"} title={"Maldives: The Travel and Experience of the Lifetime"} textLocation={"a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg "} textTime={"2 tháng Năm, 2024"}></NewsCard>
+            <Col><NewsCard key='1' url={"./images/4-900x490.jpg"} title={"Maldives: The Travel and Experience of the Lifetime"} textLocation={"a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg "} textTime={"12 tháng Năm, 2024"} label={"Universe"} view={"2400"}></NewsCard></Col>
+            <Col><NewsCard key='2' url={"./images/5-1-900x490.jpg"} title={"Maldives: The Travel and Experience of the Lifetime"} textLocation={"a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg "} textTime={"2 tháng Năm, 2024"} label={"Universe"} view={"2454"}></NewsCard></Col>
+            <Col><NewsCard key='3' url={"./images/6-1-900x490.jpg"} title={"Maldives: The Travel and Experience of the Lifetime"} textLocation={"a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg "} textTime={"2 tháng Năm, 2024"} label={"Universe"} view={"7819"}></NewsCard></Col>
         </Content>
       </ScrollToShow>
       <ScrollToShow topToBottom><Button blue>Xem thêm</Button></ScrollToShow>
@@ -80,6 +80,8 @@ const Content = styled.div`
   margin: 0 -15px;
   padding: 40px 0;
 `
-
+const Col = styled.div`
+  padding: 0 15px 30px;
+`
 
 export default News;

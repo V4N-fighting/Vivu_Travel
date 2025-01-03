@@ -6,6 +6,7 @@ import { faBars, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import Navigation from "./Navigation";
 import SideMenu from "./SideMenu"; // Import SideMenu component
 import SideSearch from "./SideSearch";
+import { Link } from "react-router-dom";
 
 
 const HeaderBottom: React.FC = () => {
@@ -35,7 +36,7 @@ const HeaderBottom: React.FC = () => {
                     <Flex20Percent>
                         <FlexBoxPadding>
                             {/* logo */}
-                            <LogoLink>
+                            <LogoLink to='/'>
                                 <Logo src="./images/logo.png" />
                             </LogoLink>
                         </FlexBoxPadding>
@@ -71,7 +72,7 @@ const Contain = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #ffffff;
+    /* background-color: #ffffff; */
 `;
 
 const FlexBoxPadding = styled(FlexBox)<{ end?: boolean }>`
@@ -87,7 +88,7 @@ const Flex60Percent = styled.div`
     width: 60%;
 `;
 
-export const LogoLink = styled.a`
+export const LogoLink = styled(Link)`
     text-decoration: none;
     display: block;
 `;

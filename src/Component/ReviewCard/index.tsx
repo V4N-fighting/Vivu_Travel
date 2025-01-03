@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarDays } from "@fortawesome/free-regular-svg-icons";
 import StarRating from "../StarRating";
+import { Link } from "react-router-dom";
 
 
 
@@ -22,7 +23,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({src, name, star, auth, descr}) =
             </Avatar>
             <Content>
                 <Title>
-                    <TitleLink>{name}</TitleLink>
+                    <TitleLink to="/ReviewPage">{name}</TitleLink>
                 </Title>
                 <StarRating star={star} />
                 <Descr>{descr}</Descr>
@@ -56,15 +57,16 @@ const Content = styled.div`
     max-width: calc(100% - 100px);
 `
 
-const Title = styled.h4`
+const Title = styled.div`
     margin: 0 0 15px;
 `
-const TitleLink = styled.a`
-    font-size: 2.2rem;
+const TitleLink = styled(Link)`
+    text-decoration: none;
+    font-size: 24px;
     color: #212121;
     font-weight: 600;
     transition: color 0.3s ease;
-    display: inline-block;
+    display: block;
     width: 80%;
     overflow: hidden; /* Ẩn phần vượt quá */
     white-space: nowrap; /* Ngăn không cho xuống dòng */

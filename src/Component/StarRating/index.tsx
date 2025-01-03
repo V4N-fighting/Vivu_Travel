@@ -4,10 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 
 
-const StarContainer = styled.div`
-  display: flex;
-  gap: 5px; 
-`;
 
   
 const StarRating: React.FC<{ star: number }> = ({ star }) => {
@@ -19,5 +15,12 @@ const StarRating: React.FC<{ star: number }> = ({ star }) => {
     </StarContainer>
   );
 };
+
+
+const StarContainer = styled.div`
+  display: flex;
+  gap: 5px; 
+  color: #37d4d9;
+`;
 
 export default StarRating;

@@ -52,7 +52,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ onClose, isVisible }) => {
                 </CloseButtonBox>
                 <Content onClick={handleContentClick}>
                     <LogoBox>
-                        <LogoLink>
+                        <LogoLink to='/'>
                             <Logo src="./images/logo.png" />
                         </LogoLink>
                     </LogoBox>

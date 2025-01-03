@@ -5,6 +5,7 @@ import { faCircleUser, faEnvelope } from "@fortawesome/free-regular-svg-icons";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { faPhone } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 interface ItemContentProps {
     icon: IconProp;
@@ -40,7 +41,7 @@ const HeaderTop: React.FC = () => {
                         <ItemContent icon={faPhone} text='1900 636 648' />
                     </FlexBoxPadding>
                     <FlexBoxPadding>
-                        <UserContent icon={faCircleUser}  />
+                        <Link to='/login'><UserContent icon={faCircleUser}  /></Link>
                     </FlexBoxPadding>
                 </FlexBoxBetween>
             </Wrapper>

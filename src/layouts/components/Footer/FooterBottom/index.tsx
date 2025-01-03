@@ -5,13 +5,16 @@ import { SocialIcon } from "../../Header/HeaderBottom/SideMenu";
 import { faTwitter, faInstagram, faPinterestP, faFacebookF } from "@fortawesome/free-brands-svg-icons";
 import { Icon } from "../../Header/HeaderTop";
 import Button from "../../../../Component/button/Button";
+import { Link } from "react-router-dom";
 
 // Define the props type for the FooterBottomWrapper component
 interface FooterBottomWrapperProps {
     url: string;
 }
 
-
+const handleScroll = () => {
+    window.scrollTo({ top: 200, behavior: 'smooth' });
+  }
 
 const FooterBottom: React.FC = () => {
     return (
@@ -20,7 +23,7 @@ const FooterBottom: React.FC = () => {
                 <Wrapper>
                     <Content>
                         <FirstColumn>
-                            <LogoLink>
+                            <LogoLink to='/'>
                                 <Logo src="./images/2-e1708591603100.png" />
                             </LogoLink>
                             <Descr>
@@ -44,11 +47,11 @@ const FooterBottom: React.FC = () => {
                         <SecondColumn>
                             <TitleColumn>Điều hướng</TitleColumn>
                             <MenuList>
-                                <MenuItem>Trang chủ</MenuItem>
-                                <MenuItem>Tours</MenuItem>
-                                <MenuItem>Về chúng tôi</MenuItem>
-                                <MenuItem>Blog</MenuItem>
-                                <MenuItem>Liên hệ</MenuItem>
+                                <MenuItem><LinkElement to="/home" onClick={handleScroll}>Trang chủ</LinkElement></MenuItem>
+                                <MenuItem><LinkElement to="/tours" onClick={handleScroll}>Tours</LinkElement></MenuItem>
+                                <MenuItem><LinkElement to="/about" onClick={handleScroll}>Về chúng tôi</LinkElement></MenuItem>
+                                <MenuItem><LinkElement to="/blog" onClick={handleScroll}>Blog</LinkElement></MenuItem>
+                                <MenuItem><LinkElement to="/contact" onClick={handleScroll}>Liên hệ</LinkElement></MenuItem>
                             </MenuList>
                         </SecondColumn>
                         <ThirdColumn>
@@ -100,6 +103,11 @@ const FooterBottom: React.FC = () => {
         </FooterBottomWrapper>
     );
 };
+
+const LinkElement = styled(Link)`
+  text-decoration: none;
+  color: inherit;
+`
 
 const FooterBottomWrapper = styled.div<FooterBottomWrapperProps>`
     background-image: url(${props => props.url});
