@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 
 
@@ -92,6 +93,18 @@ export const Text = styled(FontBody)<{white?: boolean, small?: boolean}>`
   line-height: 1.625;
 `
 
+export const Icon = styled(FontAwesomeIcon)<{fontsize?: string, padding?: string, margin?: string, color?: string, hover?: boolean}>`
+    margin: ${props => props.margin ? props.margin : ''};
+    font-size: ${props => props.fontsize ? props.fontsize : ''};
+    padding: ${props => props.padding ? props.padding : ''};
+    color: ${props => props.color && props.color};
+    cursor: pointer;
+
+    &:hover {
+      color: ${props => props.hover && 'var(--primary-color)'}
+    }
+`
+
 // Grid system
 export const Grid = styled.div`
   width: 100%;
@@ -113,11 +126,15 @@ export const GridRow = styled.div<{ margin?: string }>`
   
   margin-left: calc(-1 * var(--grid-margin));
   margin-right: calc(-1 * var(--grid-margin));
+  margin-top: calc(1 * var(--grid-margin));
+  margin-bottom: calc(1 * var(--grid-margin));
 `;
 
 export const GridCol = styled.div`
   padding-left: var(--grid-margin);
   padding-right: var(--grid-margin);
+  margin-top: var(--grid-margin);
+  margin-bottom: var(--grid-margin);
 `;
 export const GridCol_1 = styled(GridCol)`
   flex: 0 0 8.33333%;

@@ -56,7 +56,7 @@ const SideSearchWrapper = styled.div<{ isVisible: boolean; isClosing: boolean }>
     top: 0;
     height: 100%;
     width: ${props => (props.isClosing ? '0%' : '100%')};
-    background-color: rgba(0, 0, 0, 0.9);
+    background-color: rgb(0, 0, 0);
     opacity: ${props => (props.isVisible ? '1' : '0')};
     visibility: ${props => (props.isVisible ? 'visible' : 'hidden')};
     transition: left 0.8s ease, opacity 0.8s ease, visibility 0.8s ease, width 0.8s ease;

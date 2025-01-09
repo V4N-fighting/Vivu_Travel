@@ -11,19 +11,9 @@
 2) Tạo database
 2) Viết xử lý logic
 
-# Các page còn phải viết giao diện
-    1) Register -> (ok)
-    2) Login -> (ok)
-    3) Profile -> (ok)
+# Cần chỉnh sửa lại card
 
-    4) Các điểm đến (trong nav) -> (ok)
-    5) Các hoạt động (trong nav) -> (ok)
-    6) Các loại tour (trong nav) -> (ok)
-
-    ---> trang trips
-
-    7) Trang chi tiết (dùng được cho cả 4 - 5 - 6)
-
+    7) Trang chi tiết 
     8) Trang chi tiết chuyến đi
     9) Trang chi tiết blog
 

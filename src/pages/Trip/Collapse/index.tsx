@@ -3,13 +3,7 @@ import React from 'react';
 import { CaretRightOutlined } from '@ant-design/icons';
 import type { CollapseProps } from 'antd';
 import { Collapse, theme } from 'antd';
-import { Styled } from 'styled-components';
 
-const text = `
-  A dog is a type of domesticated animal.
-  Known for its loyalty and faithfulness,
-  it can be found as a welcome guest in many households across the world.
-`;
 
 interface CollapseComponentProps {
   label: string;

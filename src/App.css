@@ -9,6 +9,8 @@
 #root {
     position: relative;
     inset: 0;
+
+    --primary-color: #ff6600;
     
     /* position: fixed;
     inset: 0;
