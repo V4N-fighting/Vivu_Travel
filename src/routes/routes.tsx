@@ -4,6 +4,7 @@ import Home from '../pages/Home';
 import Profile from '../pages/Profile';
 import About from '../pages/About';
 import Blog from '../pages/Blog';
+import BlogDetail from '../pages/BlogDetail';
 import Contact from '../pages/Contact';
 import Register from '../layouts/components/Register';
 import Login from '../layouts/components/Login';
@@ -11,10 +12,12 @@ import Destination from '../pages/Destination';
 import Activity from '../pages/Activity';
 import Tour from '../pages/Tour';
 import Trip from '../pages/Trip';
+import Checkout from '../pages/Checkout';
+import TourDetail from '../pages/TourDetail';
 
 interface Route {
     path: string;
-    component: React.ComponentType;
+    component: React.ComponentType<any>;
     layout: string;
 }
 
@@ -32,6 +35,9 @@ const publicRoutes: Route[] = [
     { path: config.routes.activity, component: Activity, layout: 'default' },
     { path: config.routes.tour, component: Tour, layout: 'default' },
     { path: config.routes.trip, component: Trip, layout: 'default' },
+    { path: config.routes.blog_detail, component: BlogDetail, layout: 'default' },
+    { path: config.routes.tour_detail, component: TourDetail, layout: 'default' },
+    { path: config.routes.check_out, component: Checkout, layout: 'default' },
 ];
 
 const privateRoutes: Route[] = [];

@@ -40,7 +40,7 @@ const HeaderTop: React.FC = () => {
                         <ItemContent icon={faEnvelope} text='info@themona.global' />
                         <ItemContent icon={faPhone} text='1900 636 648' />
                     </FlexBoxPadding>
-                    <FlexBoxPadding>
+                    <FlexBoxPadding style={{justifyContent: 'end'}}>
                         <Link to='/login'><UserContent icon={faCircleUser}  /></Link>
                     </FlexBoxPadding>
                 </FlexBoxBetween>
@@ -50,9 +50,9 @@ const HeaderTop: React.FC = () => {
 }
 
 const Contain = styled.div`
-    display: flex;
+    /* display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: center; */
     background-color: #1C1C1C;
 `
 

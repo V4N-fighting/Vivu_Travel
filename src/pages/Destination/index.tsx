@@ -2,7 +2,6 @@ import styled from "styled-components";
 import Banner from "../../Component/Banner";
 import { Grid, GridCol_4, GridRow } from "../../styled";
 import TourCard from "../../Component/TourCard";
-import { useState } from "react";
 import Pagination from './../../Component/Pagination/index';
 
 // Dữ liệu mẫu
@@ -31,24 +30,26 @@ function Destination() {
         thisPage={"/Các điểm đến"}
       />
       <Container>
-        <Pagination items={destinations} 
-                    itemsPerPage={9} 
-                    scrollToTop={650}
-                    renderItems={(curItems) => (
-                      <Grid>
-                        <GridRow margin="20px">
-                          {curItems.map((destination, index) => (
-                            <GridCol_4 key={index}>
-                              <TourCard
-                                url={destination.url}
-                                label={destination.label}
-                                name={destination.name}
-                              />
-                            </GridCol_4>
-                          ))}
-                        </GridRow>
-                      </Grid>
-                    )} />
+        <Pagination 
+          items={destinations} 
+          itemsPerPage={9} 
+          scrollToTop={650}
+          renderItems={(curItems) => (
+            <Grid>
+              <GridRow margin="20px">
+                {curItems.map((destination, index) => (
+                  <GridCol_4 key={index}>
+                    <TourCard
+                      url={destination.url}
+                      label={destination.label}
+                      name={destination.name}
+                    />
+                  </GridCol_4>
+                ))}
+              </GridRow>
+            </Grid>
+          )} 
+        />
       </Container>
     </>
   );

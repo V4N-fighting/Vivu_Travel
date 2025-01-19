@@ -17,7 +17,7 @@ const Navigation: React.FC = () => {
         </NavItem>
         <NavItem>
           <NavItemName small>
-            Tours
+            <LinkElement to="/tour_detail" onClick={handleScroll}>Tours</LinkElement>
             <DropDownIcon icon={faChevronDown} />
           </NavItemName>
           <SubNavBox>

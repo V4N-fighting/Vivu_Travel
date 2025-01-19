@@ -11,13 +11,9 @@
 2) Tạo database
 2) Viết xử lý logic
 
-# Cần chỉnh sửa lại card
+# Cần làm cho xong 
 
-    7) Trang chi tiết 
-    8) Trang chi tiết chuyến đi
-    9) Trang chi tiết blog
-
-    10) Giao diện admin
+2) Giao diện admin
 
 
 

@@ -24,6 +24,7 @@ export const Margin_15 = styled.div`
 export const FlexBox = styled.div`
   display: flex;
   align-items: center;
+  width: 100%;
 `
 export const FlexBoxStretch = styled.div`
   display: flex;
@@ -78,19 +79,18 @@ export const SubTitle = styled(FontBody)<{small?: boolean, white?: boolean, blue
   user-select: none;
 `;
 
-export const Text = styled(FontBody)<{white?: boolean, small?: boolean}>`
-  max-width: 521px; 
-  /* width: 100%; */
-  margin-bottom: 24px;
+export const Text = styled(FontBody)<{white?: boolean, small?: boolean, bold?: boolean, margin?: string, color?: string}>`
+  width: 100%;
+  margin: ${props => props.margin ? props.margin : '0 0 14px'};
   font-size: ${ props => 
     props.small ? '16px' : '18px'
   };
-  font-weight: 400;
-  margin: 0 0 18px 0;
-  color: ${ props => 
+  font-weight: ${props => props.bold ? 'bold' : 400};
+  color: ${ props => props.color ? props.color :
     props.white ? '#ffffff' : '#505050'
   };
   line-height: 1.625;
+  text-align: justify;
 `
 
 export const Icon = styled(FontAwesomeIcon)<{fontsize?: string, padding?: string, margin?: string, color?: string, hover?: boolean}>`

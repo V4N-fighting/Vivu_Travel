@@ -7,18 +7,22 @@ import styled from "styled-components";
 // Define the props type for the CloseButtonBox component
 interface CloseButtonBoxProps {
     rotate?: boolean;
+    white?: boolean
+
 }
 
 
 
 // Define the props type for the CloseButton component
 interface CloseButtonProps {
-    onClick: () => void;
+    onClick?: () => void;
+    white?: boolean
+    style?: React.CSSProperties;
 }
 
-const CloseButton: React.FC<CloseButtonProps> = ({ onClick }) => {
+const CloseButton: React.FC<CloseButtonProps> = ({ onClick, white, style }) => {
     return (
-        <CloseButtonBox rotate onClick={onClick}>
+        <CloseButtonBox rotate onClick={onClick} white={white} style={style}>
             <Icon icon={faXmark} />
         </CloseButtonBox>
     );
@@ -38,8 +42,8 @@ const CloseButtonBox = styled.div<CloseButtonBoxProps>`
     height: 50px;
     line-height: 50px;
     padding: 0;
-    background-color: #FF681A;
-    color: #ffffff;
+    background-color:  ${props => props.white ? 'white' : '#FF681A'};
+    color: ${props => props.white ? '#FF681A' : '#ffffff'};;
     border: none;
     border-radius: 50%;
     transform: rotate(0);
@@ -50,8 +54,9 @@ const CloseButtonBox = styled.div<CloseButtonBoxProps>`
     text-align: center;
 
     &:hover {
-        background-color: #37d4d9;
+        background-color: ${props => props.white ? 'white' : '#37d4d9'};
         transform: ${props => props.rotate ? 'rotate(90deg)' : 'rotate(0)'};
+        color: ${props => props.white && '#37d4d9'}
     }
 `;
 

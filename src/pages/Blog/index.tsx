@@ -1,11 +1,8 @@
 import styled from "styled-components";
-import { MouseEvent, useState } from "react";
 import Banner from "../../Component/Banner";
 import NewsCard from "../../Component/NewsCard";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { Title } from "../../styled";
-import BlogItem from "../../Component/BlogItem";
+import Sidebar from "./Sidebar";
+import Pagination from "../../Component/Pagination";
 
 interface NewsData {
     id: number;
@@ -35,20 +32,6 @@ function Blog() {
     
     ];
 
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const itemsPerPage = 4;
-
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const paginatedNews = newsData.slice(startIndex, startIndex + itemsPerPage);
-
-    const totalPages = Math.ceil(newsData.length / itemsPerPage);
-
-    const handlePageChange = (newPage: number, e: MouseEvent) => {
-        console.log(e)
-        setCurrentPage(newPage);
-        window.scrollTo({ top: 600, behavior: 'smooth' });
-    };
-
     return (
         <>
             <Banner
@@ -58,79 +41,28 @@ function Blog() {
             />
             <BlogPage>
                 <Contain>
-                    <Content>
-                        {paginatedNews.map((news) => (
-                            <Col key={news.id}>
-                                <NewsCard
-                                    url={news.url}
-                                    title={news.title}
-                                    textLocation={news.textLocation}
-                                    textTime={news.textTime}
-                                    label={news.label}
-                                    view={news.view}
-                                />
-                            </Col>
-                        ))}
-                    </Content>
-                    <Pagination>
-                        {Array.from({ length: totalPages }, (_, index) => (
-                            <PageButton
-                                key={index}
-                                active={index + 1 === currentPage}
-                                onClick={(e) => handlePageChange(index + 1, e)}
-                            >
-                                {index + 1}
-                            </PageButton>
-                        ))}
-                    </Pagination>
+                    <Pagination 
+                        items={newsData} 
+                        itemsPerPage={4} 
+                        renderItems={(curItem) => (
+                            <Content>
+                                {curItem.map((news) => (
+                                    <Col key={news.id}>
+                                        <NewsCard
+                                            url={news.url}
+                                            title={news.title}
+                                            textLocation={news.textLocation}
+                                            textTime={news.textTime}
+                                            label={news.label}
+                                            view={news.view}
+                                        />
+                                    </Col>
+                                ))}
+                            </Content>
+                        )} 
+                    />
                 </Contain>
-                <SideBar>
-                    <SearchBox>
-                        {/* <Title medium>Tìm kiếm</Title> */}
-                        <Icon icon={faMagnifyingGlass} />
-                        <SearchInput placeholder="Tìm kiếm bài viết" />
-                    </SearchBox>
-                    <TypeBox>
-                        <Title small>Chọn loại bài viết</Title>
-                        <TypeItem>
-                            <input type="checkbox" />
-                            <span>Vũ trụ</span>
-                        </TypeItem>
-                        <TypeItem>
-                            <input type="checkbox" />
-                            <span>Xàm xí</span>
-                        </TypeItem>
-                        <TypeItem>
-                            <input type="checkbox" />
-                            <span>Tào lao</span>
-                        </TypeItem>
-                    </TypeBox>
-                    <OrtherBlog>
-                        <Title small>Các bài viết khác</Title>
-                        <ListBlog>
-                            <BlogItem
-                                imgUrl="./images/insta6.jpg"
-                                timeText="12 Tháng Mười Hai 2024"
-                                blogTitle="10 Sun Hats For Beach Days, Long"
-                            />
-                            <BlogItem
-                                imgUrl="./images/insta5.jpg"
-                                timeText="12 Tháng Mười Hai 2024"
-                                blogTitle="10 Sun Hats For Beach Days, Long"
-                            />
-                            <BlogItem
-                                imgUrl="./images/insta4.jpg"
-                                timeText="12 Tháng Mười Hai 2024"
-                                blogTitle="10 Sun Hats For Beach Days, Long"
-                            />
-                            <BlogItem
-                                imgUrl="./images/insta3.jpg"
-                                timeText="12 Tháng Mười Hai 2024"
-                                blogTitle="10 Sun Hats For Beach Days, Long"
-                            />
-                        </ListBlog>
-                    </OrtherBlog>
-                </SideBar>
+                <Sidebar />
             </BlogPage>
             
         </>
@@ -165,92 +97,7 @@ const Col = styled.div`
     padding: 0 15px 30px;
 `;
 
-const Pagination = styled.div`
-    display: flex;
-    justify-content: center;
-    margin-top: 40px;
 
-`;
 
-const PageButton = styled.button<PageButtonProps>`
-    margin: 0 5px;
-    padding: 8px 16px;
-    border: none;
-    background-color: ${({ active }) => (active ? "#37D4D9" : "#f0f0f0")};
-    color: ${({ active }) => (active ? "#fff" : "#000")};
-    cursor: pointer;
-
-    &:hover {
-        background-color: #37D4D9;
-        color: #fff;
-    }
-`;
-
-interface PageButtonProps {
-    active: boolean;
-}
-
-const SideBar = styled.div`
-    width: 30%;
-    padding:  0 10px 10px;
-    /* margin: 0 10px; */
-`;
-
-const SearchBox = styled.div`
-    padding: 20px 30px;
-    display: flex;
-    align-items: center;
-    border-radius: 20px;
-    border: 1px solid red;
-    margin: 0 0 30px;
-`
-const SearchInput = styled.input`
-    width: 100%;
-    font-size: 14px;
-    color: #777777;
-    border: none;
-    outline-color: none;
-    padding: 10px 8px;
-
-    &:focus {
-        outline: none;
-        border: none;
-    }
-`
-
-const Icon = styled(FontAwesomeIcon)`
-    margin-right: 5px;
-    font-size: 18px;
-`
-
-const TypeBox = styled.div`
-    padding: 20px 30px;
-    border-radius: 20px;
-    border: 1px solid red;
-    margin: 0 0 30px;
-`
-const TypeItem = styled.div`
-    padding: 10px 0 10px 10px;
-
-    & input {
-        font-size: 14px;
-    }
-
-    & span {
-        font-size: 14px;
-        color: black;
-        margin-left: 20px;
-    }
-`
-
-const OrtherBlog = styled.div`
-    padding: 20px 30px;
-    border-radius: 20px;
-    border: 1px solid red;
-    margin: 0 0 15px;
-`
-const ListBlog = styled.div`
-    margin-top: 23px;
-`;
 
 export default Blog;

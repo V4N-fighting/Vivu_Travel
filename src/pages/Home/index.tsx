@@ -8,7 +8,6 @@ import SpecialOffer from "./SpecialOffer";
 import BeautiCity from "./BeautiCity";
 import Feedback from "./Feedback";
 import News from "./News";
-import Purify from "./Banner/Purify";
 
 
 

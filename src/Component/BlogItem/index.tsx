@@ -55,14 +55,8 @@ const Content = styled.div`
 const TimeBox = styled.div`
     margin-bottom: 2px;
     display: flex;
-    align-item: center;
 `
 
-const BlogTitle = styled(Title)`
-    font-size: 20px;
-    font-weight: 500;
-    margin: 0;
-`
 
 const Icon = styled(FontAwesomeIcon)`
     margin-right: 5px;
@@ -72,6 +66,12 @@ const TimeText = styled.p`
     font-size: 14px;
     font-weight: 500;
     color: #505050;
+`
+
+const BlogTitle = styled(Title)`
+    font-size: 20px;
+    font-weight: 500;
+    margin: 0;
 `
 
 
