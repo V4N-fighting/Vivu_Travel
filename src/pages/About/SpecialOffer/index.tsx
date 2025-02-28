@@ -1,7 +1,7 @@
 
 import Button from "../../../Component/button/Button";
 import Loader from "../Loader";
-import { FlexBoxBetween, SubTitle, Title, Wrapper, Text } from "../../../styled";
+import { FlexBoxBetween, SupTitle, Title, Wrapper, Text } from "../../../styled";
 import { styled } from 'styled-components';
 
 
@@ -15,7 +15,7 @@ const SpecialOffer: React.FC<SpecialOfferProps> = ({}) => {
       <Wrapper>
         <FlexBoxBetween>
         <Content>
-            <SubTitle white small>Go & Discover</SubTitle>
+            <SupTitle white small>Go & Discover</SupTitle>
             <Title white big>Nhận ưu đãi đặt biệt</Title>
             <Text white small>Khám phá những ưu đãi đặc biệt độc đáo và tiết kiệm hấp dẫn chỉ dành riêng cho bạn.</Text>
             <Button white >Tạo tài khoản</Button>
@@ -43,10 +43,5 @@ const Content = styled.div`
   width: 41.67%;
   padding: 15px;
 `
-
-
-
-
-
 
 export default SpecialOffer;

@@ -3,8 +3,6 @@ import Banner from "../../Component/Banner";
 import Intro from "./Intro";
 import News from "../Home/News";
 import SpecialOffer from "./SpecialOffer";
-import Loader from "./Loader";
-import ReviewCard from "../../Component/ReviewCard";
 import Review from "./Review";
 
 

@@ -1,7 +1,5 @@
 
 import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendarDays } from "@fortawesome/free-regular-svg-icons";
 import StarRating from "../StarRating";
 import { Link } from "react-router-dom";
 

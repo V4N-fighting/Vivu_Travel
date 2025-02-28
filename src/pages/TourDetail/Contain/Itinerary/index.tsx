@@ -55,14 +55,13 @@ const Item: React.FC<ItemProps> = ({ plan, detail, showAll, index }) => {
                 color="red"
             />
             <Plan onClick={() => setShowDetail(!showDetail)}>
-                <Text small bold margin="0" color="red">
+                <Text small bold  color="red">
                     <span style={{color: 'black'}}>Ngày {index}: &nbsp;</span>
                     {plan}
                 </Text>
                 <Icon
                     icon={!showDetail ? faPlus : faMinus}
                     fontSize="18px"
-                    padding="5px"
                     color="orange"
                     hover
                      
@@ -120,7 +119,7 @@ const ItemWrapper = styled.div`
         background-color: red;
         position: absolute;
         top: 0;
-        left: -35px;
+        left: -26px;
     }
 `
 

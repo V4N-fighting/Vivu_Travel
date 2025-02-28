@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { FlexBoxBetween, SubTitle, Title, Wrapper, WrapperPadding, Text } from "../../../styled";
+import { FlexBoxBetween, SupTitle, Title, Wrapper, WrapperPadding, Text } from "../../../styled";
 import Button from "../../../Component/button/Button";
 import { StarFilled } from '@ant-design/icons';
 
@@ -15,8 +15,8 @@ const Feedback: React.FC<FeedbackProps> = ({}) => {
                 <WrapperPadding>
                         <FlexBoxBetween>
                             <Content>
-                                <SubTitle blue>Đi & Khám phá</SubTitle>
-                                <Title white>Khách hàng của chúng tôi</Title>
+                                <SupTitle blue>Đi & Khám phá</SupTitle>
+                                <Title white big>Khách hàng của chúng tôi</Title>
                                 <Text white>Đánh giá khách hàng là một phần quan trọng trong việc đánh giá chất lượng dịch vụ hoặc sản phẩm mà một công ty cung cấp.</Text>
                                 <Button blue>Xem thêm</Button>
                             </Content>

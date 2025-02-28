@@ -4,8 +4,7 @@ import Sidebar from "../Blog/Sidebar";
 import VideoPlayer from "../../Component/VideoPlayer";
 import { Title, Text, GridRow, Grid, Icon } from "../../styled";
 import { faCalendarDays } from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { GridCol_4 } from './../../styled/index';
+import { GridCol } from './../../styled/index';
 import Button from "../../Component/button/Button";
 import { faFacebookF, faInstagram, faPinterestP, faTwitter } from "@fortawesome/free-brands-svg-icons";
 
@@ -65,9 +64,9 @@ const BlogDetail:React.FC<BlogDetailProps> = ({
                     <Text>{TextContent1}</Text>
                     <Grid>
                         <GridRow margin="20px">
-                            <GridCol_4><Image src={img1}/></GridCol_4>
-                            <GridCol_4><Image src={img2}/></GridCol_4>
-                            <GridCol_4><Image src={img3}/></GridCol_4>
+                            <GridCol col={4}><Image src={img1}/></GridCol>
+                            <GridCol col={4}><Image src={img2}/></GridCol>
+                            <GridCol col={4}><Image src={img3}/></GridCol>
                         </GridRow>
                     </Grid>
                     <Text>{TextContent2}</Text>

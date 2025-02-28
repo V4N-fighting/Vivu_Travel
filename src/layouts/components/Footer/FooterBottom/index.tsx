@@ -1,9 +1,8 @@
 import styled, { keyframes } from "styled-components";
-import { ContentPadding, Wrapper, Text, FlexBox, Title } from "../../../../styled";
+import { Wrapper, Text, FlexBox, Title, Icon, Grid, GridRow, GridCol } from "../../../../styled";
 import { LogoLink, Logo } from "../../Header/HeaderBottom";
 import { SocialIcon } from "../../Header/HeaderBottom/SideMenu";
 import { faTwitter, faInstagram, faPinterestP, faFacebookF } from "@fortawesome/free-brands-svg-icons";
-import { Icon } from "../../Header/HeaderTop";
 import Button from "../../../../Component/button/Button";
 import { Link } from "react-router-dom";
 
@@ -22,67 +21,63 @@ const FooterBottom: React.FC = () => {
             <ContentWrapper>
                 <Wrapper>
                     <Content>
-                        <FirstColumn>
-                            <LogoLink to='/'>
-                                <Logo src="./images/2-e1708591603100.png" />
-                            </LogoLink>
-                            <Descr>
-                                Chào mừng bạn đến với gói du lịch tốt nhất của chúng tôi! Nếu bạn đang tìm kiếm một hành trình đáng nhớ và tiện ích, đây là lựa chọn hoàn hảo dành cho bạn.
-                            </Descr>
-                            <FlexBox>
-                                <SocialIconItem>
-                                    <IconItem icon={faFacebookF} />
-                                </SocialIconItem>
-                                <SocialIconItem>
-                                    <IconItem icon={faTwitter} />
-                                </SocialIconItem>
-                                <SocialIconItem>
-                                    <IconItem icon={faInstagram} />
-                                </SocialIconItem>
-                                <SocialIconItem>
-                                    <IconItem icon={faPinterestP} />
-                                </SocialIconItem>
-                            </FlexBox>
-                        </FirstColumn>
-                        <SecondColumn>
-                            <TitleColumn>Điều hướng</TitleColumn>
-                            <MenuList>
-                                <MenuItem><LinkElement to="/home" onClick={handleScroll}>Trang chủ</LinkElement></MenuItem>
-                                <MenuItem><LinkElement to="/tours" onClick={handleScroll}>Tours</LinkElement></MenuItem>
-                                <MenuItem><LinkElement to="/about" onClick={handleScroll}>Về chúng tôi</LinkElement></MenuItem>
-                                <MenuItem><LinkElement to="/blog" onClick={handleScroll}>Blog</LinkElement></MenuItem>
-                                <MenuItem><LinkElement to="/contact" onClick={handleScroll}>Liên hệ</LinkElement></MenuItem>
-                            </MenuList>
-                        </SecondColumn>
-                        <ThirdColumn>
-                            <TitleColumn>Instagram</TitleColumn>
-                            <GridBox>
-                                <GridItem>
-                                    <ItemImg src="./images/insta1.jpg" />
-                                </GridItem>
-                                <GridItem>
-                                    <ItemImg src="./images/insta2.jpg" />
-                                </GridItem>
-                                <GridItem>
-                                    <ItemImg src="./images/insta3.jpg" />
-                                </GridItem>
-                                <GridItem>
-                                    <ItemImg src="./images/insta4.jpg" />
-                                </GridItem>
-                                <GridItem>
-                                    <ItemImg src="./images/insta5.jpg" />
-                                </GridItem>
-                                <GridItem>
-                                    <ItemImg src="./images/insta6.jpg" />
-                                </GridItem>
-                            </GridBox>
-                        </ThirdColumn>
-                        <FourthColumn>
-                            <TitleColumn>Theo dõi</TitleColumn>
-                            <Descr>Đăng ký để nhận được tin tức mới nhất</Descr>
-                            <Input placeholder="Email..." />
-                            <Button uppercase orange>Đăng ký</Button>
-                        </FourthColumn>
+                        <Grid>
+                            <GridRow margin="10px">
+                                <GridCol col={3}>
+                                    <LogoLink to='/'>
+                                        <Logo src="./images/2-e1708591603100.png" />
+                                    </LogoLink>
+                                    <Descr>
+                                        Chào mừng bạn đến với gói du lịch tốt nhất của chúng tôi! Nếu bạn đang tìm kiếm một hành trình đáng nhớ và tiện ích, đây là lựa chọn hoàn hảo dành cho bạn.
+                                    </Descr>
+                                    <FlexBox>
+                                            <Icon icon={faFacebookF} />
+                                            <Icon icon={faTwitter} />
+                                            <Icon icon={faInstagram} />
+                                            <Icon icon={faPinterestP} />
+                                    </FlexBox>
+                                </GridCol>
+                                <GridCol col={2}>
+                                    <TitleColumn>Điều hướng</TitleColumn>
+                                    <MenuList>
+                                        <MenuItem><LinkElement to="/home" onClick={handleScroll}>Trang chủ</LinkElement></MenuItem>
+                                        <MenuItem><LinkElement to="/tours" onClick={handleScroll}>Tours</LinkElement></MenuItem>
+                                        <MenuItem><LinkElement to="/about" onClick={handleScroll}>Về chúng tôi</LinkElement></MenuItem>
+                                        <MenuItem><LinkElement to="/blog" onClick={handleScroll}>Blog</LinkElement></MenuItem>
+                                        <MenuItem><LinkElement to="/contact" onClick={handleScroll}>Liên hệ</LinkElement></MenuItem>
+                                    </MenuList>
+                                </GridCol>
+                                <GridCol col={3}>
+                                    <TitleColumn>Instagram</TitleColumn>
+                                    <GridBox>
+                                        <GridItem>
+                                            <ItemImg src="./images/insta1.jpg" />
+                                        </GridItem>
+                                        <GridItem>
+                                            <ItemImg src="./images/insta2.jpg" />
+                                        </GridItem>
+                                        <GridItem>
+                                            <ItemImg src="./images/insta3.jpg" />
+                                        </GridItem>
+                                        <GridItem>
+                                            <ItemImg src="./images/insta4.jpg" />
+                                        </GridItem>
+                                        <GridItem>
+                                            <ItemImg src="./images/insta5.jpg" />
+                                        </GridItem>
+                                        <GridItem>
+                                            <ItemImg src="./images/insta6.jpg" />
+                                        </GridItem>
+                                    </GridBox>
+                                </GridCol>
+                                <GridCol col={4}>
+                                    <TitleColumn>Theo dõi</TitleColumn>
+                                    <Descr>Đăng ký để nhận được tin tức mới nhất</Descr>
+                                    <Input placeholder="Email..." />
+                                    <Button uppercase orange>Đăng ký</Button>
+                                </GridCol>
+                            </GridRow>
+                        </Grid>
                     </Content>
                 </Wrapper>
             </ContentWrapper>
@@ -144,21 +139,6 @@ const Content = styled.div`
     padding-block-end: 93px;
 `;
 
-const FirstColumn = styled(ContentPadding)`
-    width: 25%;
-`;
-
-const SecondColumn = styled(ContentPadding)`
-    width: 16%;
-`;
-
-const ThirdColumn = styled(ContentPadding)`
-    width: 25%;
-`;
-
-const FourthColumn = styled(ContentPadding)`
-    width: 25%;
-`;
 
 const leftToRight = keyframes`
     0%, 100% {
@@ -216,9 +196,6 @@ const SocialIconItem = styled(SocialIcon)`
     padding: 25px;
 `;
 
-const IconItem = styled(Icon)`
-    color: #ffffff;
-`;
 
 const MenuList = styled.ul`
     list-style-type: none;

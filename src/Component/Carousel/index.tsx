@@ -72,13 +72,14 @@ const SliderWrapper = styled.div`
   position: relative;
   width: 100%;
   max-width: 100%;
-  margin: 0 auto;
+  margin: 50px auto;
   overflow: hidden;
 `;
 
 const SliderContainer = styled.div`
   display: flex;
-  transition: all 0.5s ease; // Sửa từ line sang ease
+  justify-content: space-around;
+  transition: all 0.5s ease; 
   gap: 20px;
 `;
 

@@ -25,11 +25,11 @@ export const Expense:React.FC<ExpenseProps> = ({}) => {
         <Wrap>
             <Title small>Expense</Title>
             <Include>
-                <Text small bold margin="0 0 10px">Expense includes</Text>
+                <Text small bold >Expense includes</Text>
                 {include.map((val, index) => {
                     return (
                         <Text small key={index}>
-                            <Icon icon={faCircleCheck} margin="0 10px 0 0" color="green"/>
+                            <Icon icon={faCircleCheck}  color="green"/>
                             {val}
                         </Text>
                     )
@@ -37,11 +37,11 @@ export const Expense:React.FC<ExpenseProps> = ({}) => {
                 
             </Include>
             <Exclude>
-                <Text small bold margin="0 0 20px">Expense includes</Text>
+                <Text small bold >Expense includes</Text>
                 {exclude.map((val, index) => {
                     return (
                         <Text key={index} small>
-                            <Icon icon={faCircleXmark} margin="0 10px 0 0" color="red"/>
+                            <Icon icon={faCircleXmark} color="red"/>
                             {val}
                         </Text>
                     )

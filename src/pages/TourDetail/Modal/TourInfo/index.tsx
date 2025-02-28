@@ -17,11 +17,11 @@ const TourInfo: React.FC<TourInfoProps> = ({  total, hideModal, day, month, year
     return (
         <>
             <FlexBoxBetween>
-                <Text small margin="0" style={{ textTransform: 'uppercase' }}>Thông tin đặt tour</Text>
+                <Text small style={{ textTransform: 'uppercase' }}>Thông tin đặt tour</Text>
                 <CloseButton white onClick={hideModal} />
             </FlexBoxBetween>
-            <Text margin="0" bold style={{ width: '70%', textAlign: 'left' }}>Romantic Sri Lanka Honeymoon Package</Text>
-            <Text small margin="12px 0" style={{ textAlign: 'left' }}>
+            <Text bold style={{ width: '70%', textAlign: 'left' }}>Romantic Sri Lanka Honeymoon Package</Text>
+            <Text small  style={{ textAlign: 'left' }}>
                 <span style={{ fontWeight: 'bold' }}>Starting Date:&nbsp;</span>{day}&nbsp;tháng&nbsp;{month}&nbsp;{year}
             </Text>
             <Button blue style={{ borderRadius: 0, pointerEvents: 'none' }}>Package: Cơ bản</Button>

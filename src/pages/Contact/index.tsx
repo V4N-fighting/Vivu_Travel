@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Banner from "../../Component/Banner";
 import Card from "./Card";
-import { SubTitle, Text, Title } from "../../styled";
+import { SupTitle, Text, Title } from "../../styled";
 import Button from "../../Component/button/Button";
 
 
@@ -14,8 +14,7 @@ function Contact() {
                 thisPage={"/Contact"}
             />
             <Container>
-                {/* <Card /> */}
-                <SubTitle style={{marginBottom: "20px"}}>Liên hệ chúng tôi</SubTitle>
+                <SupTitle style={{marginBottom: "20px"}}>Liên hệ chúng tôi</SupTitle>
                 <Title big>Liên hệ </Title>
                 <TextContact>
                     Chúng tôi luôn sẵn lòng lắng nghe ý kiến, câu hỏi và đề xuất từ bạn. Trên trang liên hệ, bạn sẽ tìm thấy một biểu mẫu đơn giản mà bạn có thể điền thông tin cần thiết.

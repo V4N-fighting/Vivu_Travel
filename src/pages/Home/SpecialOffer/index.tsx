@@ -1,6 +1,6 @@
 
 import Button from "../../../Component/button/Button";
-import { FlexBoxBetween, SubTitle, Title, Wrapper, Text } from "../../../styled";
+import { FlexBoxBetween, SupTitle, Title, Wrapper, Text } from "../../../styled";
 import { styled } from 'styled-components';
 
 
@@ -16,7 +16,7 @@ const SpecialOffer: React.FC<SpecialOfferProps> = ({}) => {
       <Wrapper>
         <FlexBoxBetween>
         <Content>
-            <SubTitle white small>Go & Discover</SubTitle>
+            <SupTitle white small>Go & Discover</SupTitle>
             <Title white big>Ưu đãi đặt biệt</Title>
             <Text white small>Khám phá những ưu đãi đặc biệt độc đáo và tiết kiệm hấp dẫn chỉ dành riêng cho bạn.</Text>
             <Button white >Đặt vé ngay</Button>

@@ -48,7 +48,7 @@ const Sidebar: React.FC<SidebarProps> = ({handleScrollToForm, showModel}) => {
                 </Top>
                 <Bottom>
                     <Button orange style={{width: '100%', borderRadius: '0'}} onClick={() => showModel()}>Kiểm tra</Button>
-                    <Text small margin="20px 0 0 " style={{textAlign: 'center'}}>
+                    <Text small style={{textAlign: 'center'}}>
                         Cần trợ giúp về việc đặt chổ? 
                         <span 
                             style={{color: 'red', cursor: 'pointer', textDecoration: 'underline'}} 

@@ -1,13 +1,14 @@
 import React from 'react';
-import styled, { keyframes } from 'styled-components';
-import { FlexBoxBetween, SubTitle, Text, Title } from '../../styled';
+import styled from 'styled-components';
+import { FlexBox, FlexBoxBetween, Icon, Text, Title } from '../../styled';
 import Button from '../button/Button';
-import { CalendarOutlined, EyeOutlined } from '@ant-design/icons';
+import { faCalendarDay } from '@fortawesome/free-solid-svg-icons';
+import { faEye } from '@fortawesome/free-regular-svg-icons';
 
 interface NewsCardProps {
     url: string,  
     title: string, 
-    textLocation: string,
+    textDescr: string,
     textTime: string,
     label: string,
     view: string,
@@ -15,7 +16,7 @@ interface NewsCardProps {
 
 
 
-const NewsCard: React.FC<NewsCardProps> = ({url, textLocation, title, textTime, label, view}) => {
+const NewsCard: React.FC<NewsCardProps> = ({url, textDescr, title, textTime, label, view}) => {
   return (
         <WrapperNewsCard>
             <Label >{label}</Label>
@@ -23,13 +24,15 @@ const NewsCard: React.FC<NewsCardProps> = ({url, textLocation, title, textTime, 
             <Content>
                 <NewsCardTitle>{title}</NewsCardTitle>
                 <Descr>
-                    <Local><TextDescr>{textLocation}</TextDescr></Local>
-                    <Time><TextDescr bold><CalendarOutlinedIcon />{textTime}</TextDescr></Time>
+                    <Local><Text>{textDescr}</Text></Local>
+                    <FlexBox>
+                      <Text bold><Icon icon={faCalendarDay}/>{textTime}</Text>
+                      <Text style={{width: '20%', display: 'flex'}}><Icon icon={faEye}/>{view}</Text>
+                    </FlexBox>
                 </Descr>
-                <FlexBoxBetween>
-                  <Button orange>Đọc thêm</Button>
-                  <TextDescr><EyeOutlinedIcon />{view}</TextDescr>
-                </FlexBoxBetween>
+                
+                <Button orange>Đọc thêm</Button>
+
             </Content>
         </WrapperNewsCard>
   );
@@ -42,7 +45,6 @@ const WrapperNewsCard = styled.div`
   max-width: 100%;
   background-color: #ffffff;
   border-radius: 25px;
-  /* overflow: hidden; */
   padding: 20px;
   border: 1px solid red;
   position: relative;
@@ -121,29 +123,9 @@ const Descr = styled.div`
 const Local = styled.div`
   width: 100%;
 `
-
-
-const CalendarOutlinedIcon = styled(CalendarOutlined)`
-    margin-right: 10px;
-`
-
-const EyeOutlinedIcon = styled(EyeOutlined)`
-    margin-right: 10px;
-`
-
 const Time = styled.div`
   width: 80%;
-  margin-bottom: -18px;
 `
-const TextDescr = styled(Text)<{bold?: boolean}>`
-    font-size: 16px;
-    margin: 10px 0;
-    font-weight: ${props => props.bold ? "bold" : "normal"};
-`
-
-
-
-
 
 
 export default NewsCard;

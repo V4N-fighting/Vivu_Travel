@@ -8,7 +8,7 @@ interface NewsData {
     id: number;
     url: string;
     title: string;
-    textLocation: string;
+    textDescr: string;
     textTime: string;
     label: string;
     view: string;
@@ -16,19 +16,19 @@ interface NewsData {
 
 function Blog() {
     const newsData: NewsData[] = [
-        { id: 1, url: "./images/4-900x490.jpg", title: "Maldives: The Travel and Experience of the Lifetime", textLocation: "a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg ", textTime: "12 tháng Năm, 2024", label: "Universe", view: "12323" },
-        { id: 2, url: "./images/5-1-900x490.jpg", title: "Maldives: The Travel and Experience of the Lifetime", textLocation: "a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg ", textTime: "2 tháng Năm, 2024", label: "Universe", view: "12323" },
-        { id: 3, url: "./images/6-1-900x490.jpg", title: "Maldives: The Travel and Experience of the Lifetime", textLocation: "a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg ", textTime: "2 tháng Năm, 2024", label: "Universe", view: "12323" },
-        { id: 4, url: "./images/4-900x490.jpg", title: "Maldives: The Travel and Experience of the Lifetime", textLocation: "a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg ", textTime: "12 tháng Năm, 2024", label: "Universe", view: "12323" },
-        { id: 5, url: "./images/5-1-900x490.jpg", title: "Maldives: The Travel and Experience of the Lifetime", textLocation: "a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg ", textTime: "2 tháng Năm, 2024", label: "Universe", view: "12323" },
-        { id: 6, url: "./images/6-1-900x490.jpg", title: "Maldives: The Travel and Experience of the Lifetime", textLocation: "a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg ", textTime: "2 tháng Năm, 2024", label: "Universe", view: "12323" },
+        { id: 1, url: "./images/4-900x490.jpg", title: "Maldives: The Travel and Experience of the Lifetime", textDescr: "a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg ", textTime: "12 tháng Năm, 2024", label: "Universe", view: "12323" },
+        { id: 2, url: "./images/5-1-900x490.jpg", title: "Maldives: The Travel and Experience of the Lifetime", textDescr: "a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg ", textTime: "2 tháng Năm, 2024", label: "Universe", view: "12323" },
+        { id: 3, url: "./images/6-1-900x490.jpg", title: "Maldives: The Travel and Experience of the Lifetime", textDescr: "a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg ", textTime: "2 tháng Năm, 2024", label: "Universe", view: "12323" },
+        { id: 4, url: "./images/4-900x490.jpg", title: "Maldives: The Travel and Experience of the Lifetime", textDescr: "a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg ", textTime: "12 tháng Năm, 2024", label: "Universe", view: "12323" },
+        { id: 5, url: "./images/5-1-900x490.jpg", title: "Maldives: The Travel and Experience of the Lifetime", textDescr: "a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg ", textTime: "2 tháng Năm, 2024", label: "Universe", view: "12323" },
+        { id: 6, url: "./images/6-1-900x490.jpg", title: "Maldives: The Travel and Experience of the Lifetime", textDescr: "a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg ", textTime: "2 tháng Năm, 2024", label: "Universe", view: "12323" },
     
-        { id: 7, url: "./images/4-900x490.jpg", title: "Maldives: The Travel and Experience of the Lifetime", textLocation: "a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg ", textTime: "12 tháng Năm, 2024", label: "Universe", view: "12323" },
-        { id: 8, url: "./images/5-1-900x490.jpg", title: "Maldives: The Travel and Experience of the Lifetime", textLocation: "a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg ", textTime: "2 tháng Năm, 2024", label: "Universe", view: "12323" },
-        { id: 9, url: "./images/6-1-900x490.jpg", title: "Maldives: The Travel and Experience of the Lifetime", textLocation: "a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg ", textTime: "2 tháng Năm, 2024", label: "Universe", view: "12323" },
-        { id: 10, url: "./images/4-900x490.jpg", title: "Maldives: The Travel and Experience of the Lifetime", textLocation: "a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg ", textTime: "12 tháng Năm, 2024", label: "Universe", view: "12323" },
-        { id: 11, url: "./images/5-1-900x490.jpg", title: "Maldives: The Travel and Experience of the Lifetime", textLocation: "a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg ", textTime: "2 tháng Năm, 2024", label: "Universe", view: "12323" },
-        { id: 12, url: "./images/6-1-900x490.jpg", title: "Maldives: The Travel and Experience of the Lifetime", textLocation: "a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg ", textTime: "2 tháng Năm, 2024", label: "Universe", view: "12323" },
+        { id: 7, url: "./images/4-900x490.jpg", title: "Maldives: The Travel and Experience of the Lifetime", textDescr: "a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg ", textTime: "12 tháng Năm, 2024", label: "Universe", view: "12323" },
+        { id: 8, url: "./images/5-1-900x490.jpg", title: "Maldives: The Travel and Experience of the Lifetime", textDescr: "a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg ", textTime: "2 tháng Năm, 2024", label: "Universe", view: "12323" },
+        { id: 9, url: "./images/6-1-900x490.jpg", title: "Maldives: The Travel and Experience of the Lifetime", textDescr: "a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg ", textTime: "2 tháng Năm, 2024", label: "Universe", view: "12323" },
+        { id: 10, url: "./images/4-900x490.jpg", title: "Maldives: The Travel and Experience of the Lifetime", textDescr: "a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg ", textTime: "12 tháng Năm, 2024", label: "Universe", view: "12323" },
+        { id: 11, url: "./images/5-1-900x490.jpg", title: "Maldives: The Travel and Experience of the Lifetime", textDescr: "a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg ", textTime: "2 tháng Năm, 2024", label: "Universe", view: "12323" },
+        { id: 12, url: "./images/6-1-900x490.jpg", title: "Maldives: The Travel and Experience of the Lifetime", textDescr: "a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg ", textTime: "2 tháng Năm, 2024", label: "Universe", view: "12323" },
     
     ];
 
@@ -51,7 +51,7 @@ function Blog() {
                                         <NewsCard
                                             url={news.url}
                                             title={news.title}
-                                            textLocation={news.textLocation}
+                                            textDescr={news.textDescr}
                                             textTime={news.textTime}
                                             label={news.label}
                                             view={news.view}
@@ -92,7 +92,6 @@ const Content = styled.div`
 `;
 
 const Col = styled.div`
-    /* flex: 0 50%; */
     width: 50%;
     padding: 0 15px 30px;
 `;

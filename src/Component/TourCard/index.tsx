@@ -1,5 +1,8 @@
 import styled, { keyframes } from "styled-components";
 import {ArrowRightOutlined} from '@ant-design/icons';
+import { Icon } from '../../styled';
+import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
+
 
 interface TourCardProps {
   url: string,
@@ -13,12 +16,11 @@ const TourCard: React.FC<TourCardProps> = ({url, label, name}) => {
   return (
     <Wrapper>
         <Wrap>
-          <Image url={url}>
-          </Image>
+          <Image url={url} />
           <Label>{label}</Label>
 
         </Wrap>
-        <Name>{name}<Icon></Icon></Name>
+        <Name>{name}<Icon icon={faArrowRight}/></Name>
     </Wrapper>
   );
 };
@@ -50,21 +52,15 @@ const Image = styled.div<{url: string}>`
   }
 `
 const Label = styled.span`
-  background-color: #37D4D9;
+  background-color: var(--secondary-color);
   padding: 5px 8px;
   position: absolute;
   top: 5%;
   left: 5%;
-  color: #ffffff;
+  color: var(--white-color);
   font-size: 12px;
   font-weight: 600;
   border-radius: 10px;
-`
-const Icon = styled(ArrowRightOutlined)`
-  font-size: 16px;
-  margin-left: 10px ;
-  color: #111111; 
-  transition: all 0.5s linear;
 `
 
 const Name = styled.div`

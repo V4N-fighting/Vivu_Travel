@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Button from "../../../Component/button/Button";
-import { FlexBox, FlexBoxBetween, Grid, GridCol_4, GridCol_8, GridRow, Icon, Text } from "../../../styled";
+import { FlexBox, FlexBoxBetween, Grid, GridCol, GridRow, Icon, Text } from "../../../styled";
 import CalendarComponent from "./Calendar";
 import CloseButton from "../../../Component/button/CloseButton";
 import { faCalendar } from "@fortawesome/free-regular-svg-icons";
@@ -64,7 +64,7 @@ const Modal: React.FC<ModalProps> = ({ hideModal }) => {
             <Wrapper>
                 <Grid>
                     <GridRow margin="20px">
-                        <GridCol_8>
+                        <GridCol col={8}>
                             <Header>
                                 <Step
                                     isActive={step1}
@@ -110,10 +110,10 @@ const Modal: React.FC<ModalProps> = ({ hideModal }) => {
                                         <Link to={"/check_out"}><Button orange  style={{ margin: '60px 10px 0', borderRadius: 0, padding: '20px 50px' }}>Thanh toán</Button></Link></>
                                 }
                             </Bottom>
-                        </GridCol_8>
-                        <GridCol_4>
+                        </GridCol>
+                        <GridCol col={4}>
                             <TourInfo total={total} hideModal={hideModal} day={day} month={month} year={year} />
-                        </GridCol_4>
+                        </GridCol>
                     </GridRow>
                 </Grid>
             </Wrapper>

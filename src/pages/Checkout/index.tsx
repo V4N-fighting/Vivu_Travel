@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Banner from "../../Component/Banner";
 import ProgressBar from "./ProgressBar";
-import { FlexBox, Grid, GridCol_5, GridCol_7, GridRow, Icon, Text, Title } from "../../styled";
+import { FlexBox, Grid, GridCol, GridRow, Icon, Text, Title } from "../../styled";
 import TourCard from "./TourCard";
 import Button from "../../Component/button/Button";
 import { useState } from "react";
@@ -48,7 +48,7 @@ function Checkout() {
                 </Process>
                 <Grid>
                     <GridRow margin="20px">
-                        <GridCol_7>
+                        <GridCol col={7}>
                         {curStep == 3 
                         ? <CheckoutDetailBox>
                                 <Title small>Chi tiết khách hàng</Title>
@@ -84,10 +84,10 @@ function Checkout() {
                             <Button blue  onClick={()=>setCurStep(3)}>Trở lại</Button>
                         </ConfirmBox>
                         }
-                        </GridCol_7>
-                        <GridCol_5>
+                        </GridCol>
+                        <GridCol col={5}>
                             <TourCard tour={exampleTour} />
-                        </GridCol_5>
+                        </GridCol>
                     </GridRow>
                 </Grid>
             </Container>

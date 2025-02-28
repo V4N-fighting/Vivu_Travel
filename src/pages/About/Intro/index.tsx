@@ -1,6 +1,6 @@
 
 import styled from "styled-components";
-import { FlexBox, FlexBoxStretch, SubTitle, Title, Text, Wrapper, WrapperPadding } from "../../../styled";
+import { FlexBox, FlexBoxStretch, SupTitle, Title, Text, Wrapper, WrapperPadding } from "../../../styled";
 import Button from "../../../Component/button/Button";
 
 
@@ -23,7 +23,7 @@ const Intro: React.FC<IntroProps> = ({mainImg, circleImg}) => {
                     </ImgCol>
                     <Space></Space>
                     <ContentCol>
-                        <SubTitle>Chúng tôi là Vivu</SubTitle>
+                        <SupTitle>Chúng tôi là Vivu</SupTitle>
                         <Title>Vivu là lựa chọn tốt nhất cho chuyến đi của bạn.</Title>
                         <Text>
                             Với hàng ngàn địa điểm du lịch, hướng dẫn du lịch chi tiết và những lời khuyên hữu ích, chúng tôi sẽ giúp bạn lên kế hoạch cho những chuyến đi tuyệt vời và trải nghiệm không thể quên.
@@ -56,7 +56,6 @@ const ImgCol = styled.div`
     flex: 1;
 `
 const MainImg = styled.div<{src: string}>`
-    /* width: 100%; */
     height: 100%;
     min-height: 400px;
     margin: 20px 20px 0;
@@ -76,7 +75,7 @@ const CircleImg = styled.div<{src: string}>`
     width: 30%;
     padding-bottom: 30%;
     border-radius: 99px;
-    outline: 40px solid #ffffff;
+    outline: 40px solid var(--white-color);
     background-image: url(${props => props.src});
     background-repeat: no-repeat;
     background-position: center;
@@ -97,10 +96,10 @@ const TextBox = styled.div<{backgound: string, top: string, right: string, trans
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    color: #ffffff;
+    color: var(--white-color);
     height: 200px;
     border-radius: 20px;
-    outline: 20px solid #ffffff;
+    outline: 20px solid var(--white-color);
     transform: ${props => props.transform};
 
     & div {
@@ -118,23 +117,23 @@ const Space = styled.div`
     width: 50px;
 `
 const ListContainer = styled.div`
-    display: flex;               /* Sử dụng Flexbox để chia cột */
-    justify-content: space-between; /* Giãn cách đều các cột */
-    max-width: 600px;            /* Độ rộng tối đa của danh sách */
-    margin: 20px auto;           /* Căn giữa danh sách */
+    display: flex;              
+    justify-content: space-between; 
+    max-width: 600px;            
+    margin: 20px auto;           
 `;
 
 const ListColumn = styled.ul`
-    list-style-type: disc;       /* Dấu đầu dòng tròn */
-    padding-left: 20px;          /* Thêm khoảng cách bên trái */
+    list-style-type: disc;       
+    padding-left: 20px;          
 `;
 
 const ListItem = styled.li`
-    margin-bottom: 10px;         /* Tạo khoảng cách giữa các mục */
-    color: #555;                 /* Màu chữ */
+    margin-bottom: 10px;        
+    color: #555;              
 
     &::marker {
-        color: orange;             /* Màu cho dấu đầu dòng */
+        color: var(--primary-color);          
     }
 `;
 

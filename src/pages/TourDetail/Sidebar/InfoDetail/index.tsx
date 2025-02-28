@@ -13,8 +13,8 @@ interface ContainProps {
 export const InfoDetail: React.FC<ContainProps> = ({item, value, icon}) => {
     return (
         <Wrap>
-            <Text small bold margin="0 0 10px">
-                <Icon icon={icon} style={{color: 'red'}} margin="0 10px 0 0"/>{item}
+            <Text small bold >
+                <Icon icon={icon} style={{color: 'red'}} />{item}
             </Text>
             <Text small>{value}</Text>
         </Wrap>

@@ -1,77 +1,81 @@
-import React, { useEffect, useState } from 'react';
-import styled, { css } from 'styled-components';
-import { SubTitle, Title, Text, Wrapper } from '../../../styled';
-import Button from '../../../Component/button/Button';
-import Purify from './Purify';
+import React, { useEffect, useState, useCallback } from "react";
+import styled from "styled-components";
+import { SupTitle, Title, Text, Wrapper } from "../../../styled";
+import Button from "../../../Component/button/Button";
+import Purify from "./Purify";
+import { Link } from "react-router-dom";
+import { useFetch } from "../../../Hooks/useFetch";
+import { GET_BANNER } from "../../../api";
 
-const contentBanner = [
-  {
-    index: 1,
-    textContent: "Khám phá thế giới",
-    img1: './images/banner-img-1-1.jpg',
-    img2: './images/banner-img-1-2.jpg',
-  },
-  {
-    index: 2,
-    textContent: "Vẻ đẹp thiên nhiên",
-    img1: './images/banner-img-2-1.jpg',
-    img2: './images/banner-img-2-2.jpg',
-  },
-  {
-    index: 3,
-    textContent: "Lịch sử & văn hóa",
-    img1: './images/banner-img-3-1.jpg',
-    img2: './images/banner-img-3-2.jpg',
-  },
-];
+interface BannerItem {
+  id: number;
+  textContent: string;
+  img1: string;
+  img2: string;
+}
 
 const Banner: React.FC = () => {
-  const [activeBtn, setActiveBtn] = useState<number>(1);
+  const { data, loading, error } = useFetch<BannerItem[]>(GET_BANNER);
+  const [activeId, setActiveId] = useState<number | null>(null);
 
-  const handleClick = (value: number) => {
-    setActiveBtn(value);
-  };
-
+  // Cập nhật banner đầu tiên khi có dữ liệu
   useEffect(() => {
+    if (data && data.length > 0) {
+      setActiveId(data[0].id);
+    }
+  }, [data]);
+
+  // Tự động đổi banner mỗi 5 giây
+  useEffect(() => {
+    if (!data || data.length === 0 || activeId === null) return;
+
     const interval = setInterval(() => {
-      setActiveBtn((prev) => (prev % contentBanner.length) + 1);
-    }, 5000); // Tự chuyển sau mỗi 5 giây
+      const currentIndex = data.findIndex((item) => item.id === activeId);
+      const nextIndex = (currentIndex + 1) % data.length;
+      setActiveId(data[nextIndex].id);
+    }, 5000);
 
-    return () => clearInterval(interval); // Xóa bộ đếm thời gian khi unmount
-  }, [activeBtn]);
+    return () => clearInterval(interval);
+  }, [activeId, data]);
 
-  const { textContent, img1, img2 } = contentBanner[activeBtn - 1];
+  // Giữ handleClick cố định giữa các lần render
+  const handleClick = useCallback((id: number) => {
+    setActiveId(id);
+  }, []);
 
-  
+  // Xử lý trạng thái tải hoặc lỗi
+  if (loading) return <p>Đang tải dữ liệu...</p>;
+  if (error) return <p>Lỗi: {error}</p>;
+  if (!data || data.length === 0) return <p>Không có dữ liệu.</p>;
+
+  const activeContent = data.find((item) => item.id === activeId);
 
   return (
     <BannerWrapper>
       <Wrapper>
         <Container>
           <Content>
-            <SubTitle>Lên đường ngay</SubTitle>
-            <AnimatedTitle>{textContent}</AnimatedTitle>
-            <Text>Thiên nhiên đẹp mê hồn với rừng cây xanh mướt, dòng suối trong vắt và những cánh hoa rực rỡ. Mỗi khoảnh khắc đều mang lại cảm giác bình yên và tươi mới.</Text>
-            <Button orange>Đặt vé ngay</Button>
+            <SupTitle medium orange>Lên đường ngay</SupTitle>
+            <AnimatedTitle big>{activeContent?.textContent}</AnimatedTitle>
+            <Text>Thiên nhiên đẹp mê hồn với rừng cây xanh mướt, dòng suối trong vắt và những cánh hoa rực rỡ.</Text>
+            <Link to={"/trips"}>
+              <Button orange>Đặt vé ngay</Button>
+            </Link>
           </Content>
           <Content>
             <ImgWrapper1>
-              <AnimatedImg src={img1} alt="Banner Image 1" />
+              <AnimatedImg src={activeContent?.img1} alt="Banner Image 1" />
             </ImgWrapper1>
             <ImgWrapper2>
-              <AnimatedImg src={img2} alt="Banner Image 2" />
+              <AnimatedImg src={activeContent?.img2} alt="Banner Image 2" />
             </ImgWrapper2>
           </Content>
         </Container>
         <WrapperPavigation>
           <BannerPavigation>
-            {contentBanner.map((value) => (
-              <PavigationBtn
-                key={value.index}
-                isActive={activeBtn === value.index}
-                onClick={() => handleClick(value.index)}
-              >
-                {value.index}
+            {data.map((item) => (
+              <PavigationBtn key={item.id} isActive={activeId === item.id} onClick={() => handleClick(item.id)}>
+                {item.id}
               </PavigationBtn>
             ))}
           </BannerPavigation>
@@ -81,6 +85,9 @@ const Banner: React.FC = () => {
     </BannerWrapper>
   );
 };
+
+
+
 
 const BannerWrapper = styled.div`
   padding-top: 100px;
@@ -108,8 +115,7 @@ const Content = styled.div`
   position: relative;
 `;
 
-const AnimatedTitle = styled(Title)`
-`;
+const AnimatedTitle = styled(Title)``;
 
 const ImgWrapper1 = styled.div`
   width: 70%;
@@ -141,8 +147,8 @@ const WrapperPavigation = styled.div`
 
 const PavigationBtn = styled.button<{ isActive: boolean }>`
   position: relative;
-  background-color: ${props => props.isActive ? '#FF681A' : '#ffffff'};
-  color:  ${props => props.isActive ? '#ffffff' : '#FF681A'};
+  background-color: ${(props) => (props.isActive ? '#FF681A' : '#ffffff')};
+  color: ${(props) => (props.isActive ? '#ffffff' : '#FF681A')};
   text-decoration: none;
   text-align: center;
   font-weight: 900;
@@ -162,12 +168,7 @@ const PavigationBtn = styled.button<{ isActive: boolean }>`
   cursor: pointer;
   transition: 0.3s ease all;
 
-  &:hover {
-    color: #FFF;
-    background-color: #FF681A;
-  }
-
-  &:focus {
+  &:hover, &:focus {
     color: #FFF;
     background-color: #FF681A;
   }

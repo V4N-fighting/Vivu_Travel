@@ -1,39 +1,43 @@
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
+
+import {  IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled from "styled-components";
 
 
 
-interface CloseButtonBoxProps {
+interface CircleIconBoxProps {
     rotate?: boolean;
     white?: boolean
 }
 
 
-interface CloseButtonProps {
+interface CircleIconProps {
     onClick?: () => void;
     white?: boolean
     style?: React.CSSProperties;
+    icon: IconDefinition;
 }
 
-const CloseButton: React.FC<CloseButtonProps> = ({ onClick, white, style }) => {
+const CircleIcon: React.FC<CircleIconProps> = ({ onClick, white, style, icon }) => {
     return (
-        <CloseButtonBox rotate onClick={onClick} white={white} style={style}>
-            <Icon icon={faXmark} />
-        </CloseButtonBox>
+        <CircleIconBox onClick={onClick} white={white} style={style}>
+            <Icon icon={icon} />
+        </CircleIconBox>
     );
 }
 
 
 const Icon = styled(FontAwesomeIcon)`
-    width: 24px;
-    height: 24px;
+    width: 18px;
+    height: 18px;
 `;
 
-const CloseButtonBox = styled.div<CloseButtonBoxProps>`
+const CircleIconBox = styled.div<CircleIconBoxProps>`
+    margin: 0 10px 0 0;
     align-items: center;
     justify-content: center;
     display: flex;
+    flex-shrink: 0;
     width: 50px;
     height: 50px;
     line-height: 50px;
@@ -56,4 +60,4 @@ const CloseButtonBox = styled.div<CloseButtonBoxProps>`
     }
 `;
 
-export default CloseButton;
+export default CircleIcon;

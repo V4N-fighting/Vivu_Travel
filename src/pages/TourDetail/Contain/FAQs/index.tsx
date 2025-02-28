@@ -58,13 +58,12 @@ const Item: React.FC<ItemProps> = ({ question, answer, showAll }) => {
     return (
         <ItemWrapper>
             <Question onClick={() => setShowAnswer(!showAnswer)} >
-                <Text small bold margin="0">
+                <Text small bold >
                     {question}
                 </Text>
                 <Icon
                     icon={!showAnswer ? faPlus : faMinus}
                     fontSize="18px"
-                    padding="5px"
                     color="black"
                     hover
                     

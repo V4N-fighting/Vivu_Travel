@@ -1,7 +1,6 @@
 
 import styled from "styled-components";
-import { FlexBox, FlexBoxStretch, SubTitle, Title, Text, WrapperPadding } from "../../../styled";
-import Button from "../../../Component/button/Button";
+import {  SupTitle, Title } from "../../../styled";
 import Carousel from "../../../Component/Carousel";
 import ReviewCard from "../../../Component/ReviewCard";
 
@@ -23,7 +22,7 @@ const Review: React.FC<ReviewProps> = ({}) => {
     return ( 
         <Wrapper background='https://cdn-media.sforum.vn/storage/app/media/thanhhuyen/h%C3%ACnh%20n%E1%BB%81n%20b%E1%BA%A7u%20tr%E1%BB%9Di/1/hinh-nen-bau-troi-5.jpg'>
              <Contain>
-                 <SubTitle blue>Đánh giá tốt</SubTitle>
+                 <SupTitle blue>Đánh giá tốt</SupTitle>
                  <Title white>Hơn 50.000 khách hàng hài lòng trên khắp thế giới </Title>
                  <Carousel slidesToShow={3} slides={cards} autoSlide autoSlideInterval={300000}></Carousel>
              </Contain>
@@ -39,7 +38,6 @@ const Wrapper = styled.div<{background: string}>`
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
-    /* overflow-x: hidden; */
 
     &::before {
         content: '';

@@ -23,14 +23,14 @@ interface Route {
 
 // Public routes
 const publicRoutes: Route[] = [
+    { path: config.routes.register, component: Register, layout: '' },
+    { path: config.routes.login, component: Login, layout: '' },
     { path: '/', component: Home, layout: 'default' },
     { path: config.routes.home, component: Home, layout: 'default' },
     { path: config.routes.profile, component: Profile, layout: 'default' },
     { path: config.routes.about, component: About, layout: 'default' },
     { path: config.routes.blog, component: Blog, layout: 'default' },
     { path: config.routes.contact, component: Contact, layout: 'default' },
-    { path: config.routes.register, component: Register, layout: '' },
-    { path: config.routes.login, component: Login, layout: '' },
     { path: config.routes.destination, component: Destination, layout: 'default' },
     { path: config.routes.activity, component: Activity, layout: 'default' },
     { path: config.routes.tour, component: Tour, layout: 'default' },

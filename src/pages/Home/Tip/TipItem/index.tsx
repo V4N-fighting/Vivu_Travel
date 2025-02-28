@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { SubTitle, Text, Title } from '../../../../styled';
+import { SupTitle, Text, Title } from '../../../../styled';
 import Button from '../../../../Component/button/Button';
 import { TagOutlined, CalendarOutlined } from '@ant-design/icons';
 import { SocialIcon } from './../../../../layouts/components/Header/HeaderBottom/SideMenu/index';
@@ -8,7 +8,7 @@ import { SocialIcon } from './../../../../layouts/components/Header/HeaderBottom
 interface TipItemProps {
     url: string, 
     label: string, 
-    subtitle: string, 
+    suptitle: string, 
     title: string, 
     text: string,
     reverse?: boolean,
@@ -16,7 +16,7 @@ interface TipItemProps {
 
 
 
-const TipItem: React.FC<TipItemProps> = ({url, label, subtitle, title, text, reverse}) => {
+const TipItem: React.FC<TipItemProps> = ({url, label, suptitle, title, text, reverse}) => {
   return (
     <Wrapper reverse={reverse}>
         <ImageBox url={url}>
@@ -24,7 +24,7 @@ const TipItem: React.FC<TipItemProps> = ({url, label, subtitle, title, text, rev
         </ImageBox>
         <ContentBox reverse={reverse} >
             <Content>
-                <ContentSubTitle><Icon><CalendarOutlined /></Icon>{subtitle}</ContentSubTitle>
+                <ContentSupTitle><Icon><CalendarOutlined /></Icon>{suptitle}</ContentSupTitle>
                 <ContentTitle>{title}</ContentTitle>
                 <Text>{text}</Text>
                 <Button orange>Đọc thêm</Button>
@@ -96,7 +96,7 @@ const ContentTitle = styled(Title)`
     line-height: 1.2;
 `;
 
-const ContentSubTitle = styled(SubTitle)`
+const ContentSupTitle = styled(SupTitle)`
     font-size: 20px;
     line-height: 1.4;
     margin-bottom: 15px;

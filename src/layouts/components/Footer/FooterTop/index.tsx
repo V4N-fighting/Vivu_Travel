@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { ContentPadding, FlexBoxBetween, Title, Wrapper } from '../../../../styled';
+import {  FlexBoxBetween, Title, Wrapper } from '../../../../styled';
 import Button from '../../../../Component/button/Button';
 
 
@@ -7,7 +7,6 @@ const FooterTop: React.FC = () => {
     return (
         <FooterTopWrapper>
             <ContentWrapper>
-                <ContentPadding>
                     <Content>
                         <FlexBoxBetween>
                             <FlexContent>
@@ -22,7 +21,6 @@ const FooterTop: React.FC = () => {
                             </FlexImage>
                         </FlexBoxBetween>
                     </Content>
-                </ContentPadding>
             </ContentWrapper>
         </FooterTopWrapper>
     );

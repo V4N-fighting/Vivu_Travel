@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { FlexBox, Wrapper } from "../../../../styled";
-import { BoxIcon, Icon } from "../HeaderTop";
-import { faBars, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import Navigation from "./Navigation";
 import SideMenu from "./SideMenu"; // Import SideMenu component
 import SideSearch from "./SideSearch";
 import { Link } from "react-router-dom";
+import CircleIcon from "../../../../Component/CircleIcon";
+import { faMagnifyingGlass, faBars } from "@fortawesome/free-solid-svg-icons";
 
 
 const HeaderBottom: React.FC = () => {
@@ -41,21 +41,19 @@ const HeaderBottom: React.FC = () => {
                             </LogoLink>
                         </FlexBoxPadding>
                     </Flex20Percent>
+
                     <Flex60Percent>
                         <FlexBoxPadding>
                             {/* navigation */}
                             <Navigation />
                         </FlexBoxPadding>
                     </Flex60Percent>
+                    
                     <Flex20Percent>
                         <FlexBoxPadding end={true}>
                             {/* 2 button */}
-                            <SearchBoxIcon onClick={handleSearchClick}>
-                                <IconOnHeaderBottom icon={faMagnifyingGlass} />
-                            </SearchBoxIcon>
-                            <MenuBoxIcon onClick={handleMenuClick}>
-                                <IconOnHeaderBottom icon={faBars} />
-                            </MenuBoxIcon>
+                            <CircleIcon icon={faMagnifyingGlass} onClick={handleSearchClick}/>
+                            <CircleIcon icon={faBars} onClick={handleMenuClick}/>
                         </FlexBoxPadding>
                     </Flex20Percent>
                 </FlexBox>
@@ -102,27 +100,27 @@ export const Logo = styled.img<{ src?: string }>`
     src: ${(props) => props.src};
 `;
 
-const IconOnHeaderBottom = styled(Icon)`
-    width: 20px;
-    height: 20px;
-    color: #ffffff;
-`;
+// const IconOnHeaderBottom = styled(Icon)`
+//     width: 20px;
+//     height: 20px;
+//     color: #ffffff;
+// `;
 
-const SearchBoxIcon = styled(BoxIcon)`
-    width: 50px;
-    height: 50px;
-    background-color: #FF681A;
-    transition: all ease 0.5s;
-    cursor: pointer;
-    margin-right: 15px;
+// const SearchBoxIcon = styled(BoxIcon)`
+//     width: 50px;
+//     height: 50px;
+//     background-color: #FF681A;
+//     transition: all ease 0.5s;
+//     cursor: pointer;
+//     margin-right: 15px;
 
-    &:hover {
-        background-color: #37D4D9;
-    }
-`;
+//     &:hover {
+//         background-color: #37D4D9;
+//     }
+// `;
 
-const MenuBoxIcon = styled(SearchBoxIcon)`
-    margin-right: 0;
-`;
+// const MenuBoxIcon = styled(SearchBoxIcon)`
+//     margin-right: 0;
+// `;
 
 export default HeaderBottom;

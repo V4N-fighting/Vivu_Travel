@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Banner from "../../Component/Banner";
-import { Grid, GridRow, GridCol_8, GridCol_4 } from "../../styled";
+import { Grid, GridRow, GridCol} from "../../styled";
 import Contain from "./Contain";
 import Sidebar from "./Sidebar";
 import { useRef, useState } from "react";
@@ -38,12 +38,12 @@ const TourDetail: React.FC<TourDetailProps> = () => {
             <TourPage>
                 <Grid>
                     <GridRow>
-                        <GridCol_8>
+                        <GridCol col={8}>
                             <Contain formRef={formRef} />
-                        </GridCol_8>
-                        <GridCol_4>
+                        </GridCol>
+                        <GridCol col={4}>
                             <Sidebar handleScrollToForm={handleScrollToForm} showModel={handleShowModal} />
-                        </GridCol_4>
+                        </GridCol>
                     </GridRow>
                 </Grid>
                             

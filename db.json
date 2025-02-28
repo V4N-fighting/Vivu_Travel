@@ -1,0 +1,130 @@
+{
+    "users": [
+      { "id": 1, "name": "Nguyễn Văn A", "age": 25 },
+      { "id": 2, "name": "Trần Thị B", "age": 30 }
+    ],
+
+    "products": [
+      { "id": 1, "name": "iPhone 15", "price": 25000000 },
+      { "id": 2, "name": "MacBook Pro", "price": 45000000 }
+    ],
+
+    "banners": [
+      {
+        "id": 1,
+        "textContent": "Khám phá thế giới",
+        "img1": "./images/banner-img-1-1.jpg",
+        "img2": "./images/banner-img-1-2.jpg"
+      },
+      {
+        "id": 2,
+        "textContent": "Vẻ đẹp thiên nhiên",
+        "img1": "./images/banner-img-2-1.jpg",
+        "img2": "./images/banner-img-2-2.jpg"
+      },
+      {
+        "id": 3,
+        "textContent": "Lịch sử & văn hóa",
+        "img1": "./images/banner-img-3-1.jpg",
+        "img2": "./images/banner-img-3-2.jpg"
+      }
+    ],
+
+    "trips": [
+      {
+        "id": 1,
+        "destination": "Đà Nẵng, Việt Nam",
+        "description": "Khám phá thành phố biển Đà Nẵng với cảnh đẹp thiên nhiên hùng vĩ và nền ẩm thực phong phú.",
+        "duration": "4 ngày 3 đêm",
+        "price_adult": 5000000,
+        "price_child": 3500000,
+        "package_type": "Cơ bản",
+        "departure_dates": ["2025-06-10", "2025-06-20", "2025-06-30"],
+        "itinerary": [
+          {
+            "day": 1,
+            "title": "Đến Đà Nẵng - Bà Nà Hills",
+            "description": "Đón khách tại sân bay, tham quan Bà Nà Hills và thưởng thức buffet trưa."
+          },
+          {
+            "day": 2,
+            "title": "Khám phá Hội An",
+            "description": "Tham quan phố cổ Hội An, tận hưởng không gian lung linh đèn lồng vào buổi tối."
+          },
+          {
+            "day": 3,
+            "title": "Biển Mỹ Khê - Ngũ Hành Sơn",
+            "description": "Thư giãn tại biển Mỹ Khê, khám phá danh thắng Ngũ Hành Sơn."
+          },
+          {
+            "day": 4,
+            "title": "Tự do tham quan và trở về",
+            "description": "Mua sắm đặc sản, đưa khách ra sân bay kết thúc chuyến đi."
+          }
+        ],
+        "max_people": 20,
+        "transport": ["Máy bay", "Xe du lịch"],
+        "languages": ["Tiếng Việt", "Tiếng Anh"],
+        "hotel_stars": 4,
+        "max_altitude": 1487,
+        "map_link": "https://www.google.com/maps?q=Da+Nang,Vietnam",
+        "images": [
+          "https://example.com/images/danang1.jpg",
+          "https://example.com/images/danang2.jpg",
+          "https://example.com/images/danang3.jpg"
+        ],
+        "faqs": [
+          {
+            "question": "Tôi có cần visa để đi Đà Nẵng không?",
+            "answer": "Nếu bạn là công dân Việt Nam, bạn không cần visa. Khách nước ngoài nên kiểm tra yêu cầu visa trước khi đi."
+          },
+          {
+            "question": "Chuyến đi có bao gồm ăn uống không?",
+            "answer": "Gói cơ bản bao gồm bữa sáng tại khách sạn, các bữa còn lại khách tự túc."
+          },
+          {
+            "question": "Tôi có thể mang theo trẻ nhỏ không?",
+            "answer": "Có, trẻ em dưới 5 tuổi được miễn phí, từ 5-11 tuổi có mức giá ưu đãi."
+          }
+        ],
+        "rating": 4.7
+      }
+    ],
+
+    "blogs": [
+    {
+      "id": 1,
+      "category": "Công nghệ",
+      "publishedDate": "2025-02-28",
+      "views": 1200,
+      "image": "https://example.com/image1.jpg",
+      "video": "https://example.com/video1.mp4",
+      "title": "Xu hướng công nghệ 2025",
+      "content": "Năm 2025, công nghệ AI và blockchain sẽ tiếp tục phát triển mạnh mẽ..."
+    },
+    {
+      "id": 2,
+      "category": "Du lịch",
+      "publishedDate": "2025-02-27",
+      "views": 850,
+      "image": "https://example.com/image2.jpg",
+      "video": null,
+      "title": "Top 10 điểm đến hot năm 2025",
+      "content": "Dưới đây là danh sách những điểm du lịch hấp dẫn không thể bỏ qua..."
+    },
+    {
+      "id": 3,
+      "category": "Sức khỏe",
+      "publishedDate": "2025-02-26",
+      "views": 620,
+      "image": "https://example.com/image3.jpg",
+      "video": "https://example.com/video3.mp4",
+      "title": "Cách duy trì lối sống lành mạnh",
+      "content": "Ăn uống hợp lý, tập thể dục đều đặn và ngủ đủ giấc là ba yếu tố quan trọng..."
+    }
+  ]
+  }
+  
+ 
+    
+  

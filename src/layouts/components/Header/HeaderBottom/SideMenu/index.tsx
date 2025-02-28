@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import CloseButton from '../../../../../Component/button/CloseButton';
 import { LogoLink, Logo } from '..';
-import { FlexBox, Title } from '../../../../../styled';
-import { BoxIcon, Icon } from '../../HeaderTop';
+import { FlexBox, Icon, Title } from '../../../../../styled';
 import { faTwitter, faInstagram, faPinterestP } from '@fortawesome/free-brands-svg-icons';
 import BlogItem from '../../../../../Component/BlogItem';
 
@@ -12,7 +11,28 @@ interface SideMenuProps {
     isVisible: boolean;
 }
 
-
+const list = [
+    {
+        imgUrl: "./images/insta6.jpg",
+        timeText: "12 Tháng Mười Hai 2024",
+        blogTitle: "10 Sun Hats For Beach Days, Long",
+    },
+    {
+        imgUrl: "./images/insta5.jpg",
+        timeText: "12 Tháng Mười Hai 2024",
+        blogTitle: "10 Sun Hats For Beach Days, Long",
+    },
+    {
+        imgUrl: "./images/insta4.jpg",
+        timeText: "12 Tháng Mười Hai 2024",
+        blogTitle: "10 Sun Hats For Beach Days, Long",
+    },
+    {
+        imgUrl: "./images/insta3.jpg",
+        timeText: "12 Tháng Mười Hai 2024",
+        blogTitle: "10 Sun Hats For Beach Days, Long",
+    },
+]
 
 const SideMenu: React.FC<SideMenuProps> = ({ onClose, isVisible }) => {
     const [isClosing, setIsClosing] = useState(false);
@@ -24,7 +44,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ onClose, isVisible }) => {
             setIsClosing(true);
             const timer = setTimeout(() => {
                 onClose();
-            }, 800); // Time matches the animation duration
+            }, 800); 
             return () => clearTimeout(timer);
         }
     }, [isVisible, onClose]);
@@ -33,7 +53,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ onClose, isVisible }) => {
         setIsClosing(true);
         setTimeout(() => {
             onClose();
-        }, 800); // Time matches the animation duration
+        }, 800);
     };
 
     const handleWrapperClick = () => {
@@ -41,7 +61,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ onClose, isVisible }) => {
     };
 
     const handleContentClick = (event: React.MouseEvent) => {
-        event.stopPropagation(); // Prevents event from bubbling up to handleWrapperClick
+        event.stopPropagation(); 
     };
 
     return (
@@ -62,38 +82,22 @@ const SideMenu: React.FC<SideMenuProps> = ({ onClose, isVisible }) => {
                         </TitleDescr>
                     </TextBox>
                     <FlexBox>
-                        <SocialIcon>
                             <Icon icon={faTwitter} />
-                        </SocialIcon>
-                        <SocialIcon>
                             <Icon icon={faInstagram} />
-                        </SocialIcon>
-                        <SocialIcon>
                             <Icon icon={faPinterestP} />
-                        </SocialIcon>
                     </FlexBox>
                     <TitleMarginTop medium>Bài viết gần đây</TitleMarginTop>
                     <ListBlog>
-                        <BlogItem
-                            imgUrl="./images/insta6.jpg"
-                            timeText="12 Tháng Mười Hai 2024"
-                            blogTitle="10 Sun Hats For Beach Days, Long"
-                        />
-                        <BlogItem
-                            imgUrl="./images/insta5.jpg"
-                            timeText="12 Tháng Mười Hai 2024"
-                            blogTitle="10 Sun Hats For Beach Days, Long"
-                        />
-                        <BlogItem
-                            imgUrl="./images/insta4.jpg"
-                            timeText="12 Tháng Mười Hai 2024"
-                            blogTitle="10 Sun Hats For Beach Days, Long"
-                        />
-                        <BlogItem
-                            imgUrl="./images/insta3.jpg"
-                            timeText="12 Tháng Mười Hai 2024"
-                            blogTitle="10 Sun Hats For Beach Days, Long"
-                        />
+                        {list.map((val, index) => {
+                            return (
+                                <BlogItem
+                                    key={index}
+                                    imgUrl={val.imgUrl}
+                                    timeText={val.timeText}
+                                    blogTitle={val.blogTitle}
+                                />
+                            )
+                        })}
                     </ListBlog>
                 </Content>
             </ContentWrapper>
@@ -149,7 +153,7 @@ const TitleDescr = styled(Title)`
     font-weight: 400;
 `;
 
-export const SocialIcon = styled(BoxIcon)`
+export const SocialIcon = styled(Icon)`
     border: 0.5px solid #FF681A;
     cursor: pointer;
 `;

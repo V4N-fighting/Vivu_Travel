@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import Banner from "../../Component/Banner";
-import { Grid, GridCol_4, GridRow } from "../../styled";
-import { useState } from "react";
+import { Grid, GridCol,  GridRow } from "../../styled";
 import TourCard from "../../Component/TourCard";
 import Pagination from "../../Component/Pagination";
 
@@ -38,13 +37,13 @@ function Activity() {
             <Grid>
               <GridRow margin="20px">
                 {curItems.map((activity, index) => (
-                  <GridCol_4 key={index}>
+                  <GridCol col={4} key={index}>
                     <TourCard
                       url={activity.url}
                       label={activity.label}
                       name={activity.name}
                     />
-                  </GridCol_4>
+                  </GridCol>
                 ))}
               </GridRow>
             </Grid>

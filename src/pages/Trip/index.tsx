@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Banner from "../../Component/Banner";
-import { Grid, GridCol_3, GridCol_9, GridRow, Title } from "../../styled";
+import { Grid, GridCol, GridRow, Title } from "../../styled";
 import SideBar from "./SideBar";
 import Content from "./Content";
 
@@ -19,12 +19,12 @@ function Trip() {
         <TitleTrip>Trips</TitleTrip>
         <Grid>
           <GridRow margin="10px">
-            <GridCol_3>
+            <GridCol col={3}>
               <SideBar />
-            </GridCol_3>
-            <GridCol_9>
+            </GridCol>
+            <GridCol col={9}>
               <Content />
-            </GridCol_9>
+            </GridCol>
           </GridRow>
         </Grid>
       </Container>

@@ -1,24 +1,45 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { Title, Text, Icon } from '../../styled';
 import Button from '../button/Button';
 import { faChartSimple, faCheck, faLocationDot, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { faCalendar, faClock } from '@fortawesome/free-regular-svg-icons';
 
-interface CardProps {
+interface TourCardDetailProps {
     url: string,  
     title: string, 
     textLocation: string,
     textTime: string,
+    textDescr: string,
     textDensity: string,
     textLevel: string,
     price: string,
-    horizontal?: boolean
+    horizontal?: boolean,
+    isDensity?: boolean
 }
 
+const TourCardDetail: React.FC<TourCardDetailProps> = 
+({url, price, textLocation, title, textTime, textDensity, textLevel, horizontal, textDescr, isDensity = true}) => {
+  const [isfullYear, setIsFullYear] = useState<boolean>(true)
+  
+  const details = [
+    { icon: faLocationDot, text: textLocation },
+    { icon: faClock, text: textTime },
+    { icon: faUsers, text: textDensity },
+    { icon: faChartSimple, text: textLevel },
+  ];
 
+  const next_tour = ['Th1 04', 'Th1 05', 'Th1 06' ];
 
-const Card: React.FC<CardProps> = ({url, price, textLocation, title, textTime, textDensity, textLevel, horizontal}) => {
+  const months = ['Th1', 'Th2', 'Th3', 'Th4', 'Th5', 'Th6', 'Th7', 'Th8', 'Th9', 'Th10', 'Th11', 'Th12' ];
+
+  const availableMonth = months.join(' ');
+
+  useEffect(() => {
+    months.length == 12 ? setIsFullYear(true): setIsFullYear(false);
+  }, [])
+
+  
   return (
         <WrapperCard horizontal={horizontal}>
             <WrapperImage><Image src={url}></Image></WrapperImage>
@@ -26,27 +47,27 @@ const Card: React.FC<CardProps> = ({url, price, textLocation, title, textTime, t
                 <CardTitle>{title}</CardTitle>
                 <Descr>
                     <Left>
-                        <TextDescr><Icon margin='0 10px 0 0' color='orange' icon={faLocationDot} />{textLocation}</TextDescr>
-                        <TextDescr><Icon margin='0 10px 0 0' color='orange' icon={faClock} />{textTime}</TextDescr>
-                        <TextDescr><Icon margin='0 10px 0 0' color='orange' icon={faUsers} />{textDensity}</TextDescr>
-                        <TextDescr><Icon margin='0 10px 0 0' color='orange' icon={faChartSimple} />{textLevel}</TextDescr>
-
-                        <TextDescr>
-                        Travel is the movement of people between relatively distant geographical locations, and can involve travel by foot, bicycle, automobile, train, boat, bus, airplane, or other means, with or without luggage, and can be one way or round trip. Travel can also include relatively short stays between successive movements.
+                      {details.map((detail, index) => (
+                        <TextDescr key={index}>
+                          <Icon color="orange" icon={detail.icon} />
+                          {detail.text}
                         </TextDescr>
+                      ))}
+                      <TextDescr>{textDescr}</TextDescr>
                     </Left>
                     <Right>
                         <Price>{price}</Price>
                         <TextDescr>Chuyến khởi hành tiếp theo</TextDescr>
-                        <TextDescr><Icon margin='0 10px 0 0' color='orange' icon={faCheck} />Th1 04</TextDescr>
-                        <TextDescr><Icon margin='0 10px 0 0' color='orange' icon={faCheck} />Th1 05</TextDescr>
-                        <TextDescr><Icon margin='0 10px 0 0' color='orange' icon={faCheck} />Th1 06</TextDescr>
+                        {next_tour.map((day, index) => {
+                          return <TextDescr key={index}><Icon color='orange' icon={faCheck} />{day}</TextDescr>
+                        })}
                     </Right>
                 </Descr>
                 <CardButton orange>Xem chi tiết</CardButton>
-                <TextDescr>Có sẵn quanh năm</TextDescr>
-                <TextDescr style={{fontSize: '12px'}}><Icon margin='0 10px 0 0' color='orange' icon={faCalendar} />Th1  Th2  Th3  Th4  Th5  Th6  Th7  Th8  Th9  Th10  Th11  Th12</TextDescr>
-
+                {isDensity && <>
+                  <TextDescr>{isfullYear ? 'Có sẵn quanh năm' : 'Có ở các tháng'}</TextDescr>
+                  <TextDescr style={{fontSize: '12px'}}><Icon color='orange' icon={faCalendar} />{availableMonth}</TextDescr>
+                </>}
             </Content>
         </WrapperCard>
   );
@@ -58,10 +79,10 @@ const WrapperCard = styled.div<{horizontal?: boolean}>`
   display: ${props => props.horizontal ? 'flex' : 'block'};
   width: 100%;
   max-width: 100%;
-  background-color: #ffffff;
+  background-color: var(--white-color);
   border-radius: 5px;
   overflow: hidden;
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  box-shadow: var(--box-shadow);
   `
 const WrapperImage = styled.div`
     width: 100%;
@@ -90,18 +111,12 @@ const Content = styled.div`
   max-width: 100%;
   padding: 20px 15px;
 `
-const CardTitle = styled.div`
+const CardTitle = styled(Title)`
   display: -webkit-box;
-    -webkit-line-clamp: 1;
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-  padding: 0;
-  margin: 0 0 12px;
-  font-weight: 600;
-  font-size: 16px;
-  line-height: 1.4;
-  color: #1C1C1C;
   &:hover {
     cursor: pointer;
     text-decoration: underline;
@@ -113,13 +128,13 @@ const Descr = styled.div`
   display: flex;
   margin: 20px 0;
   padding: 10px 0;
-  border-bottom: 1px solid #999999;
+  border-bottom: var(--border);
 
 `
 const Left = styled.div`
   width: calc(60% - 1px);
   margin-bottom: -18px;
-  border-right: 1px solid #9f9f9f;
+  border-right: var(--border);
   padding-right: 15px;
 `
 const Right = styled.div`
@@ -153,4 +168,4 @@ const CardButton = styled(Button)`
 `
 
 
-export default Card;
+export default TourCardDetail;

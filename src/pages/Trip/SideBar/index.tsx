@@ -27,7 +27,7 @@ const SideBar: React.FC = () => {
   return (
     <Sidebar>
                 <SidebarItem>
-                  <Title small margin="0">Điều kiện lọc</Title>
+                  <Title small >Điều kiện lọc</Title>
                   <DeleteAll>Xóa tất cả</DeleteAll>
                 </SidebarItem>
                 <SidebarItem>

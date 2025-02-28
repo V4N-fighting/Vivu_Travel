@@ -3,24 +3,25 @@ import {ArrowRightOutlined, CarOutlined, FieldTimeOutlined, MoneyCollectOutlined
 import PurifyItem from "./PurifyItem";
 import Button from "../../../../Component/button/Button";
 import { EnvironmentOutlined } from '@ant-design/icons';
+import { countryList } from './../../../../Component/CountryList/index';
 
 
 interface PurifyProps {
 }
+
+const newOptions = countryList.map((val, index) => {
+  return {
+    value: index + 1,
+    label: val
+  }
+})
 
 const PurifyContent = [
   {
     width: '20%',
     Icon: EnvironmentOutlined,
     placeholder: 'Điểm đến',
-    options: [
-      {value: 1, label: 'Đảo trên trời'},
-      {value: 2, label: 'Hoa quả sơn'},
-      {value: 3, label: 'Tây thiên'},
-      {value: 4, label: 'Sư đà lĩnh'},
-      {value: 5, label: 'Thủy liêm động'},
-      {value: 6, label: 'Cao lão trang'},
-    ]
+    options: newOptions,
   },
   {
     width: '20%',

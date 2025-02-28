@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { FlexBox, SubTitle, Text, Title, Wrapper } from "../../../styled";
+import { FlexBox, SupTitle, Text, Title, Wrapper } from "../../../styled";
 import { PlayCircleFilled } from '@ant-design/icons';
 import ScrollToShow from "../../../Component/ScrollToShow";
 
@@ -13,9 +13,9 @@ const BestCity: React.FC<BestCityProps> = ({}) => {
             
                 <FlexBox_50_P_0_15>
                     <ScrollToShow leftToRight>
-                        <SubTitle>Đi & Khám Phá</SubTitle>
-                        <TitleChange>Những thành phố tuyệt vời</TitleChange>
-                        <Text>Nếu bạn đam mê khám phá những điểm đến độc đáo và trải nghiệm văn hóa mới, chúng tôi sẽ dẫn bạn đến những thành phố tuyệt vời nhất trên hành trình đáng nhớ này.</Text>
+                        <SupTitle orange>Đi & Khám Phá</SupTitle>
+                        <Title big>Những thành phố tuyệt vời</Title>
+                        <Text small>Nếu bạn đam mê khám phá những điểm đến độc đáo và trải nghiệm văn hóa mới, chúng tôi sẽ dẫn bạn đến những thành phố tuyệt vời nhất trên hành trình đáng nhớ này.</Text>
                         <FlexBoxChange>
                             <FlexBox_50_P_0_15>
                                 <Image src='./images/gallery-1-1.jpg'></Image>
@@ -60,14 +60,12 @@ const Image = styled.img`
     border-radius: 10px;
 `
 
-const TitleChange = styled(Title)`
-    font-size: 50px;
-`
 
 const GallaryBtn = styled.div`
     padding: 10px 30px;
-    border-radius: 35px;
+    border-radius: 50px;
     box-shadow: 0px 0px 15px 0px rgba(255, 104, 26, 0.15);
+    border: 1px solid var(--primary-color);
     background-color: #ffffff;
     position: absolute;
     top: 10%;
@@ -76,7 +74,7 @@ const GallaryBtn = styled.div`
     align-items: center;
 `
 
-const Span = styled(SubTitle)`
+const Span = styled(SupTitle)`
     color: #333333;
     font-weight: 600;
     padding-bottom: 2px;

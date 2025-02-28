@@ -54,11 +54,11 @@ const StyledButton = styled.button<ButtonProps>`
   transition: 0.3s ease all;
 
   &:hover {
-    color: ${(props) => (props.white ? '#FF681A' : 'white')};
+    color: ${(props) => (props.white ? 'var(--primary-color)' : 'white')};
   }
 
   &:focus {
-    color: ${(props) => (props.white ? '#FF681A' : 'white')};
+    color: ${(props) => (props.white ? 'var(--primary-color)' : 'white')};
   }
 
   &::before {
@@ -70,7 +70,7 @@ const StyledButton = styled.button<ButtonProps>`
     bottom: 0;
     opacity: 0;
     content: '';
-    background-color: ${(props) => (props.white ? 'white' : '#37D4D9')};
+    background-color: ${(props) => (props.white ? 'white' : 'var(--secondary-color)')};
     z-index: -2;
   }
 

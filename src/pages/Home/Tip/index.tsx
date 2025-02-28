@@ -2,7 +2,7 @@ import React from 'react';
 import styled, { keyframes } from 'styled-components';
 import { Select } from 'antd';
 import TipItem from './TipItem';
-import { SubTitle, Title } from '../../../styled';
+import { CenterBox, SupTitle, Title } from '../../../styled';
 import ScrollToShow from '../../../Component/ScrollToShow';
 
 const { Option } = Select;
@@ -19,13 +19,15 @@ const Tip: React.FC<TipProps> = ({}) => {
       <Circle><CircleImage></CircleImage></Circle>
       <Header>
         <ScrollToShow topToBottom>
-          <SupTitle>Mẹo vặt cần thiết</SupTitle>
-          <TipTitle>Những Mẹo Tuyệt Vời Làm Cho Chuyến Đi Của Bạn</TipTitle>
+          <CenterBox>
+            <SupTitle orange medium>Mẹo vặt cần thiết</SupTitle> 
+            <TipTitle big>Những Mẹo Tuyệt Vời Làm Cho Chuyến Đi Của Bạn</TipTitle>
+          </CenterBox>  
         </ScrollToShow>
       </Header>
-      <ScrollToShow leftToRight><TipItem  url={'./images/6-2-705x540.jpg'} label={'Camera'} subtitle={'12 Tháng Mười Hai, 2023'} title={'10 Sun Hats For Beach Days, Long Hikes, And'} text={'Nulla porttitor accumsan tincidunt. Curabitur aliquet quam id dui posuere blandit. Vestibulum ac diam sit'} ></TipItem></ScrollToShow>
+      <ScrollToShow leftToRight><TipItem  url={'./images/6-2-705x540.jpg'} label={'Camera'} suptitle={'12 Tháng Mười Hai, 2023'} title={'10 Sun Hats For Beach Days, Long Hikes, And'} text={'Nulla porttitor accumsan tincidunt. Curabitur aliquet quam id dui posuere blandit. Vestibulum ac diam sit'} ></TipItem></ScrollToShow>
       <ScrollToShow rightToLeft>
-        <TipItem reverse url={'./images/7-2-705x540.jpg'} label={'Camera'} subtitle={'12 Tháng Mười Hai, 2023'} title={'10 Sun Hats For Beach Days, Long Hikes, And'} text={'Nulla porttitor accumsan tincidunt. Curabitur aliquet quam id dui posuere blandit. Vestibulum ac diam sit'} ></TipItem>
+        <TipItem reverse url={'./images/7-2-705x540.jpg'} label={'Camera'} suptitle={'12 Tháng Mười Hai, 2023'} title={'10 Sun Hats For Beach Days, Long Hikes, And'} text={'Nulla porttitor accumsan tincidunt. Curabitur aliquet quam id dui posuere blandit. Vestibulum ac diam sit'} ></TipItem>
         
       </ScrollToShow><Dot><DotImage></DotImage></Dot>
     </Wrapper>
@@ -51,12 +53,8 @@ const Header = styled.div`
 `;
 
 const TipTitle = styled(Title)`
-  text-align: center;
   width: 700px;
   margin: 40px 0;
-`
-const SupTitle = styled(SubTitle)`
-  text-align: center;
 `
 const turnAround = keyframes`
     0% {

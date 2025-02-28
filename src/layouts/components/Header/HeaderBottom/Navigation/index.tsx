@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FlexBox, SubTitle, Title } from '../../../../../styled';
+import { FlexBox, Title } from '../../../../../styled';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
@@ -7,34 +7,84 @@ import { Link } from 'react-router-dom';
 const handleScroll = () => {
   window.scrollTo({ top: 200, behavior: 'smooth' });
 }
+interface NavigationArrayProps {
+  id: number;
+  value: string;
+  to: string;
+  children?: NavigationArrayProps[]; 
+}
+
+const navigation: NavigationArrayProps[] = [
+  {
+    id: 1,
+    value: 'Trang chủ',
+    to: '/'
+  },
+  {
+    id: 2,
+    value: 'Tours',
+    to: '/tour_detail',
+    children: [
+      {
+        id: 1,
+        value: 'Các điểm đến',
+        to: '/destinations'
+      },
+      {
+        id: 2,
+        value: 'Các hoạt động',
+        to: '/activities'
+      },
+      {
+        id: 3,
+        value: 'Các loại tour',
+        to: '/tours'
+      },
+    ],
+  },
+  {
+    id: 3,
+    value: 'Về chúng tôi',
+    to: '/about'
+  },
+  {
+    id: 4,
+    value: 'Blog',
+    to: '/blog'
+  },
+  {
+    id: 5,
+    value: 'Liên hệ',
+    to: '/contact'
+  },
+];
+
 
 const Navigation: React.FC = () => {
   return (
     <NavList>
       <FlexBoxPadding>
-        <NavItem>
-          <NavItemName small><LinkElement to="/">Trang chủ</LinkElement></NavItemName>
+        {navigation.map((item, _index) => {
+          return !item.children 
+          ? 
+          <NavItem key={item.id}>
+            <NavItemName small><LinkElement to={item.to}>{item.value}</LinkElement></NavItemName>
+          </NavItem>
+          : 
+          <NavItem>
+            <NavItemName small>
+              <LinkElement to={item.to} onClick={handleScroll}>{item.value}</LinkElement>
+              <DropDownIcon icon={faChevronDown} />
+            </NavItemName>
+            <SubNavBox>
+              {item.children.map((child, _index)=>{
+                  return <SubNavItemName small key={child.id}>
+                            <LinkElement to={child.to} onClick={handleScroll}>{child.value}</LinkElement>
+                        </SubNavItemName>
+              })}
+            </SubNavBox>
         </NavItem>
-        <NavItem>
-          <NavItemName small>
-            <LinkElement to="/tour_detail" onClick={handleScroll}>Tours</LinkElement>
-            <DropDownIcon icon={faChevronDown} />
-          </NavItemName>
-          <SubNavBox>
-            <SubNavItemName small><LinkElement to="/destinations" onClick={handleScroll}>Các điểm đến</LinkElement></SubNavItemName>
-            <SubNavItemName small><LinkElement to="/activities" onClick={handleScroll}>Các hoạt động</LinkElement></SubNavItemName>
-            <SubNavItemName small><LinkElement to="/tours" onClick={handleScroll}>Các loại tour</LinkElement></SubNavItemName>
-          </SubNavBox>
-        </NavItem>
-        <NavItem>
-          <NavItemName small><LinkElement to="/about" onClick={handleScroll}>Về chúng tôi</LinkElement></NavItemName>
-        </NavItem>
-        <NavItem>
-          <NavItemName small><LinkElement to="/blog" onClick={handleScroll}>Blog</LinkElement></NavItemName>
-        </NavItem>
-        <NavItem>
-          <NavItemName small><LinkElement to="/contact" onClick={handleScroll}>Liên hệ</LinkElement></NavItemName>
-        </NavItem>
+        })}
       </FlexBoxPadding>
     </NavList>
   );
@@ -64,21 +114,21 @@ const DropDownIcon = styled(FontAwesomeIcon)`
   font-size: 0.5rem;
   padding-bottom: 2px;
   transition: all ease 0.5s;
-  color: #1c1c1c;
+  color: var(--primary-text-color);
 `;
 
 const SubNavBox = styled.div`
   position: absolute;
   text-align: left;
   top: 100%;
-  background-color: #ffffff;
+  background-color: var(--white-color);;
   visibility: hidden;
   min-width: 190px;
   width: max-content;
   margin-top: 50px;
   opacity: 0;
   z-index: -1;
-  border-bottom: 3px solid #ff681a;
+  border-bottom: 3px solid var(--primary-color);
   box-shadow: 0px 10px 60px 0px rgba(0, 0, 0, 0.09),
     0px 3px 0px 0px rgba(231, 13, 60, 0.004);
   transform-origin: top center;
@@ -117,7 +167,7 @@ const SubNavItemName = styled(NavItemName)`
     display: inline-block;
     font-size: 0.7em;
     line-height: 5.5px;
-    color: #ff681a;
+    color: var(--primary-color);
     font-weight: 700;
     box-shadow: inset 0px 3px 4px 0px rgba(255, 104, 26, 0.4);
   }
@@ -133,15 +183,15 @@ const NavItem = styled.li`
 
   &:hover {
     ${NavItemName} {
-      color: #37d4d9;
+      color: var(--secondary-color);
     }
 
     ${LinkElement} {
-      color: #37d4d9;
+      color: var(--secondary-color);
     }
 
     ${DropDownIcon} {
-      color: #37d4d9;
+      color: var(--secondary-color);
     }
 
     ${SubNavBox} {
@@ -151,10 +201,10 @@ const NavItem = styled.li`
       z-index: 9;
 
       ${SubNavItemName} {
-        color: #1c1c1c;
+        color: var(--primary-text-color);
 
         &:hover {
-          color: #37d4d9;
+          color: var(--secondary-color);
         }
       }
     }

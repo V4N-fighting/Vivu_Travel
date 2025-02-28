@@ -1,4 +1,4 @@
-import React, { CSSProperties, FC } from 'react';
+import React, { FC } from 'react';
 import { Select } from 'antd';
 import styled from 'styled-components';
 import { IconBaseProps } from '@ant-design/icons/lib/components/Icon';

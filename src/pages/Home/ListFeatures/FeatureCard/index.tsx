@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { ContentPadding, Title, Text, FontBody } from "../../../../styled";
+import {  FontBody } from "../../../../styled";
 
 interface FeatureCardProps {
 

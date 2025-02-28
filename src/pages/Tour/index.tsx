@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Banner from "../../Component/Banner";
-import { Grid, GridCol_4, GridRow } from "../../styled";
+import { Grid, GridCol, GridRow } from "../../styled";
 import { useState } from "react";
 import TourCard from "../../Component/TourCard";
 import Pagination from "../../Component/Pagination";
@@ -39,13 +39,13 @@ function Tour() {
             <Grid>
               <GridRow margin="20px">
                 {curItems.map((tour, index) => (
-                  <GridCol_4 key={index}>
+                  <GridCol col={4} key={index}>
                     <TourCard
                       url={tour.url}
                       label={tour.label}
                       name={tour.name}
                     />
-                  </GridCol_4>
+                  </GridCol>
                 ))}
               </GridRow>
             </Grid>

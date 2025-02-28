@@ -133,8 +133,8 @@ const Contain: React.FC<ContainProps> = ({formRef}) => {
                 </NavContent>
             </Information>
             <Form ref={formRef}>
-                <Text style={{ gridColumn: 'span 2'}} margin="0 0 10px">Bạn có thể gửi yêu cầu qua mẫu này</Text>
-                <Text style={{ gridColumn: 'span 2'}} margin="0 0 10px" small>Tên chuyến đi: *
+                <Text style={{ gridColumn: 'span 2'}} >Bạn có thể gửi yêu cầu qua mẫu này</Text>
+                <Text style={{ gridColumn: 'span 2'}}  small>Tên chuyến đi: *
                     <span style={{fontWeight: 'bold'}}> Romantic Sri Lanka Honeymoon Package</span>
                 </Text>
                 <Input type="text" placeholder="Nhập tên*" required style={{ gridColumn: 'span 2'}}/>

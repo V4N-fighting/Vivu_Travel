@@ -20,7 +20,7 @@ const StarRating: React.FC<{ star: number }> = ({ star }) => {
 const StarContainer = styled.div`
   display: flex;
   gap: 5px; 
-  color: #37d4d9;
+  color: var(--secondary-color);
 `;
 
 export default StarRating;

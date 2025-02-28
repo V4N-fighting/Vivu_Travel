@@ -1,68 +1,62 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { faList, faGripVertical } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DropdownMenu from '../DropdownMenu';
-import Card from '../../../Component/Card';
-import { Grid, GridCol_12, GridCol_6, GridRow } from '../../../styled';
+import { Grid, GridCol, GridRow, Icon } from '../../../styled';
 import Pagination from './../../../Component/Pagination/index';
+import TourCardDetail from '../../../Component/TourCardDetail';
 
 const listContent = [
-  <Card 
+  <TourCardDetail 
     key='1'
     url={"./images/4-900x490.jpg"}
     title={"Maldives: The Travel and Experience of the Lifetime"}
     textLocation={"Colombo, England, France"}
-    textTime={"8 Ngày - 6 Đêm"} 
-    price={"300,000đ"} 
-    textDensity={'1-3 người'} 
-    textLevel={'Trung bình'} 
-    horizontal={false} 
-  />,
-  <Card 
+    textTime={"8 Ngày - 6 Đêm"}
+    price={"1300,000đ"}
+    textDensity={'1-3 người'}
+    textLevel={'Trung bình'}
+    horizontal={true} textDescr={'Lương Ngọc Văn đẹp trai thì thôi luôn nhé, miễn bàn miễn bàn miễn bàn miễn bàn'}  />,
+  <TourCardDetail 
     key='2'
     url={"./images/4-900x490.jpg"}
     title={"Maldives: The Travel and Experience of the Lifetime"}
     textLocation={"Colombo, England, France"}
-    textTime={"8 Ngày - 6 Đêm"} 
-    price={"300,000đ"} 
-    textDensity={'1-3 người'} 
-    textLevel={'Trung bình'} 
-    horizontal={false} 
-  />,
-  <Card 
+    textTime={"8 Ngày - 6 Đêm"}
+    price={"300,000đ"}
+    textDensity={'1-3 người'}
+    textLevel={'Trung bình'}
+    horizontal={false} textDescr={'Lương Ngọc Văn đẹp trai thì thôi luôn nhé, miễn bàn miễn bàn miễn bàn miễn bàn'}  />,
+  <TourCardDetail 
     key='3'
     url={"./images/4-900x490.jpg"}
     title={"Maldives: The Travel and Experience of the Lifetime"}
     textLocation={"Colombo, England, France"}
-    textTime={"8 Ngày - 6 Đêm"} 
-    price={"300,000đ"} 
-    textDensity={'1-3 người'} 
-    textLevel={'Trung bình'} 
-    horizontal={false} 
-  />,
-  <Card 
+    textTime={"8 Ngày - 6 Đêm"}
+    price={"300,000đ"}
+    textDensity={'1-3 người'}
+    textLevel={'Trung bình'}
+    horizontal={false} textDescr={'Lương Ngọc Văn đẹp trai thì thôi luôn nhé, miễn bàn miễn bàn miễn bàn miễn bàn'}  />,
+  <TourCardDetail 
     key='4'
     url={"./images/4-900x490.jpg"}
     title={"Maldives: The Travel and Experience of the Lifetime"}
     textLocation={"Colombo, England, France"}
-    textTime={"8 Ngày - 6 Đêm"} 
-    price={"300,000đ"} 
-    textDensity={'1-3 người'} 
-    textLevel={'Trung bình'} 
-    horizontal={false} 
-  />,
-  <Card 
+    textTime={"8 Ngày - 6 Đêm"}
+    price={"300,000đ"}
+    textDensity={'1-3 người'}
+    textLevel={'Trung bình'}
+    horizontal={false} textDescr={'Lương Ngọc Văn đẹp trai thì thôi luôn nhé, miễn bàn miễn bàn miễn bàn miễn bàn'}  />,
+  <TourCardDetail 
     key='5'
     url={"./images/4-900x490.jpg"}
     title={"Maldives: The Travel and Experience of the Lifetime"}
     textLocation={"Colombo, England, France"}
-    textTime={"8 Ngày - 6 Đêm"} 
-    price={"300,000đ"} 
-    textDensity={'1-3 người'} 
-    textLevel={'Trung bình'} 
-    horizontal={false} 
-  />,
+    textTime={"8 Ngày - 6 Đêm"}
+    price={"300,000đ"}
+    textDensity={'1-3 người'}
+    textLevel={'Trung bình'}
+    horizontal={false} textDescr={'Lương Ngọc Văn đẹp trai thì thôi luôn nhé, miễn bàn miễn bàn miễn bàn miễn bàn'}  />,
 ];
 
 
@@ -100,13 +94,13 @@ const Content: React.FC = () => {
                 <GridRow margin='10px'>
                 {curItems.map((card, index) => {
                   return menuShow ? (
-                    <GridCol_6 key={index}>
+                    <GridCol col={6} key={index}>
                       {React.cloneElement(card, { horizontal: false })}
-                    </GridCol_6>
+                    </GridCol>
                   ) : (
-                    <GridCol_12 key={index}>
+                    <GridCol col={12} key={index}>
                       {React.cloneElement(card, { horizontal: true })}
-                    </GridCol_12>
+                    </GridCol>
                   );
                 })}
 
@@ -126,7 +120,6 @@ const Wrapper = styled.div`
 const Header = styled.div`
   display: flex;
   justify-content: flex-end;
-  /* padding: 0 10px; */
 `
 
 const Arrange= styled.div`
@@ -139,16 +132,6 @@ const Layout = styled.div`
   padding : 0 10px;
 `
 
-const Icon = styled(FontAwesomeIcon)`
-    margin: 0 5px;
-    font-size: 14px;
-    padding: 0 5px;
-    cursor: pointer;
-
-    &:hover {
-      color: var(--primary-color);
-    }
-`
 const Contain = styled.div`
     padding: 20px 0;
 `

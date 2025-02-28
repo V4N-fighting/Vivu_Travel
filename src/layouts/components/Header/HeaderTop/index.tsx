@@ -1,14 +1,14 @@
 import React from "react";
-import { Wrapper, FlexBox, Title, FlexBoxBetween } from "../../../../styled";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Wrapper, FlexBox, Text, FlexBoxBetween, Icon } from "../../../../styled";
 import { faCircleUser, faEnvelope } from "@fortawesome/free-regular-svg-icons";
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { IconDefinition, IconProp } from "@fortawesome/fontawesome-svg-core";
 import { faPhone } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import CircleIcon from "../../../../Component/CircleIcon";
 
 interface ItemContentProps {
-    icon: IconProp;
+    icon: IconDefinition;
     text?: string;
 }
 
@@ -17,8 +17,8 @@ interface ItemContentProps {
 const ItemContent: React.FC<ItemContentProps> = ({ icon, text }) => {
     return (
         <ItemWrapper>
-            <BoxIcon><Icon icon={icon} /></BoxIcon>
-            {text && <Text small white>{text}</Text>}
+            <CircleIcon icon={icon}/>
+            {text && <Text small white style={{margin: 0}}>{text}</Text>}
         </ItemWrapper>
     );
 };
@@ -26,7 +26,7 @@ const ItemContent: React.FC<ItemContentProps> = ({ icon, text }) => {
 const UserContent: React.FC<ItemContentProps> = ({ icon }) => {
     return (
         <ItemWrapper>
-            <User><UserIcon icon={icon} /></User>
+            <User><Icon white icon={icon} style={{margin: 0}}/></User>
         </ItemWrapper>
     );
 };
@@ -50,53 +50,25 @@ const HeaderTop: React.FC = () => {
 }
 
 const Contain = styled.div`
-    /* display: flex;
-    align-items: center;
-    justify-content: center; */
     background-color: #1C1C1C;
 `
-
-const Text = styled(Title)`
-    margin: 0 15px 0 0;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all ease 0.5s;
-
-    &:hover {
-        color: #37D4D9;
-    }
-`;
-
-
-
-export const Icon = styled(FontAwesomeIcon)`
-    width: 16px;
-    height: 16px;
-    color: #FF681A;
-    transition: all ease 0.5s;
-
-    &:hover {
-        color: #ffffff
-    }
-`;
-
-const UserIcon = styled(FontAwesomeIcon)`
-    padding: 4px 0;
-`;
 
 
 const User = styled.a`
     display: block;
     padding: 17px 22px;
-    color: #ffffff;
-    background-color: #37D4D9;
+    color: var(--white-color);
+    background-color: var(--secondary-color);
     transition: all ease 0.5s;
     cursor: pointer;
 
     &:hover {
-        background-color: #FF681A;
+        background-color: var(--primary-color);
     }
 `
+const FlexBoxPadding = styled(FlexBox)`
+    padding: 0 15px;
+`;
 
 export const BoxIcon = styled.div`
     width: 40px;
@@ -104,34 +76,30 @@ export const BoxIcon = styled.div`
     margin-right: 5px;
     border-radius: 50%;
     transition: all ease 0.5s;
-    background-color: #ffffff;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    background-color: var(--white-color);
 
     &:hover {
-        background-color: #37D4D9;
+        background-color: var(--secondary-color);
     }
 `;
 
 const ItemWrapper = styled.div`
     display: flex;
     align-items: center;
+    margin: 0 15px 0 0;
 
     &:hover {
         ${Icon} {
-            color: #ffffff;
+            color: var(--white-color);
         };
         ${BoxIcon} {
-            background-color: #37D4D9;
+            background-color: var(--secondary-color);
         }
     }
 `;
 
 
 
-const FlexBoxPadding = styled(FlexBox)`
-    padding: 0 15px;
-`;
+
 
 export default HeaderTop;

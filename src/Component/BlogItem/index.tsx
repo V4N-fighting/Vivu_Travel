@@ -1,6 +1,5 @@
 import styled from "styled-components";
-import {  Title } from "../../styled";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {  Icon, Title, Text } from "../../styled";
 import { faCalendarDays } from "@fortawesome/free-regular-svg-icons";
 
 
@@ -20,9 +19,9 @@ const BlogItem: React.FC<BlogItemProps> = ({imgUrl, blogTitle, timeText}) => {
             <Content>
                 <TimeBox>
                     <Icon icon={faCalendarDays} />
-                    <TimeText>{timeText}</TimeText>
+                    <Text>{timeText}</Text>
                 </TimeBox>
-                <BlogTitle>{blogTitle}</BlogTitle>
+                <Title medium>{blogTitle}</Title>
             </Content>
         </Wrapper>
      );
@@ -55,23 +54,6 @@ const Content = styled.div`
 const TimeBox = styled.div`
     margin-bottom: 2px;
     display: flex;
-`
-
-
-const Icon = styled(FontAwesomeIcon)`
-    margin-right: 5px;
-    font-size: 14px;
-`
-const TimeText = styled.p`
-    font-size: 14px;
-    font-weight: 500;
-    color: #505050;
-`
-
-const BlogTitle = styled(Title)`
-    font-size: 20px;
-    font-weight: 500;
-    margin: 0;
 `
 
 

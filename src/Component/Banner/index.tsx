@@ -41,7 +41,7 @@ const Contain = styled.div`
 
 const PageName = styled.div`
     font-size: 65px;
-    color: #ffffff;
+    color: var(--white-text-color);
     text-transform: capitalize;
     line-height: 1.4;
     margin-bottom: 20px;
@@ -49,14 +49,14 @@ const PageName = styled.div`
 
 const Navigate = styled.div`
     font-size: 20px;
-    color: #ffffff;
+    color: var(--white-text-color);
     text-transform: capitalize;
     line-height: 1.4;
     display: flex;
 `
 
 const LinkPage = styled(Link)`
-    color: #ffffff;
+    color: var(--white-text-color);
 `
 
 const Space = styled.div`
