@@ -3,7 +3,7 @@ import Banner from "../../Component/Banner";
 import ProgressBar from "./ProgressBar";
 import { FlexBox, Grid, GridCol, GridRow, Icon, Text, Title } from "../../styled";
 import TourCard from "./TourCard";
-import Button from "../../Component/button/Button";
+import Button from "../../Component/BaseComponent/Button/Button";
 import { useState } from "react";
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 

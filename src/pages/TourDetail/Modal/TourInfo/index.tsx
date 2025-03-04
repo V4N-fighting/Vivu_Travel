@@ -1,7 +1,7 @@
 
 import styled from "styled-components";
-import Button from "../../../../Component/button/Button";
-import CloseButton from "../../../../Component/button/CloseButton";
+import Button from "../../../../Component/BaseComponent/Button/Button";
+import CloseButton from "../../../../Component/BaseComponent/Button/CloseButton";
 import { FlexBoxBetween, Text } from "../../../../styled";
 
 

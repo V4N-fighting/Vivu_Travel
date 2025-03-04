@@ -1,6 +1,6 @@
 
 import styled from "styled-components";
-import Button from "../../../Component/button/Button";
+import Button from "../../../Component/BaseComponent/Button/Button";
 import { Text } from "../../../styled";
 import { InfoDetail } from "./InfoDetail";
 import { faCar, faHotel, faLanguage, faMountainSun, IconDefinition } from "@fortawesome/free-solid-svg-icons";

@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import {  Icon, Title, Text } from "../../styled";
-import { faCalendarDays } from "@fortawesome/free-regular-svg-icons";
+import {  Title, Text } from "../../styled";
+import Icons from "../BaseComponent/Icons";
 
 
 
@@ -18,7 +18,7 @@ const BlogItem: React.FC<BlogItemProps> = ({imgUrl, blogTitle, timeText}) => {
             </ImageWrapper>
             <Content>
                 <TimeBox>
-                    <Icon icon={faCalendarDays} />
+                    <Icons.CalendarIcon />
                     <Text>{timeText}</Text>
                 </TimeBox>
                 <Title medium>{blogTitle}</Title>

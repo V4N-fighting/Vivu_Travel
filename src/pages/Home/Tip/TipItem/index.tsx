@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { SupTitle, Text, Title } from '../../../../styled';
-import Button from '../../../../Component/button/Button';
+import Button from '../../../../Component/BaseComponent/Button/Button';
 import { TagOutlined, CalendarOutlined } from '@ant-design/icons';
 import { SocialIcon } from './../../../../layouts/components/Header/HeaderBottom/SideMenu/index';
 

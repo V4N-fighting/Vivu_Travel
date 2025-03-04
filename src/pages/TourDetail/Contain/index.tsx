@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import styled from "styled-components";
 import { Text, Title } from "../../../styled";
-import Button from "../../../Component/button/Button";
+import Button from "../../../Component/BaseComponent/Button/Button";
 import { Overview } from "./Overview";
 import { Expense } from "./Expense";
 import { Itinerary } from "./Itinerary";

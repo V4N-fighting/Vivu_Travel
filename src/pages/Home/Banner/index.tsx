@@ -1,54 +1,45 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import { SupTitle, Title, Text, Wrapper } from "../../../styled";
-import Button from "../../../Component/button/Button";
+import Button from "../../../Component/BaseComponent/Button/Button";
 import Purify from "./Purify";
 import { Link } from "react-router-dom";
-import { useFetch } from "../../../Hooks/useFetch";
-import { GET_BANNER } from "../../../api";
+import { useBanner } from "../../../service/bannerService";
 
-interface BannerItem {
-  id: number;
-  textContent: string;
-  img1: string;
-  img2: string;
-}
+
+const TIME_CHANGE = 4000;
+const DEFAULT_BANNER_INDEX = 0;
 
 const Banner: React.FC = () => {
-  const { data, loading, error } = useFetch<BannerItem[]>(GET_BANNER);
-  const [activeId, setActiveId] = useState<number | null>(null);
+  const [activeIndex, setActiveIndex] = useState<number>(DEFAULT_BANNER_INDEX);
 
-  // Cập nhật banner đầu tiên khi có dữ liệu
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const { data, loading, error } = useBanner()
+
+
   useEffect(() => {
-    if (data && data.length > 0) {
-      setActiveId(data[0].id);
-    }
-  }, [data]);
+    if (!data || data.length === 0) return;
 
-  // Tự động đổi banner mỗi 5 giây
-  useEffect(() => {
-    if (!data || data.length === 0 || activeId === null) return;
+    intervalRef.current = setInterval(() => {
+      setActiveIndex((prevIndex) => (prevIndex + 1) % data.length);
+    }, TIME_CHANGE);
 
-    const interval = setInterval(() => {
-      const currentIndex = data.findIndex((item) => item.id === activeId);
-      const nextIndex = (currentIndex + 1) % data.length;
-      setActiveId(data[nextIndex].id);
-    }, 5000);
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, [data]); 
 
-    return () => clearInterval(interval);
-  }, [activeId, data]);
-
-  // Giữ handleClick cố định giữa các lần render
-  const handleClick = useCallback((id: number) => {
-    setActiveId(id);
-  }, []);
+  const handleClick = (index: number) => {
+    setActiveIndex(index); // Cập nhật active index
+  };
+  
 
   // Xử lý trạng thái tải hoặc lỗi
   if (loading) return <p>Đang tải dữ liệu...</p>;
   if (error) return <p>Lỗi: {error}</p>;
   if (!data || data.length === 0) return <p>Không có dữ liệu.</p>;
 
-  const activeContent = data.find((item) => item.id === activeId);
+  const activeContent = data[activeIndex];
 
   return (
     <BannerWrapper>
@@ -64,17 +55,17 @@ const Banner: React.FC = () => {
           </Content>
           <Content>
             <ImgWrapper1>
-              <AnimatedImg src={activeContent?.img1} alt="Banner Image 1" />
+              <AnimatedImg src={activeContent?.firstImage} alt="Banner Image 1" />
             </ImgWrapper1>
             <ImgWrapper2>
-              <AnimatedImg src={activeContent?.img2} alt="Banner Image 2" />
+              <AnimatedImg src={activeContent?.secondImage} alt="Banner Image 2" />
             </ImgWrapper2>
           </Content>
         </Container>
         <WrapperPavigation>
           <BannerPavigation>
-            {data.map((item) => (
-              <PavigationBtn key={item.id} isActive={activeId === item.id} onClick={() => handleClick(item.id)}>
+            {data.map((item, index) => (
+              <PavigationBtn key={item.id} onClick={() => handleClick(index)} style={{ backgroundColor: activeIndex === index ? '#FF681A' : '#ffffff', color:  activeIndex === index ? '#fff' : '#FF681A'}}>
                 {item.id}
               </PavigationBtn>
             ))}
@@ -85,9 +76,6 @@ const Banner: React.FC = () => {
     </BannerWrapper>
   );
 };
-
-
-
 
 const BannerWrapper = styled.div`
   padding-top: 100px;
@@ -145,10 +133,8 @@ const WrapperPavigation = styled.div`
   align-items: center;
 `;
 
-const PavigationBtn = styled.button<{ isActive: boolean }>`
+const PavigationBtn = styled.button`
   position: relative;
-  background-color: ${(props) => (props.isActive ? '#FF681A' : '#ffffff')};
-  color: ${(props) => (props.isActive ? '#ffffff' : '#FF681A')};
   text-decoration: none;
   text-align: center;
   font-weight: 900;

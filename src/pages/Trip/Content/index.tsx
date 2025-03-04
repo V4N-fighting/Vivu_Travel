@@ -3,10 +3,11 @@ import styled from 'styled-components';
 import { faList, faGripVertical } from '@fortawesome/free-solid-svg-icons';
 import DropdownMenu from '../DropdownMenu';
 import { Grid, GridCol, GridRow, Icon } from '../../../styled';
-import Pagination from './../../../Component/Pagination/index';
 import TourCardDetail from '../../../Component/TourCardDetail';
+import { usePagination } from '../../../Hooks/usePagination';
+import Pagination from '../../../Component/Pagination';
 
-const listContent = [
+const listContentDefault = [
   <TourCardDetail 
     key='1'
     url={"./images/4-900x490.jpg"}
@@ -59,20 +60,31 @@ const listContent = [
     horizontal={false} textDescr={'Lương Ngọc Văn đẹp trai thì thôi luôn nhé, miễn bàn miễn bàn miễn bàn miễn bàn'}  />,
 ];
 
+enum ModeShow {
+  List,
+  Menu
+}
+
 
 const Content: React.FC = () => {
+  const [modeShow, setModeShow] =  useState(ModeShow.List)
+  const {
+    indexOfFirstItem,
+    indexOfLastItem,
+    totalPages,
+    getCurrentPage
+  } =  usePagination(4,listContentDefault.length)
 
-  const [listShow, setListShow] = useState<boolean>(true)
-  const [menuShow, setMenuShow] = useState<boolean>(false)
+  const listContent = listContentDefault.slice(indexOfFirstItem,indexOfLastItem)
+
 
   const handleShowMenu = () => {
-    setListShow(false);
-    setMenuShow(true);
+    setModeShow(ModeShow.Menu)
   }
 
   const handleShowList = () => {
-    setListShow(true);
-    setMenuShow(false);
+    setModeShow(ModeShow.List)
+    
   }
 
   return (
@@ -80,20 +92,15 @@ const Content: React.FC = () => {
         <Header>
             <Arrange><DropdownMenu /></Arrange>
             <Layout>
-                <Icon icon={faList} onClick={handleShowList} color={listShow ? 'orange' : ''}/>
-                <Icon icon={faGripVertical} onClick={handleShowMenu} color={menuShow ? 'orange' : ''} />
+                <Icon icon={faList} onClick={handleShowList} color={modeShow === ModeShow.List ? 'orange' : ''}/>
+                <Icon icon={faGripVertical} onClick={handleShowMenu} color={modeShow === ModeShow.Menu  ? 'orange' : ''} />
             </Layout>
         </Header>
         <Contain>
-          <Pagination 
-            items={listContent} 
-            itemsPerPage={listShow ? 4 : 2} 
-            scrollToTop={750}
-            renderItems={(curItems) => (
-              <Grid>
+        <Grid>
                 <GridRow margin='10px'>
-                {curItems.map((card, index) => {
-                  return menuShow ? (
+                {listContent.map((card, index) => {
+                  return modeShow === ModeShow.Menu ? (
                     <GridCol col={6} key={index}>
                       {React.cloneElement(card, { horizontal: false })}
                     </GridCol>
@@ -103,10 +110,15 @@ const Content: React.FC = () => {
                     </GridCol>
                   );
                 })}
-
                 </GridRow>
               </Grid>
-          )} />
+          
+          <Pagination 
+            totalPage={totalPages}
+            onChange={(value : number)=> {getCurrentPage(value)}}
+            itemsPerPage={modeShow === ModeShow.List ? 4 : 2} 
+            scrollToTop={750}
+          />
         </Contain>
     </Wrapper>
   );

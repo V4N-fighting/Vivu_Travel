@@ -18,7 +18,6 @@ const TourCard: React.FC<TourCardProps> = ({url, label, name}) => {
         <Wrap>
           <Image url={url} />
           <Label>{label}</Label>
-
         </Wrap>
         <Name>{name}<Icon icon={faArrowRight}/></Name>
     </Wrapper>

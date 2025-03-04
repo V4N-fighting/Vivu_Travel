@@ -2,7 +2,7 @@ import styled, { keyframes } from "styled-components";
 import { SupTitle, Text, Title } from "../../../styled";
 import ScrollToShow from "../../../Component/ScrollToShow";
 import NewsCard from "../../../Component/NewsCard";
-import Button from "../../../Component/button/Button";
+import Button from "../../../Component/BaseComponent/Button/Button";
 
 
 interface NewsProps {

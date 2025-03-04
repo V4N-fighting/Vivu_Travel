@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import {  FlexBoxBetween, Title, Wrapper } from '../../../../styled';
-import Button from '../../../../Component/button/Button';
+import Button from '../../../../Component/BaseComponent/Button/Button';
 
 
 const FooterTop: React.FC = () => {

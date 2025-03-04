@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import Button from "../../../Component/button/Button";
+import Button from "../../../Component/BaseComponent/Button/Button";
 import { FlexBox, FlexBoxBetween, Grid, GridCol, GridRow, Icon, Text } from "../../../styled";
 import CalendarComponent from "./Calendar";
-import CloseButton from "../../../Component/button/CloseButton";
+import CloseButton from "../../../Component/BaseComponent/Button/CloseButton";
 import { faCalendar } from "@fortawesome/free-regular-svg-icons";
 import { faTeletype } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";

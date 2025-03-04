@@ -3,6 +3,7 @@ import Banner from "../../Component/Banner";
 import { Grid, GridCol, GridRow } from "../../styled";
 import TourCard from "../../Component/TourCard";
 import Pagination from './../../Component/Pagination/index';
+import { usePagination } from "../../Hooks/usePagination";
 
 // Dữ liệu mẫu
 const destinations = [
@@ -19,9 +20,19 @@ const destinations = [
   { id: 11, url: "./images/destinations-1-1.jpg", label: "(7 Trips)", name: "India" },
 ];
 
-
+const ITEM_PER_PAGE = 6
 
 function Destination() {
+
+  const {
+    indexOfFirstItem,
+    indexOfLastItem,
+    totalPages,
+    getCurrentPage
+  } =  usePagination(ITEM_PER_PAGE,destinations.length)
+      
+  const listContent = destinations.slice(indexOfFirstItem,indexOfLastItem)
+
   return (
     <>
       <Banner
@@ -30,26 +41,24 @@ function Destination() {
         thisPage={"/Các điểm đến"}
       />
       <Container>
-        <Pagination 
-          items={destinations} 
-          itemsPerPage={9} 
-          scrollToTop={650}
-          renderItems={(curItems) => (
-            <Grid>
-              <GridRow margin="20px">
-                {curItems.map((destination, index) => (
-                  <GridCol col={4} key={index}>
-                    <TourCard
-                      url={destination.url}
-                      label={destination.label}
-                      name={destination.name}
-                    />
-                  </GridCol>
-                ))}
-              </GridRow>
-            </Grid>
-          )} 
-        />
+        <Grid>
+          <GridRow margin="20px">
+            {listContent.map((item, index) => {
+              return <GridCol col={4} key={index}>
+                        <TourCard
+                          url={item.url}
+                          label={item.label}
+                          name={item.name}
+                        />
+                      </GridCol>
+            })}
+            <Pagination 
+                itemsPerPage={ITEM_PER_PAGE} 
+                totalPage={totalPages} 
+                onChange={(value : number)=> {getCurrentPage(value)}} 
+            />
+          </GridRow>
+        </Grid>
       </Container>
     </>
   );

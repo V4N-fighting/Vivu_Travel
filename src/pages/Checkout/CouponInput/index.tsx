@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import Button from '../../../Component/button/Button';
+import Button from '../../../Component/BaseComponent/Button/Button';
 
 const CouponInputContainer = styled.div`
   display: flex;

@@ -2,7 +2,7 @@ import styled from "styled-components"
 import { FlexBoxBetween, Icon, Text, Title } from "../../../../styled"
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
-import Button from "../../../../Component/button/Button";
+import Button from "../../../../Component/BaseComponent/Button/Button";
 import { faCircle } from "@fortawesome/free-solid-svg-icons";
 
 const setPlan: {id: number, plan: string, detail: string}[] = [

@@ -5,7 +5,7 @@ import VideoPlayer from "../../Component/VideoPlayer";
 import { Title, Text, GridRow, Grid, Icon } from "../../styled";
 import { faCalendarDays } from "@fortawesome/free-regular-svg-icons";
 import { GridCol } from './../../styled/index';
-import Button from "../../Component/button/Button";
+import Button from "../../Component/BaseComponent/Button/Button";
 import { faFacebookF, faInstagram, faPinterestP, faTwitter } from "@fortawesome/free-brands-svg-icons";
 
 interface BlogDetailProps {

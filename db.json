@@ -1,95 +1,160 @@
 {
-    "users": [
-      { "id": 1, "name": "Nguyễn Văn A", "age": 25 },
-      { "id": 2, "name": "Trần Thị B", "age": 30 }
-    ],
-
-    "products": [
-      { "id": 1, "name": "iPhone 15", "price": 25000000 },
-      { "id": 2, "name": "MacBook Pro", "price": 45000000 }
-    ],
-
+    
     "banners": [
       {
         "id": 1,
         "textContent": "Khám phá thế giới",
-        "img1": "./images/banner-img-1-1.jpg",
-        "img2": "./images/banner-img-1-2.jpg"
+        "firstImage": "./images/banner-img-1-1.jpg",
+        "secondImage": "./images/banner-img-1-2.jpg"
       },
       {
         "id": 2,
         "textContent": "Vẻ đẹp thiên nhiên",
-        "img1": "./images/banner-img-2-1.jpg",
-        "img2": "./images/banner-img-2-2.jpg"
+        "firstImage": "./images/banner-img-2-1.jpg",
+        "secondImage": "./images/banner-img-2-2.jpg"
       },
       {
         "id": 3,
         "textContent": "Lịch sử & văn hóa",
-        "img1": "./images/banner-img-3-1.jpg",
-        "img2": "./images/banner-img-3-2.jpg"
+        "firstImage": "./images/banner-img-3-1.jpg",
+        "secondImage": "./images/banner-img-3-2.jpg"
       }
     ],
 
-    "trips": [
+    
+    "tours": [
       {
         "id": 1,
-        "destination": "Đà Nẵng, Việt Nam",
-        "description": "Khám phá thành phố biển Đà Nẵng với cảnh đẹp thiên nhiên hùng vĩ và nền ẩm thực phong phú.",
-        "duration": "4 ngày 3 đêm",
-        "price_adult": 5000000,
-        "price_child": 3500000,
-        "package_type": "Cơ bản",
-        "departure_dates": ["2025-06-10", "2025-06-20", "2025-06-30"],
-        "itinerary": [
-          {
-            "day": 1,
-            "title": "Đến Đà Nẵng - Bà Nà Hills",
-            "description": "Đón khách tại sân bay, tham quan Bà Nà Hills và thưởng thức buffet trưa."
-          },
-          {
-            "day": 2,
-            "title": "Khám phá Hội An",
-            "description": "Tham quan phố cổ Hội An, tận hưởng không gian lung linh đèn lồng vào buổi tối."
-          },
-          {
-            "day": 3,
-            "title": "Biển Mỹ Khê - Ngũ Hành Sơn",
-            "description": "Thư giãn tại biển Mỹ Khê, khám phá danh thắng Ngũ Hành Sơn."
-          },
-          {
-            "day": 4,
-            "title": "Tự do tham quan và trở về",
-            "description": "Mua sắm đặc sản, đưa khách ra sân bay kết thúc chuyến đi."
-          }
-        ],
+        "name": "Khám Phá Paris",
+        "description": "Hành trình khám phá thủ đô hoa lệ của Pháp với các địa danh nổi tiếng.",
+        "location": "Paris, Pháp",
+        "duration": "3 ngày",
+        "departure_date": "2025-06-15",
         "max_people": 20,
-        "transport": ["Máy bay", "Xe du lịch"],
+        "adventure_level": "Thấp",
+        "price": {
+          "adult": "30,000,000 VND",
+          "child": "15,000,000 VND"
+        },
+        "tour_type": "Văn hóa",
+        "activities": ["Tham quan bảo tàng", "Dạo sông Seine", "Thăm Tháp Eiffel"],
+        "languages": ["Tiếng Việt", "Tiếng Anh", "Tiếng Pháp"],
+        "transportation": ["Máy bay", "Xe buýt", "Tàu điện ngầm"],
+        "altitude": "35m",
+        "hotel_star": 4,
+        "itinerary": {
+          "Day 1": "Tham quan Nhà thờ Đức Bà, Bảo tàng Louvre, đi thuyền trên sông Seine.",
+          "Day 2": "Khám phá Tháp Eiffel, Đại lộ Champs-Élysées, Cung điện Versailles.",
+          "Day 3": "Mua sắm tại Galeries Lafayette, tham quan Montmartre, trở về Việt Nam."
+        },
+        "map_embed": "<iframe src='https://www.google.com/maps/embed?...'></iframe>"
+      },
+      {
+        "id": 2,
+        "name": "Chinh Phục Núi Phú Sĩ",
+        "description": "Trải nghiệm leo núi và ngắm cảnh tuyệt đẹp tại ngọn núi biểu tượng của Nhật Bản.",
+        "location": "Núi Phú Sĩ, Nhật Bản",
+        "duration": "3 ngày",
+        "departure_date": "2025-07-10",
+        "max_people": 15,
+        "adventure_level": "Cao",
+        "price": {
+          "adult": "35,000,000 VND",
+          "child": "18,000,000 VND"
+        },
+        "tour_type": "Mạo hiểm",
+        "activities": ["Leo núi", "Cắm trại", "Ngắm mặt trời mọc"],
+        "languages": ["Tiếng Việt", "Tiếng Nhật", "Tiếng Anh"],
+        "transportation": ["Máy bay", "Xe buýt", "Đi bộ"],
+        "altitude": "3,776m",
+        "hotel_star": 3,
+        "itinerary": {
+          "Day 1": "Bay đến Tokyo, tham quan hồ Kawaguchi gần núi Phú Sĩ.",
+          "Day 2": "Bắt đầu leo núi từ trạm thứ 5, cắm trại và ngắm cảnh.",
+          "Day 3": "Ngắm bình minh trên đỉnh Phú Sĩ, xuống núi và trở về Việt Nam."
+        },
+        "map_embed": "<iframe src='https://www.google.com/maps/embed?...'></iframe>"
+      },
+      {
+        "id": 3,
+        "name": "Hành Trình Maldives",
+        "description": "Kỳ nghỉ dưỡng thiên đường tại Maldives với biển xanh, cát trắng.",
+        "location": "Maldives",
+        "duration": "3 ngày",
+        "departure_date": "2025-08-05",
+        "max_people": 10,
+        "adventure_level": "Thấp",
+        "price": {
+          "adult": "50,000,000 VND",
+          "child": "25,000,000 VND"
+        },
+        "tour_type": "Nghỉ dưỡng",
+        "activities": ["Lặn biển", "Chèo kayak", "Tắm nắng"],
         "languages": ["Tiếng Việt", "Tiếng Anh"],
-        "hotel_stars": 4,
-        "max_altitude": 1487,
-        "map_link": "https://www.google.com/maps?q=Da+Nang,Vietnam",
-        "images": [
-          "https://example.com/images/danang1.jpg",
-          "https://example.com/images/danang2.jpg",
-          "https://example.com/images/danang3.jpg"
-        ],
-        "faqs": [
-          {
-            "question": "Tôi có cần visa để đi Đà Nẵng không?",
-            "answer": "Nếu bạn là công dân Việt Nam, bạn không cần visa. Khách nước ngoài nên kiểm tra yêu cầu visa trước khi đi."
-          },
-          {
-            "question": "Chuyến đi có bao gồm ăn uống không?",
-            "answer": "Gói cơ bản bao gồm bữa sáng tại khách sạn, các bữa còn lại khách tự túc."
-          },
-          {
-            "question": "Tôi có thể mang theo trẻ nhỏ không?",
-            "answer": "Có, trẻ em dưới 5 tuổi được miễn phí, từ 5-11 tuổi có mức giá ưu đãi."
-          }
-        ],
-        "rating": 4.7
+        "transportation": ["Máy bay", "Thuyền"],
+        "altitude": "0m",
+        "hotel_star": 5,
+        "itinerary": {
+          "Day 1": "Bay đến Maldives, nhận phòng khách sạn trên biển, nghỉ dưỡng.",
+          "Day 2": "Lặn biển, khám phá san hô, thư giãn tại resort.",
+          "Day 3": "Chèo thuyền kayak, tắm biển và trở về Việt Nam."
+        },
+        "map_embed": "<iframe src='https://www.google.com/maps/embed?...'></iframe>"
+      },
+      {
+        "id": 4,
+        "name": "Khám Phá Dubai",
+        "description": "Hành trình khám phá thành phố xa hoa với những kỳ quan hiện đại.",
+        "location": "Dubai, UAE",
+        "duration": "3 ngày",
+        "departure_date": "2025-09-20",
+        "max_people": 25,
+        "adventure_level": "Trung bình",
+        "price": {
+          "adult": "40,000,000 VND",
+          "child": "20,000,000 VND"
+        },
+        "tour_type": "Văn hóa & Mạo hiểm",
+        "activities": ["Tham quan Burj Khalifa", "Trải nghiệm sa mạc", "Mua sắm"],
+        "languages": ["Tiếng Việt", "Tiếng Anh", "Tiếng Ả Rập"],
+        "transportation": ["Máy bay", "Xe hơi"],
+        "altitude": "2m",
+        "hotel_star": 5,
+        "itinerary": {
+          "Day 1": "Bay đến Dubai, thăm Burj Khalifa, thưởng thức ẩm thực.",
+          "Day 2": "Trải nghiệm đi xe địa hình trên sa mạc, khám phá chợ Vàng.",
+          "Day 3": "Mua sắm tại Dubai Mall, trở về Việt Nam."
+        },
+        "map_embed": "<iframe src='https://www.google.com/maps/embed?...'></iframe>"
+      },
+      {
+        "id": 5,
+        "name": "Chuyến Đi Bắc Cực",
+        "description": "Hành trình phiêu lưu khám phá vùng Bắc Cực lạnh giá.",
+        "location": "Bắc Cực",
+        "duration": "3 ngày",
+        "departure_date": "2025-12-10",
+        "max_people": 8,
+        "adventure_level": "Cao",
+        "price": {
+          "adult": "100,000,000 VND",
+          "child": "50,000,000 VND"
+        },
+        "tour_type": "Mạo hiểm & Khám phá",
+        "activities": ["Ngắm Bắc Cực quang", "Đi xe trượt tuyết", "Thăm làng tuần lộc"],
+        "languages": ["Tiếng Việt", "Tiếng Anh"],
+        "transportation": ["Máy bay", "Xe trượt tuyết"],
+        "altitude": "0m",
+        "hotel_star": 4,
+        "itinerary": {
+          "Day 1": "Bay đến Na Uy, di chuyển đến vùng Bắc Cực, nhận phòng khách sạn.",
+          "Day 2": "Đi xe trượt tuyết, khám phá thiên nhiên hoang dã.",
+          "Day 3": "Ngắm Bắc Cực quang, quay về Việt Nam."
+        },
+        "map_embed": "<iframe src='https://www.google.com/maps/embed?...'></iframe>"
       }
     ],
+      
 
     "blogs": [
     {

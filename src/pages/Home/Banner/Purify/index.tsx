@@ -1,7 +1,7 @@
 import styled, { keyframes } from "styled-components";
 import {ArrowRightOutlined, CarOutlined, FieldTimeOutlined, MoneyCollectOutlined} from '@ant-design/icons';
 import PurifyItem from "./PurifyItem";
-import Button from "../../../../Component/button/Button";
+import Button from "../../../../Component/BaseComponent/Button/Button";
 import { EnvironmentOutlined } from '@ant-design/icons';
 import { countryList } from './../../../../Component/CountryList/index';
 

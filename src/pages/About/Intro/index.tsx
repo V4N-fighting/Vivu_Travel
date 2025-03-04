@@ -1,7 +1,7 @@
 
 import styled from "styled-components";
 import { FlexBox, FlexBoxStretch, SupTitle, Title, Text, Wrapper, WrapperPadding } from "../../../styled";
-import Button from "../../../Component/button/Button";
+import Button from "../../../Component/BaseComponent/Button/Button";
 
 
 

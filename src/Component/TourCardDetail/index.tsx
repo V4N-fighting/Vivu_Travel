@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { Title, Text, Icon } from '../../styled';
-import Button from '../button/Button';
+import Button from '../BaseComponent/Button/Button';
 import { faChartSimple, faCheck, faLocationDot, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { faCalendar, faClock } from '@fortawesome/free-regular-svg-icons';
 

@@ -1,5 +1,5 @@
 
-import Button from "../../../Component/button/Button";
+import Button from "../../../Component/BaseComponent/Button/Button";
 import Loader from "../Loader";
 import { FlexBoxBetween, SupTitle, Title, Wrapper, Text } from "../../../styled";
 import { styled } from 'styled-components';

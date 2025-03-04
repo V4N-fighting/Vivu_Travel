@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Banner from "../../Component/Banner";
 import Card from "./Card";
 import { SupTitle, Text, Title } from "../../styled";
-import Button from "../../Component/button/Button";
+import Button from "../../Component/BaseComponent/Button/Button";
 
 
 function Contact() {

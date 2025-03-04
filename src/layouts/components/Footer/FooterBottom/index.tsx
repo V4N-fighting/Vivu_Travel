@@ -3,7 +3,7 @@ import { Wrapper, Text, FlexBox, Title, Icon, Grid, GridRow, GridCol } from "../
 import { LogoLink, Logo } from "../../Header/HeaderBottom";
 import { SocialIcon } from "../../Header/HeaderBottom/SideMenu";
 import { faTwitter, faInstagram, faPinterestP, faFacebookF } from "@fortawesome/free-brands-svg-icons";
-import Button from "../../../../Component/button/Button";
+import Button from "../../../../Component/BaseComponent/Button/Button";
 import { Link } from "react-router-dom";
 
 // Define the props type for the FooterBottomWrapper component

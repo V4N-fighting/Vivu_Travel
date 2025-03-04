@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FlexBox, FlexBoxBetween, Icon, Text, Title } from '../../styled';
-import Button from '../button/Button';
-import { faCalendarDay } from '@fortawesome/free-solid-svg-icons';
+import { FlexBox, Icon, Text, Title } from '../../styled';
+import Button from '../BaseComponent/Button/Button';
 import { faEye } from '@fortawesome/free-regular-svg-icons';
+import Icons from '../BaseComponent/Icons';
 
 interface NewsCardProps {
     url: string,  
@@ -26,7 +26,7 @@ const NewsCard: React.FC<NewsCardProps> = ({url, textDescr, title, textTime, lab
                 <Descr>
                     <Local><Text>{textDescr}</Text></Local>
                     <FlexBox>
-                      <Text bold><Icon icon={faCalendarDay}/>{textTime}</Text>
+                      <Text bold><Icons.CalendarIcon/>{textTime}</Text>
                       <Text style={{width: '20%', display: 'flex'}}><Icon icon={faEye}/>{view}</Text>
                     </FlexBox>
                 </Descr>

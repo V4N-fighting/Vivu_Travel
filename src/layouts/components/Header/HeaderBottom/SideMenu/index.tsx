@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import CloseButton from '../../../../../Component/button/CloseButton';
+import CloseButton from '../../../../../Component/BaseComponent/Button/CloseButton';
 import { LogoLink, Logo } from '..';
 import { FlexBox, Icon, Title } from '../../../../../styled';
 import { faTwitter, faInstagram, faPinterestP } from '@fortawesome/free-brands-svg-icons';

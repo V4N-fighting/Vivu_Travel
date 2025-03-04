@@ -1,29 +1,25 @@
+
+
 import styled from "styled-components";
 import { useState } from "react";
 
 interface PaginationProps<T> {
-  items: T[]; 
   itemsPerPage: number; 
-  renderItems: (items: T[]) => JSX.Element; 
+  totalPage: number
   scrollToTop?: number; 
+  onChange: (value: number) => void 
 }
 
 function Pagination<T>({
-  items,
-  itemsPerPage,
-  renderItems,
+  totalPage,
+  onChange,
   scrollToTop = 0, // Mặc định cuộn lên đầu trang
 }: PaginationProps<T>) {
   const [currentPage, setCurrentPage] = useState(1);
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = items.slice(indexOfFirstItem, indexOfLastItem);
-
-  const totalPages = Math.ceil(items.length / itemsPerPage);
-
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+    onChange(page)
     if (scrollToTop) {
       window.scrollTo({ top: scrollToTop, behavior: "smooth" });
     }
@@ -31,10 +27,9 @@ function Pagination<T>({
 
   return (
     <Container>
-      {renderItems(currentItems)}
-      {totalPages > 1 && (
+      {totalPage > 1 && (
         <PaginationWrapper>
-          {Array.from({ length: totalPages }, (_, index) => (
+          {Array.from({ length: totalPage }, (_, index) => (
             <button
               key={index + 1}
               className={currentPage === index + 1 ? "active" : ""}
@@ -83,3 +78,4 @@ const PaginationWrapper = styled.div`
 `;
 
 export default Pagination;
+

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { FlexBoxBetween, SupTitle, Title, Wrapper, WrapperPadding, Text } from "../../../styled";
-import Button from "../../../Component/button/Button";
+import Button from "../../../Component/BaseComponent/Button/Button";
 import { StarFilled } from '@ant-design/icons';
 
 

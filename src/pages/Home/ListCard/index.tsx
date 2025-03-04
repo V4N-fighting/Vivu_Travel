@@ -1,82 +1,85 @@
 import styled, { keyframes } from "styled-components";
 import { CenterBox, SupTitle, Text, Title } from "../../../styled";
 import Carousel from "../../../Component/Carousel";
-import Button from "../../../Component/button/Button";
+import Button from "../../../Component/BaseComponent/Button/Button";
 import ScrollToShow from "../../../Component/ScrollToShow";
 import TourCardDetail from "../../../Component/TourCardDetail";
+import { useTour } from "../../../service/tourService";
 
 
 interface ListCardProps {
   
 }
 
-
+const listContent = [
+  <TourCardDetail 
+    key='1'
+    url={"./images/4-900x490.jpg"}
+    title={"Maldives: The Travel and Experience of the Lifetime"}
+    textLocation={"Colombo, England, France"}
+    textTime={"8 Ngày - 6 Đêm"}
+    price={"100,000đ"}
+    textDensity={'1-3 người'}
+    textLevel={'Trung bình'}
+    horizontal={false} textDescr={'Lương Ngọc Văn đẹp trai thì thôi luôn nhé, miễn bàn miễn bàn miễn bàn miễn bàn'}
+    isDensity={false}  />,
+    
+  <TourCardDetail 
+    key='2'
+    url={"./images/4-900x490.jpg"}
+    title={"Maldives: The Travel and Experience of the Lifetime"}
+    textLocation={"Colombo, England, France"}
+    textTime={"8 Ngày - 6 Đêm"}
+    price={"200,000đ"}
+    textDensity={'1-3 người'}
+    textLevel={'Trung bình'}
+    horizontal={false} textDescr={'Lương Ngọc Văn đẹp trai thì thôi luôn nhé, miễn bàn miễn bàn miễn bàn miễn bàn'}  
+    isDensity={false}/>,
+  <TourCardDetail 
+    key='3'
+    url={"./images/4-900x490.jpg"}
+    title={"Maldives: The Travel and Experience of the Lifetime"}
+    textLocation={"Colombo, England, France"}
+    textTime={"8 Ngày - 6 Đêm"}
+    price={"300,000đ"}
+    textDensity={'1-3 người'}
+    textLevel={'Trung bình'}
+    horizontal={false} textDescr={'Lương Ngọc Văn đẹp trai thì thôi luôn nhé, miễn bàn miễn bàn miễn bàn miễn bàn'}  
+    isDensity={false}/>,
+  <TourCardDetail 
+    key='4'
+    url={"./images/4-900x490.jpg"}
+    title={"Maldives: The Travel and Experience of the Lifetime"}
+    textLocation={"Colombo, England, France"}
+    textTime={"8 Ngày - 6 Đêm"}
+    price={"400,000đ"}
+    textDensity={'1-3 người'}
+    textLevel={'Trung bình'}
+    horizontal={false} textDescr={'Lương Ngọc Văn đẹp trai thì thôi luôn nhé, miễn bàn miễn bàn miễn bàn miễn bàn'}  
+    isDensity={false}/>,
+  <TourCardDetail 
+    key='5'
+    url={"./images/4-900x490.jpg"}
+    title={"Maldives: The Travel and Experience of the Lifetime"}
+    textLocation={"Colombo, England, France"}
+    textTime={"8 Ngày - 6 Đêm"}
+    price={"500,000đ"}
+    textDensity={'1-3 người'}
+    textLevel={'Trung bình'}
+    horizontal={false} textDescr={'Lương Ngọc Văn đẹp trai thì thôi luôn nhé, miễn bàn miễn bàn miễn bàn miễn bàn'}  
+    isDensity={false}/>,
+];
 
 const ListCard: React.FC<ListCardProps> = ({}) => {
 
- 
+  const {data, loading, error} = useTour()
 
-  const listContent = [
-    <TourCardDetail 
-      key='1'
-      url={"./images/4-900x490.jpg"}
-      title={"Maldives: The Travel and Experience of the Lifetime"}
-      textLocation={"Colombo, England, France"}
-      textTime={"8 Ngày - 6 Đêm"}
-      price={"100,000đ"}
-      textDensity={'1-3 người'}
-      textLevel={'Trung bình'}
-      horizontal={false} textDescr={'Lương Ngọc Văn đẹp trai thì thôi luôn nhé, miễn bàn miễn bàn miễn bàn miễn bàn'}
-      isDensity={false}  />,
-      
-    <TourCardDetail 
-      key='2'
-      url={"./images/4-900x490.jpg"}
-      title={"Maldives: The Travel and Experience of the Lifetime"}
-      textLocation={"Colombo, England, France"}
-      textTime={"8 Ngày - 6 Đêm"}
-      price={"200,000đ"}
-      textDensity={'1-3 người'}
-      textLevel={'Trung bình'}
-      horizontal={false} textDescr={'Lương Ngọc Văn đẹp trai thì thôi luôn nhé, miễn bàn miễn bàn miễn bàn miễn bàn'}  
-      isDensity={false}/>,
-    <TourCardDetail 
-      key='3'
-      url={"./images/4-900x490.jpg"}
-      title={"Maldives: The Travel and Experience of the Lifetime"}
-      textLocation={"Colombo, England, France"}
-      textTime={"8 Ngày - 6 Đêm"}
-      price={"300,000đ"}
-      textDensity={'1-3 người'}
-      textLevel={'Trung bình'}
-      horizontal={false} textDescr={'Lương Ngọc Văn đẹp trai thì thôi luôn nhé, miễn bàn miễn bàn miễn bàn miễn bàn'}  
-      isDensity={false}/>,
-    <TourCardDetail 
-      key='4'
-      url={"./images/4-900x490.jpg"}
-      title={"Maldives: The Travel and Experience of the Lifetime"}
-      textLocation={"Colombo, England, France"}
-      textTime={"8 Ngày - 6 Đêm"}
-      price={"400,000đ"}
-      textDensity={'1-3 người'}
-      textLevel={'Trung bình'}
-      horizontal={false} textDescr={'Lương Ngọc Văn đẹp trai thì thôi luôn nhé, miễn bàn miễn bàn miễn bàn miễn bàn'}  
-      isDensity={false}/>,
-    <TourCardDetail 
-      key='5'
-      url={"./images/4-900x490.jpg"}
-      title={"Maldives: The Travel and Experience of the Lifetime"}
-      textLocation={"Colombo, England, France"}
-      textTime={"8 Ngày - 6 Đêm"}
-      price={"500,000đ"}
-      textDensity={'1-3 người'}
-      textLevel={'Trung bình'}
-      horizontal={false} textDescr={'Lương Ngọc Văn đẹp trai thì thôi luôn nhé, miễn bàn miễn bàn miễn bàn miễn bàn'}  
-      isDensity={false}/>,
-  ];
+  
 
- 
-
+  // Xử lý trạng thái tải hoặc lỗi
+  if (loading) return <p>Đang tải dữ liệu...</p>;
+  if (error) return <p>Lỗi: {error}</p>;
+  if (!data || data.length === 0) return <p>Không có dữ liệu.</p>;
 
 
   return (

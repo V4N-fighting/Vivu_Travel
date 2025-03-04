@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import Banner from "../../Component/Banner";
 import { Grid, GridCol, GridRow } from "../../styled";
-import { useState } from "react";
 import TourCard from "../../Component/TourCard";
 import Pagination from "../../Component/Pagination";
+import { usePagination } from "../../Hooks/usePagination";
 
 // Dữ liệu mẫu
 const tours = [
@@ -19,9 +19,18 @@ const tours = [
 ];
 
 
+const ITEM_PER_PAGE = 6
 
 function Tour() {
-  
+
+    const {
+      indexOfFirstItem,
+      indexOfLastItem,
+      totalPages,
+      getCurrentPage
+    } =  usePagination(ITEM_PER_PAGE,tours.length)
+        
+    const listContent = tours.slice(indexOfFirstItem,indexOfLastItem)
 
   return (
     <>
@@ -31,26 +40,24 @@ function Tour() {
         thisPage={"/Các loại tour"}
       />
       <Container>
-        <Pagination 
-          items={tours} 
-          itemsPerPage={6} 
-          scrollToTop={650}
-          renderItems={(curItems) => (
-            <Grid>
-              <GridRow margin="20px">
-                {curItems.map((tour, index) => (
-                  <GridCol col={4} key={index}>
-                    <TourCard
-                      url={tour.url}
-                      label={tour.label}
-                      name={tour.name}
-                    />
-                  </GridCol>
-                ))}
-              </GridRow>
-            </Grid>
-          )} 
-        />
+      <Grid>
+          <GridRow margin="20px">
+            {listContent.map((item, index) => {
+              return <GridCol col={4} key={index}>
+                        <TourCard
+                          url={item.url}
+                          label={item.label}
+                          name={item.name}
+                        />
+                      </GridCol>
+            })}
+            <Pagination 
+                itemsPerPage={ITEM_PER_PAGE} 
+                totalPage={totalPages} 
+                onChange={(value : number)=> {getCurrentPage(value)}} 
+            />
+          </GridRow>
+        </Grid>
       </Container>
     </>
   );
