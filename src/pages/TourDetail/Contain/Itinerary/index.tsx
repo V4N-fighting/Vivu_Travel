@@ -3,7 +3,7 @@ import { FlexBoxBetween, Icon, Text, Title } from "../../../../styled"
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
 import Button from "../../../../Component/BaseComponent/Button/Button";
-import { faCircle } from "@fortawesome/free-solid-svg-icons";
+import Icons from "../../../../Component/BaseComponent/Icons";
 
 const setPlan: {id: number, plan: string, detail: string}[] = [
     {
@@ -48,8 +48,7 @@ const Item: React.FC<ItemProps> = ({ plan, detail, showAll, index }) => {
 
     return (
         <ItemWrapper>
-            <Icon 
-                icon={faCircle}
+            <Icons.PointIcon 
                 style={{position: 'absolute', left: '-40px', top: '50%', transform: 'translateY(-50%)'}}
                 fontSize='10px'
                 color="red"
@@ -59,13 +58,7 @@ const Item: React.FC<ItemProps> = ({ plan, detail, showAll, index }) => {
                     <span style={{color: 'black'}}>Ngày {index}: &nbsp;</span>
                     {plan}
                 </Text>
-                <Icon
-                    icon={!showDetail ? faPlus : faMinus}
-                    fontSize="18px"
-                    color="orange"
-                    hover
-                     
-                />
+                {showDetail ? <Icons.MinusIcon orange hover/> : <Icons.PlusIcon orange hover/>}
             </Plan>
             {showDetail && (
                 <Detail>

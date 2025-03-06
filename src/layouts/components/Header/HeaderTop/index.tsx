@@ -5,7 +5,7 @@ import { IconDefinition, IconProp } from "@fortawesome/fontawesome-svg-core";
 import { faPhone } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import CircleIcon from "../../../../Component/CircleIcon";
+import CircleIcon from "../../../../Component/BaseComponent/Icons/CircleIcon";
 
 interface ItemContentProps {
     icon: IconDefinition;

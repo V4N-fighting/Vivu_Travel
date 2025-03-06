@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import Icons from "../../../Component/BaseComponent/Icons";
 
 
 
@@ -19,11 +20,11 @@ const Login: React.FC = () => {
       </Top>
       <InputBox>
         <input type="text" placeholder="Username or Email" />
-        <Icon icon={faUser} />
+        <Icons.UserIcon />
       </InputBox>
       <InputBox>
         <input type="password" placeholder="Password" />
-        <Icon icon={faLock} />
+        <Icons.LockIcon />
       </InputBox>
       <Submit type="submit" value="Sign In" />
       <TwoCol>

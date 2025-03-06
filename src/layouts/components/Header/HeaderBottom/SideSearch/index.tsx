@@ -3,6 +3,7 @@ import styled from "styled-components";
 import CloseButton from "../../../../../Component/BaseComponent/Button/CloseButton";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Icons from "../../../../../Component/BaseComponent/Icons";
 
 
 
@@ -43,7 +44,7 @@ const SideSearch: React.FC<SideSearchProps> = ({ onClose, isVisible }) => {
             </CloseButtonBox>
             <BoxSearch isVisible={isVisible}>
                 <InputSearch placeholder="Search Here"/>
-                <SearchIcon><FontAwesomeIcon icon={faMagnifyingGlass} /></SearchIcon>
+                <SearchIcon><Icons.SearchIcon /></SearchIcon>
             </BoxSearch>
         </SideSearchWrapper>
     );

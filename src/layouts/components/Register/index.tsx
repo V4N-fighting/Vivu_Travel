@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import Icons from "../../../Component/BaseComponent/Icons";
 
 
 
@@ -19,20 +20,20 @@ const Register: React.FC = () => {
       <TwoForms>
         <InputBox>
           <input type="text" placeholder="Firstname" />
-          <Icon icon={faUser} />
+          <Icons.UserIcon />
         </InputBox>
         <InputBox>
           <input type="text" placeholder="Lastname" />
-          <Icon icon={faUser} />
+          <Icons.UserIcon />
         </InputBox>
       </TwoForms>
       <InputBox>
         <input type="text" placeholder="Email" />
-        <Icon icon={faEnvelope} />
+        <Icons.EnvelopeIcon />
       </InputBox>
       <InputBox>
         <input type="password" placeholder="Password" />
-        <Icon icon={faLock} />
+        <Icons.LockIcon />
       </InputBox>
       <Submit type="submit" value="Register" />
       <TwoCol>

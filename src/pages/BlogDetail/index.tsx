@@ -7,6 +7,8 @@ import { faCalendarDays } from "@fortawesome/free-regular-svg-icons";
 import { GridCol } from './../../styled/index';
 import Button from "../../Component/BaseComponent/Button/Button";
 import { faFacebookF, faInstagram, faPinterestP, faTwitter } from "@fortawesome/free-brands-svg-icons";
+import { Calendar } from 'antd';
+import Icons from "../../Component/BaseComponent/Icons";
 
 interface BlogDetailProps {
     url: string,
@@ -58,7 +60,7 @@ const BlogDetail:React.FC<BlogDetailProps> = ({
                     />
                     <Title medium>{title}</Title>
                     <TimeBox>
-                        <Icon icon={faCalendarDays} />
+                        <Icons.CalendarIcon />
                         <TimeText>{timeText}</TimeText>
                     </TimeBox>
                     <Text>{TextContent1}</Text>
@@ -72,10 +74,10 @@ const BlogDetail:React.FC<BlogDetailProps> = ({
                     <Text>{TextContent2}</Text>
                     <ShareBox>
                         Chia sẻ: 
-                        <Button blue circle style={{margin: '0 10px 0 20px'}}><Icon icon={faFacebookF}/></Button>
-                        <Button blue circle style={{margin: '0 10px'}}><Icon icon={faInstagram}/></Button>
-                        <Button blue circle style={{margin: '0 10px'}}><Icon icon={faTwitter}/></Button>
-                        <Button blue circle style={{margin: '0 10px'}}><Icon icon={faPinterestP}/></Button>
+                        <Button blue circle style={{margin: '0 10px 0 20px'}}><Icons.FacebookIcon /></Button>
+                        <Button blue circle style={{margin: '0 10px'}}><Icons.InstagramIcon /></Button>
+                        <Button blue circle style={{margin: '0 10px'}}><Icons.TwitterIcon /></Button>
+                        <Button blue circle style={{margin: '0 10px'}}><Icons.TwitterIcon /></Button>
                     </ShareBox>
                     <CommentBox>
                         <Title medium>Để lại bình luận</Title>

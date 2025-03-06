@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { FlexBoxBetween, SupTitle, Title, Wrapper, WrapperPadding, Text } from "../../../styled";
 import Button from "../../../Component/BaseComponent/Button/Button";
 import { StarFilled } from '@ant-design/icons';
+import StarRating from "../../../Component/StarRating";
 
 
 
@@ -32,13 +33,7 @@ const Feedback: React.FC<FeedbackProps> = ({}) => {
                                             </Avatar>
                                             <FeedbackContain>
                                                 <Icon src="./images/quote1.png"/>
-                                                <Rating>
-                                                    <RatingIcon />
-                                                    <RatingIcon />
-                                                    <RatingIcon />
-                                                    <RatingIcon />
-                                                    <RatingIcon />
-                                                </Rating>
+                                                <StarRating star={5} />
                                                 <TextContain>
                                                     Quả là 1 nơi tuyệt vời để tìm kiếm 1 nơi nghỉ ngơi cho mình, tôi rất yêu nơi này.
                                                 </TextContain>

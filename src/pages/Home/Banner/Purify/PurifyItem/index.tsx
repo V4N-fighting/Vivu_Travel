@@ -1,14 +1,14 @@
-import React, { FC } from 'react';
+import React, { FC, ReactNode } from 'react';
 import { Select } from 'antd';
 import styled from 'styled-components';
-import { IconBaseProps } from '@ant-design/icons/lib/components/Icon';
 
 interface PurifyItemProps {
-  width: string,
-  Icon: FC<IconBaseProps>,
-  placeholder: string,
-  optionsValue: object[],
+  width: string;
+  Icon: JSX.Element; 
+  placeholder: string;
+  optionsValue: { value: number; label: string }[];
 }
+
 
 
 
@@ -45,16 +45,18 @@ const NewSelect = styled(Select)<{ width: string }>`
 
 
 interface PlaceholderWithIconProps {
-  Icon: FC<IconBaseProps>; // Kiểu dữ liệu cho một React component
+  Icon: JSX.Element; 
   placeholder: string;
 }
 
+
 const PlaceholderWithIcon: FC<PlaceholderWithIconProps> = ({ Icon, placeholder }) => (
   <span>
-    <Icon style={{ marginRight: '5px' }} />
+    {Icon} 
     {placeholder}
   </span>
 );
+
  
 
 export default PurifyItem;

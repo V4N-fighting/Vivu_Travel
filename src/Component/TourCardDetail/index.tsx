@@ -4,6 +4,8 @@ import { Title, Text, Icon } from '../../styled';
 import Button from '../BaseComponent/Button/Button';
 import { faChartSimple, faCheck, faLocationDot, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { faCalendar, faClock } from '@fortawesome/free-regular-svg-icons';
+import { LocationDotIcon } from './../BaseComponent/Icons/LocationDotIcon';
+import Icons from '../BaseComponent/Icons';
 
 interface TourCardDetailProps {
     url: string,  
@@ -23,10 +25,10 @@ const TourCardDetail: React.FC<TourCardDetailProps> =
   const [isfullYear, setIsFullYear] = useState<boolean>(true)
   
   const details = [
-    { icon: faLocationDot, text: textLocation },
-    { icon: faClock, text: textTime },
-    { icon: faUsers, text: textDensity },
-    { icon: faChartSimple, text: textLevel },
+    { icon: <Icons.LocationDotIcon orange/>, text: textLocation },
+    { icon: <Icons.CalendarIcon orange/>, text: textTime },
+    { icon: <Icons.UserIcon orange/>, text: textDensity },
+    { icon: <Icons.ChartSimpleIcon orange/>, text: textLevel },
   ];
 
   const next_tour = ['Th1 04', 'Th1 05', 'Th1 06' ];
@@ -49,7 +51,7 @@ const TourCardDetail: React.FC<TourCardDetailProps> =
                     <Left>
                       {details.map((detail, index) => (
                         <TextDescr key={index}>
-                          <Icon color="orange" icon={detail.icon} />
+                          {detail.icon}
                           {detail.text}
                         </TextDescr>
                       ))}
@@ -66,7 +68,7 @@ const TourCardDetail: React.FC<TourCardDetailProps> =
                 <CardButton orange>Xem chi tiết</CardButton>
                 {isDensity && <>
                   <TextDescr>{isfullYear ? 'Có sẵn quanh năm' : 'Có ở các tháng'}</TextDescr>
-                  <TextDescr style={{fontSize: '12px'}}><Icon color='orange' icon={faCalendar} />{availableMonth}</TextDescr>
+                  <TextDescr style={{fontSize: '12px'}}><Icons.CalendarIcon orange/>{availableMonth}</TextDescr>
                 </>}
             </Content>
         </WrapperCard>

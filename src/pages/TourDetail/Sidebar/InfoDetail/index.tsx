@@ -1,12 +1,11 @@
 import styled from "styled-components"
-import { faHotel, IconDefinition } from "@fortawesome/free-solid-svg-icons";
-import { Icon } from "../../../../styled";
 import { Text } from './../../../../styled/index';
+import { ReactNode } from "react";
 
 interface ContainProps {
     item: string,
     value: string,
-    icon: IconDefinition,
+    icon: ReactNode,
 }
 
 
@@ -14,7 +13,7 @@ export const InfoDetail: React.FC<ContainProps> = ({item, value, icon}) => {
     return (
         <Wrap>
             <Text small bold >
-                <Icon icon={icon} style={{color: 'red'}} />{item}
+                {icon}{item}
             </Text>
             <Text small>{value}</Text>
         </Wrap>

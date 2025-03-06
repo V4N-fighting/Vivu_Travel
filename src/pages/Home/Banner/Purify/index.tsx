@@ -1,9 +1,13 @@
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import {ArrowRightOutlined, CarOutlined, FieldTimeOutlined, MoneyCollectOutlined} from '@ant-design/icons';
 import PurifyItem from "./PurifyItem";
 import Button from "../../../../Component/BaseComponent/Button/Button";
 import { EnvironmentOutlined } from '@ant-design/icons';
 import { countryList } from './../../../../Component/CountryList/index';
+import { LocationDotIcon } from './../../../../Component/BaseComponent/Icons/LocationDotIcon';
+import Icons from "../../../../Component/BaseComponent/Icons";
+import { CarIcon } from './../../../../Component/BaseComponent/Icons/CarIcon';
+import { MoneyIcon } from './../../../../Component/BaseComponent/Icons/MoneyIcon';
 
 
 interface PurifyProps {
@@ -19,13 +23,13 @@ const newOptions = countryList.map((val, index) => {
 const PurifyContent = [
   {
     width: '20%',
-    Icon: EnvironmentOutlined,
+    Icon: <Icons.LocationDotIcon />,
     placeholder: 'Điểm đến',
     options: newOptions,
   },
   {
     width: '20%',
-    Icon: CarOutlined,
+    Icon: <Icons.CarIcon />,
     placeholder: 'Hoạt động',
     options: [
       {value: 1, label: 'Tham quan'},
@@ -38,7 +42,7 @@ const PurifyContent = [
   },
   {
     width: '20%',
-    Icon: FieldTimeOutlined ,
+    Icon: <Icons.ClockIcon />,
     placeholder: 'Thời gian',
     options: [
       {value: 1, label: '1 - 10 ngày'},
@@ -49,7 +53,7 @@ const PurifyContent = [
   },
   {
     width: '20%',
-    Icon: MoneyCollectOutlined,
+    Icon: <Icons.MoneyIcon />,
     placeholder: 'Mức giá', 
     options: [
       {value: 1, label: '0 - 1 triệu đồng'},

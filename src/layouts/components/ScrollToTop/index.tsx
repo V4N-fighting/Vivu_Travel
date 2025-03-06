@@ -2,6 +2,7 @@ import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
+import Icons from "../../../Component/BaseComponent/Icons";
 
 
 
@@ -30,17 +31,12 @@ const ScrollToTop: React.FC = () => {
 
   return (
     <ScrollToTopButton show={showButton} onClick={scrollToTop}>
-      <Icon icon={faArrowUp} />
+      <Icons.ArrowUpIcon />
     </ScrollToTopButton>
     
   );
 };
 
-// Define the type for the styled Icon component
-const Icon = styled(FontAwesomeIcon)`
-    width: 16px;
-    height: 16px;
-`;
 
 const spin = keyframes`
   100% {

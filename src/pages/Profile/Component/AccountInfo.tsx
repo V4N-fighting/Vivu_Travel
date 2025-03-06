@@ -2,8 +2,8 @@ import styled from "styled-components";
 import { useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "../../../Component/BaseComponent/Button/Button";
-import { faCamera } from "@fortawesome/free-solid-svg-icons";
 import { Title } from "../../../styled";
+import Icons from "../../../Component/BaseComponent/Icons";
 
 const AccountInfo = () => {
   const [isChangePassword, setIsChangePassword] = useState(false);
@@ -43,7 +43,7 @@ const AccountInfo = () => {
 
           {/* Icon Camera */}
           <CameraIconWrapper onClick={handleIconClick}>
-            <Icon icon={faCamera} />
+            <Icons.CameraIcon />
           </CameraIconWrapper>
 
           {/* Input File Ẩn */}

@@ -5,8 +5,8 @@ import Navigation from "./Navigation";
 import SideMenu from "./SideMenu"; // Import SideMenu component
 import SideSearch from "./SideSearch";
 import { Link } from "react-router-dom";
-import CircleIcon from "../../../../Component/CircleIcon";
 import { faMagnifyingGlass, faBars } from "@fortawesome/free-solid-svg-icons";
+import CircleIcon from "../../../../Component/BaseComponent/Icons/CircleIcon";
 
 
 const HeaderBottom: React.FC = () => {

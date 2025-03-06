@@ -94,5 +94,5 @@
 1) Banner gặp vấn đề chỗ mấy con số
 2) chỉnh lại cách dùng icon từ thư viện (hiện đang import trực tiếp icon từ thư viện)
 
-
+tới tourdetail
 

@@ -1,8 +1,8 @@
 import styled from "styled-components"
-import { FlexBoxBetween, Icon, Text, Title } from "../../../../styled"
-import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons"
+import { FlexBoxBetween, Text, Title } from "../../../../styled"
 import { useEffect, useState } from "react"
 import Button from "../../../../Component/BaseComponent/Button/Button"
+import Icons from "../../../../Component/BaseComponent/Icons"
 
 const setQuestionAnswer: {id: number, question: string, answer: string}[] = [
     {
@@ -61,13 +61,7 @@ const Item: React.FC<ItemProps> = ({ question, answer, showAll }) => {
                 <Text small bold >
                     {question}
                 </Text>
-                <Icon
-                    icon={!showAnswer ? faPlus : faMinus}
-                    fontSize="18px"
-                    color="black"
-                    hover
-                    
-                />
+                {!showAnswer ? <Icons.PlusIcon hover/> : <Icons.MinusIcon hover/> }
             </Question>
             {showAnswer && (
                 <Answer>

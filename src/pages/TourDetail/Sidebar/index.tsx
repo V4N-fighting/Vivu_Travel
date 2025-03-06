@@ -4,32 +4,34 @@ import Button from "../../../Component/BaseComponent/Button/Button";
 import { Text } from "../../../styled";
 import { InfoDetail } from "./InfoDetail";
 import { faCar, faHotel, faLanguage, faMountainSun, IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import Icons from "../../../Component/BaseComponent/Icons";
+import { ReactNode } from "react";
 
 
-const infodetail: {id: number, item: string, value: string, icon: IconDefinition}[] = [
+const infodetail: {id: number, item: string, value: string, icon: ReactNode}[] = [
     {
         id: 1,
         item: 'Accomodation',
         value: '3 Stars Hotels',
-        icon: faHotel,
+        icon: <Icons.HotelIcon />,
     },
     {
         id: 2,
         item: 'Transportation',
         value: 'Bus, Airlines',
-        icon: faCar,
+        icon: <Icons.CarIcon />,
     },
     {
         id: 3,
         item: 'Maximum Altitude',
         value: '5,416 metres',
-        icon: faMountainSun,
+        icon: <Icons.MountainSunIcon />,
     },
     {
         id: 4,
         item: 'Language',
         value: 'English, Spanish, French, Chinese',
-        icon: faLanguage,
+        icon: <Icons.LanguageIcon />,
     },
 ]
 

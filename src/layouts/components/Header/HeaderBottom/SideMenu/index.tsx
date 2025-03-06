@@ -5,6 +5,7 @@ import { LogoLink, Logo } from '..';
 import { FlexBox, Icon, Title } from '../../../../../styled';
 import { faTwitter, faInstagram, faPinterestP } from '@fortawesome/free-brands-svg-icons';
 import BlogItem from '../../../../../Component/BlogItem';
+import Icons from '../../../../../Component/BaseComponent/Icons';
 
 interface SideMenuProps {
     onClose: () => void;
@@ -82,9 +83,9 @@ const SideMenu: React.FC<SideMenuProps> = ({ onClose, isVisible }) => {
                         </TitleDescr>
                     </TextBox>
                     <FlexBox>
-                            <Icon icon={faTwitter} />
-                            <Icon icon={faInstagram} />
-                            <Icon icon={faPinterestP} />
+                        <Icons.TwitterIcon />
+                        <Icons.InstagramIcon />
+                        <Icons.PinterestIcon />
                     </FlexBox>
                     <TitleMarginTop medium>Bài viết gần đây</TitleMarginTop>
                     <ListBlog>

@@ -6,6 +6,8 @@ import { Grid, GridCol, GridRow, Icon } from '../../../styled';
 import TourCardDetail from '../../../Component/TourCardDetail';
 import { usePagination } from '../../../Hooks/usePagination';
 import Pagination from '../../../Component/Pagination';
+import { ListIcon } from './../../../Component/BaseComponent/Icons/ListIcon';
+import Icons from '../../../Component/BaseComponent/Icons';
 
 const listContentDefault = [
   <TourCardDetail 
@@ -92,8 +94,8 @@ const Content: React.FC = () => {
         <Header>
             <Arrange><DropdownMenu /></Arrange>
             <Layout>
-                <Icon icon={faList} onClick={handleShowList} color={modeShow === ModeShow.List ? 'orange' : ''}/>
-                <Icon icon={faGripVertical} onClick={handleShowMenu} color={modeShow === ModeShow.Menu  ? 'orange' : ''} />
+                <Icons.ListIcon onClick={handleShowList} color={modeShow === ModeShow.List ? 'orange' : ''}/>
+                <Icons.GripverticalIcon onClick={handleShowMenu} color={modeShow === ModeShow.Menu  ? 'orange' : ''} />
             </Layout>
         </Header>
         <Contain>

@@ -2,6 +2,8 @@ import styled from "styled-components";
 import { FlexBox, SupTitle, Text, Title, Wrapper } from "../../../styled";
 import { PlayCircleFilled } from '@ant-design/icons';
 import ScrollToShow from "../../../Component/ScrollToShow";
+import { CirclePlayIcon } from './../../../Component/BaseComponent/Icons/CirclePlayIcon';
+import Icons from "../../../Component/BaseComponent/Icons";
 
 interface BestCityProps {
 
@@ -33,7 +35,7 @@ const BestCity: React.FC<BestCityProps> = ({}) => {
                         <Image src='./images/gallery-1-3.jpg'></Image>
                         <GallaryBtn>
                             <Span small>Xem video</Span>
-                            <Icon><PlayCircleFilled /></Icon>
+                            <Icons.CirclePlayIcon />
                         </GallaryBtn>
                     </ScrollToShow>
                 </FlexBox_50_P_0_15>

@@ -1,6 +1,6 @@
 import styled from "styled-components"
-import { Icon, Text, Title } from "../../../../styled"
-import { faCircleCheck, faCircleXmark } from "@fortawesome/free-solid-svg-icons"
+import {Icon, Text, Title } from "../../../../styled"
+import Icons from "../../../../Component/BaseComponent/Icons"
 
 interface ExpenseProps {
     
@@ -29,7 +29,7 @@ export const Expense:React.FC<ExpenseProps> = ({}) => {
                 {include.map((val, index) => {
                     return (
                         <Text small key={index}>
-                            <Icon icon={faCircleCheck}  color="green"/>
+                            <Icons.CircleCheckIcon color="green"/>
                             {val}
                         </Text>
                     )
@@ -41,7 +41,7 @@ export const Expense:React.FC<ExpenseProps> = ({}) => {
                 {exclude.map((val, index) => {
                     return (
                         <Text key={index} small>
-                            <Icon icon={faCircleXmark} color="red"/>
+                            <Icons.CircleXmartIcon color="red"/>
                             {val}
                         </Text>
                     )

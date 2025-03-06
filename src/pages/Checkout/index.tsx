@@ -6,6 +6,8 @@ import TourCard from "./TourCard";
 import Button from "../../Component/BaseComponent/Button/Button";
 import { useState } from "react";
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
+import { CircleCheckIcon } from './../../Component/BaseComponent/Icons/CircleCheckIcon';
+import Icons from "../../Component/BaseComponent/Icons";
 
 const exampleTour = {
     image: "https://icdn.24h.com.vn/upload/2-2023/images/2023-06-06/kim5_1-1686027959-673-width740height480.jpg",
@@ -79,7 +81,7 @@ function Checkout() {
                                 <Button orange onClick={() => setCurStep(4)}>Tiếp theo</Button>
                             </CheckoutDetailBox>
                         : <ConfirmBox>
-                            <FlexBox><Text><Icon icon={faCircleCheck} fontSize={40} color="green" />&nbsp;Congratulation</Text></FlexBox>
+                            <FlexBox><Text><Icons.CircleCheckIcon fontSize={40} color="green" />&nbsp;Congratulation</Text></FlexBox>
                             <Title>Chuyến đi của bạn sẽ sớm được duyệt <br/>Theo dõi thường xuyên tại đây nhé!</Title>
                             <Button blue  onClick={()=>setCurStep(3)}>Trở lại</Button>
                         </ConfirmBox>

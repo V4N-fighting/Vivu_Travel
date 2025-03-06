@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled from "styled-components";
 import BlogItem from "../../../Component/BlogItem";
 import { Icon, Title } from "../../../styled";
+import Icons from "../../../Component/BaseComponent/Icons";
 
 
 
@@ -39,7 +40,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
     return ( 
         <SideBar>
             <SearchBox>
-                <Icon icon={faMagnifyingGlass} />
+                <Icons.SearchIcon />
                 <SearchInput placeholder="Tìm kiếm bài viết" />
             </SearchBox>
             <TypeBox>
@@ -56,6 +57,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
                 <ListBlog>
                     {blogs.map((blog, index) => {
                         return <BlogItem
+                                    key={index}
                                     imgUrl={blog.img}
                                     timeText={blog.time}
                                     blogTitle={blog.title}

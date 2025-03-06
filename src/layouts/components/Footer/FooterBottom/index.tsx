@@ -5,6 +5,7 @@ import { SocialIcon } from "../../Header/HeaderBottom/SideMenu";
 import { faTwitter, faInstagram, faPinterestP, faFacebookF } from "@fortawesome/free-brands-svg-icons";
 import Button from "../../../../Component/BaseComponent/Button/Button";
 import { Link } from "react-router-dom";
+import Icons from "../../../../Component/BaseComponent/Icons";
 
 // Define the props type for the FooterBottomWrapper component
 interface FooterBottomWrapperProps {
@@ -31,10 +32,10 @@ const FooterBottom: React.FC = () => {
                                         Chào mừng bạn đến với gói du lịch tốt nhất của chúng tôi! Nếu bạn đang tìm kiếm một hành trình đáng nhớ và tiện ích, đây là lựa chọn hoàn hảo dành cho bạn.
                                     </Descr>
                                     <FlexBox>
-                                            <Icon icon={faFacebookF} />
-                                            <Icon icon={faTwitter} />
-                                            <Icon icon={faInstagram} />
-                                            <Icon icon={faPinterestP} />
+                                            <Icons.FacebookIcon />
+                                            <Icons.TwitterIcon />
+                                            <Icons.InstagramIcon />
+                                            <Icons.PinterestIcon />
                                     </FlexBox>
                                 </GridCol>
                                 <GridCol col={2}>
