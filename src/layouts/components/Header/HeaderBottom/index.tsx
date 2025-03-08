@@ -7,6 +7,7 @@ import SideSearch from "./SideSearch";
 import { Link } from "react-router-dom";
 import { faMagnifyingGlass, faBars } from "@fortawesome/free-solid-svg-icons";
 import CircleIcon from "../../../../Component/BaseComponent/Icons/CircleIcon";
+import Icons from "../../../../Component/BaseComponent/Icons";
 
 
 const HeaderBottom: React.FC = () => {
@@ -52,8 +53,8 @@ const HeaderBottom: React.FC = () => {
                     <Flex20Percent>
                         <FlexBoxPadding end={true}>
                             {/* 2 button */}
-                            <CircleIcon icon={faMagnifyingGlass} onClick={handleSearchClick}/>
-                            <CircleIcon icon={faBars} onClick={handleMenuClick}/>
+                            <CircleIcon  onClick={handleSearchClick}><Icons.MagnifyingGlassIcon  /></CircleIcon>
+                            <CircleIcon  onClick={handleMenuClick}><Icons.BarIcon /></CircleIcon>
                         </FlexBoxPadding>
                     </Flex20Percent>
                 </FlexBox>

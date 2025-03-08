@@ -1,36 +1,25 @@
-
-import {  IconDefinition } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ReactNode } from "react";
 import styled from "styled-components";
-
-
 
 interface CircleIconBoxProps {
     rotate?: boolean;
-    white?: boolean
+    white?: boolean;
 }
-
 
 interface CircleIconProps {
     onClick?: () => void;
-    white?: boolean
+    white?: boolean;
     style?: React.CSSProperties;
-    icon: IconDefinition;
+    children: ReactNode;
 }
 
-const CircleIcon: React.FC<CircleIconProps> = ({ onClick, white, style, icon }) => {
+const CircleIcon: React.FC<CircleIconProps> = ({ onClick, white, style, children }) => {
     return (
         <CircleIconBox onClick={onClick} white={white} style={style}>
-            <Icon icon={icon} />
+            <IconWrapper>{children}</IconWrapper> 
         </CircleIconBox>
     );
-}
-
-
-const Icon = styled(FontAwesomeIcon)`
-    width: 18px;
-    height: 18px;
-`;
+};
 
 const CircleIconBox = styled.div<CircleIconBoxProps>`
     margin: 0 10px 0 0;
@@ -40,10 +29,9 @@ const CircleIconBox = styled.div<CircleIconBoxProps>`
     flex-shrink: 0;
     width: 50px;
     height: 50px;
-    line-height: 50px;
     padding: 0;
-    background-color:  ${props => props.white ? 'white' : 'var(--primary-color)'};
-    color: ${props => props.white ? 'var(--primary-color)' : 'var(--white-color)'};;
+    background-color: ${({ white }) => (white ? "white" : "var(--primary-color)")};
+    color: ${({ white }) => (white ? "var(--primary-color)" : "var(--white-color)")};
     border: none;
     border-radius: 50%;
     transform: rotate(0);
@@ -54,9 +42,23 @@ const CircleIconBox = styled.div<CircleIconBoxProps>`
     text-align: center;
 
     &:hover {
-        background-color: ${props => props.white ? 'white' : 'var(--secondary-color)'};
-        transform: ${props => props.rotate ? 'rotate(90deg)' : 'rotate(0)'};
-        color: ${props => props.white && 'var(--secondary-color)'}
+        background-color: ${({ white }) => (white ? "white" : "var(--secondary-color)")};
+        transform: ${({ rotate }) => (rotate ? "rotate(90deg)" : "rotate(0)")};
+        color: ${({ white }) => (white ? "var(--secondary-color)" : "var(--white-color)")};
+    }
+`;
+
+const IconWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+
+    & > * {
+        padding: 0;
+        margin: 0;
+        color: #ffffff;
     }
 `;
 

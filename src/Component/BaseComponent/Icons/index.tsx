@@ -29,6 +29,10 @@ import { MountainSunIcon } from "./MoutainSunIcon";
 import { LanguageIcon } from "./LanguageIcon";
 import { ListIcon } from "./ListIcon";
 import { GripverticalIcon } from "./GripverticalIcon";
+import { BarIcon } from "./BarIcon";
+import { MagnifyingGlassIcon } from "./MagnifyingGlassIcon";
+import { PhoneIcon } from "./PhoneIcon";
+import { CircleUserIcon } from "./CircleUserIcon";
 
 const Icons = {
     CalendarIcon,
@@ -61,7 +65,11 @@ const Icons = {
     MountainSunIcon,
     LanguageIcon,
     ListIcon,
-    GripverticalIcon
+    GripverticalIcon,
+    BarIcon,
+    MagnifyingGlassIcon,
+    PhoneIcon,
+    CircleUserIcon
 
 }
 export default Icons

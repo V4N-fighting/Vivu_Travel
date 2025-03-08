@@ -31,7 +31,7 @@ const ScrollToTop: React.FC = () => {
 
   return (
     <ScrollToTopButton show={showButton} onClick={scrollToTop}>
-      <Icons.ArrowUpIcon />
+      <Icons.ArrowUpIcon white style={{padding: 0, margin: 0}}/>
     </ScrollToTopButton>
     
   );

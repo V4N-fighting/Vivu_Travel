@@ -1,14 +1,12 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { Wrapper, FlexBox, Text, FlexBoxBetween, Icon } from "../../../../styled";
-import { faCircleUser, faEnvelope } from "@fortawesome/free-regular-svg-icons";
-import { IconDefinition, IconProp } from "@fortawesome/fontawesome-svg-core";
-import { faPhone } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import CircleIcon from "../../../../Component/BaseComponent/Icons/CircleIcon";
+import Icons from "../../../../Component/BaseComponent/Icons";
 
 interface ItemContentProps {
-    icon: IconDefinition;
+    icon: ReactNode;
     text?: string;
 }
 
@@ -17,7 +15,7 @@ interface ItemContentProps {
 const ItemContent: React.FC<ItemContentProps> = ({ icon, text }) => {
     return (
         <ItemWrapper>
-            <CircleIcon icon={icon}/>
+            <CircleIcon>{icon}</CircleIcon>
             {text && <Text small white style={{margin: 0}}>{text}</Text>}
         </ItemWrapper>
     );
@@ -26,7 +24,7 @@ const ItemContent: React.FC<ItemContentProps> = ({ icon, text }) => {
 const UserContent: React.FC<ItemContentProps> = ({ icon }) => {
     return (
         <ItemWrapper>
-            <User><Icon white icon={icon} style={{margin: 0}}/></User>
+            <User>{icon}</User>
         </ItemWrapper>
     );
 };
@@ -37,11 +35,11 @@ const HeaderTop: React.FC = () => {
             <Wrapper>
                 <FlexBoxBetween>
                     <FlexBoxPadding>
-                        <ItemContent icon={faEnvelope} text='info@themona.global' />
-                        <ItemContent icon={faPhone} text='1900 636 648' />
+                        <ItemContent icon={<Icons.EnvelopeIcon />} text='info@themona.global' />
+                        <ItemContent icon={<Icons.PhoneIcon />} text='1900 636 648' />
                     </FlexBoxPadding>
                     <FlexBoxPadding style={{justifyContent: 'end'}}>
-                        <Link to='/login'><UserContent icon={faCircleUser}  /></Link>
+                        <Link to='/login'><UserContent icon={<Icons.CircleUserIcon white style={{padding: 0, margin: 0}}/>}  /></Link>
                     </FlexBoxPadding>
                 </FlexBoxBetween>
             </Wrapper>
