@@ -1,9 +1,8 @@
 import styled from "styled-components";
 import { FlexBox, SupTitle, Text, Title, Wrapper } from "../../../styled";
-import { PlayCircleFilled } from '@ant-design/icons';
 import ScrollToShow from "../../../Component/ScrollToShow";
-import { CirclePlayIcon } from './../../../Component/BaseComponent/Icons/CirclePlayIcon';
 import Icons from "../../../Component/BaseComponent/Icons";
+import CircleIcon from "../../../Component/BaseComponent/Icons/CircleIcon";
 
 interface BestCityProps {
 
@@ -35,7 +34,7 @@ const BestCity: React.FC<BestCityProps> = ({}) => {
                         <Image src='./images/gallery-1-3.jpg'></Image>
                         <GallaryBtn>
                             <Span small>Xem video</Span>
-                            <Icons.CirclePlayIcon />
+                            <CircleIcon style={{margin: 0}}><Icons.CirclePlayIcon /></CircleIcon>
                         </GallaryBtn>
                     </ScrollToShow>
                 </FlexBox_50_P_0_15>
@@ -64,7 +63,7 @@ const Image = styled.img`
 
 
 const GallaryBtn = styled.div`
-    padding: 10px 30px;
+    padding: 10px 12px;
     border-radius: 50px;
     box-shadow: 0px 0px 15px 0px rgba(255, 104, 26, 0.15);
     border: 1px solid var(--primary-color);
@@ -74,28 +73,14 @@ const GallaryBtn = styled.div`
     left: -55px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
 `
 
 const Span = styled(SupTitle)`
     color: #333333;
     font-weight: 600;
     padding-bottom: 2px;
-`
-const Icon = styled.a`
-    font-size: 45px;
-    color: #FF681A;
-    margin-left: 20px;
-    line-height: 1;
-    padding: 2px;
-    border-radius: 50%;
-    transition: all 0.5s linear;
-
-    &:hover {
-        
-        color: #37D4D9;
-        filter: drop-shadow(2px 4px 6px #7df1f5);
-        cursor: pointer;
-    }
+    margin: 0 15px 0 10px;
 `
 
 

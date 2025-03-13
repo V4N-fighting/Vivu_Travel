@@ -1,66 +1,14 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { faList, faGripVertical } from '@fortawesome/free-solid-svg-icons';
 import DropdownMenu from '../DropdownMenu';
-import { Grid, GridCol, GridRow, Icon } from '../../../styled';
+import { Grid, GridCol, GridRow } from '../../../styled';
 import TourCardDetail from '../../../Component/TourCardDetail';
 import { usePagination } from '../../../Hooks/usePagination';
 import Pagination from '../../../Component/Pagination';
-import { ListIcon } from './../../../Component/BaseComponent/Icons/ListIcon';
 import Icons from '../../../Component/BaseComponent/Icons';
+import { useTour } from '../../../service/tourService';
 
-const listContentDefault = [
-  <TourCardDetail 
-    key='1'
-    url={"./images/4-900x490.jpg"}
-    title={"Maldives: The Travel and Experience of the Lifetime"}
-    textLocation={"Colombo, England, France"}
-    textTime={"8 Ngày - 6 Đêm"}
-    price={"1300,000đ"}
-    textDensity={'1-3 người'}
-    textLevel={'Trung bình'}
-    horizontal={true} textDescr={'Lương Ngọc Văn đẹp trai thì thôi luôn nhé, miễn bàn miễn bàn miễn bàn miễn bàn'}  />,
-  <TourCardDetail 
-    key='2'
-    url={"./images/4-900x490.jpg"}
-    title={"Maldives: The Travel and Experience of the Lifetime"}
-    textLocation={"Colombo, England, France"}
-    textTime={"8 Ngày - 6 Đêm"}
-    price={"300,000đ"}
-    textDensity={'1-3 người'}
-    textLevel={'Trung bình'}
-    horizontal={false} textDescr={'Lương Ngọc Văn đẹp trai thì thôi luôn nhé, miễn bàn miễn bàn miễn bàn miễn bàn'}  />,
-  <TourCardDetail 
-    key='3'
-    url={"./images/4-900x490.jpg"}
-    title={"Maldives: The Travel and Experience of the Lifetime"}
-    textLocation={"Colombo, England, France"}
-    textTime={"8 Ngày - 6 Đêm"}
-    price={"300,000đ"}
-    textDensity={'1-3 người'}
-    textLevel={'Trung bình'}
-    horizontal={false} textDescr={'Lương Ngọc Văn đẹp trai thì thôi luôn nhé, miễn bàn miễn bàn miễn bàn miễn bàn'}  />,
-  <TourCardDetail 
-    key='4'
-    url={"./images/4-900x490.jpg"}
-    title={"Maldives: The Travel and Experience of the Lifetime"}
-    textLocation={"Colombo, England, France"}
-    textTime={"8 Ngày - 6 Đêm"}
-    price={"300,000đ"}
-    textDensity={'1-3 người'}
-    textLevel={'Trung bình'}
-    horizontal={false} textDescr={'Lương Ngọc Văn đẹp trai thì thôi luôn nhé, miễn bàn miễn bàn miễn bàn miễn bàn'}  />,
-  <TourCardDetail 
-    key='5'
-    url={"./images/4-900x490.jpg"}
-    title={"Maldives: The Travel and Experience of the Lifetime"}
-    textLocation={"Colombo, England, France"}
-    textTime={"8 Ngày - 6 Đêm"}
-    price={"300,000đ"}
-    textDensity={'1-3 người'}
-    textLevel={'Trung bình'}
-    horizontal={false} textDescr={'Lương Ngọc Văn đẹp trai thì thôi luôn nhé, miễn bàn miễn bàn miễn bàn miễn bàn'}  />,
-];
+
 
 enum ModeShow {
   List,
@@ -70,6 +18,25 @@ enum ModeShow {
 
 const Content: React.FC = () => {
   const [modeShow, setModeShow] =  useState(ModeShow.List)
+
+  const { data: tours, loading: tourLoading, error: tourError } = useTour();
+
+  const listContentDefault = tours ? tours.map((item, index) => {
+    return (
+      <TourCardDetail 
+        key={index}
+        url={"./images/4-900x490.jpg"}
+        title={item.name}
+        textLocation={item.countryName}
+        textTime={item.duration}
+        price={item.price.adult}
+        textDensity={item.maxPeople}
+        textLevel={item.adventureLevel}
+        horizontal={true} 
+        textDescr={item.description}  
+      />
+    )}) : [];
+
   const {
     indexOfFirstItem,
     indexOfLastItem,
@@ -88,6 +55,11 @@ const Content: React.FC = () => {
     setModeShow(ModeShow.List)
     
   }
+
+  // Xử lý trạng thái tải hoặc lỗi
+  if (tourLoading) return <p>Đang tải dữ liệu...</p>;
+  if (tourError) return <p>Lỗi: {tourError}</p>;
+  if (!tours || tours.length === 0) return <p>Không có dữ liệu.</p>;
 
   return (
     <Wrapper>

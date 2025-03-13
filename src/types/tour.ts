@@ -1,23 +1,22 @@
 
+
 export default interface TourItem {
-    id: number;
+    id: string;
     name: string;
     description: string;
-    location: string;
+    countryID: string;
     duration: string;
     departure_date: string; 
-    max_people: number;
+    max_people: string;
     adventure_level: string;
     price: {
       adult: string; 
       child: string;
     };
-    tour_type: string;
-    activities: string[];
-    languages: string[];
+    type_id: string;
+    activityIDs: string[];
+    activityNames: string[];
     transportation: string[];
     altitude: string;
-    hotel_star: number;
-    itinerary: Record<string, string>; // Định dạng { "Day X": "Nội dung" }
-    map_embed: string; // HTML iframe embed
+    hotel_star: string;
   }

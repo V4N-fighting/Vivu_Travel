@@ -4,6 +4,7 @@ import { Grid, GridCol,  GridRow } from "../../styled";
 import TourCard from "../../Component/TourCard";
 import Pagination from "../../Component/Pagination";
 import { usePagination } from "../../Hooks/usePagination";
+import { useActivities } from "../../service/activitiesService";
 
 // Dữ liệu mẫu
 const activities = [
@@ -31,6 +32,12 @@ function Activity() {
   } =  usePagination(ITEM_PER_PAGE,activities.length)
       
   const listContent = activities.slice(indexOfFirstItem,indexOfLastItem)
+
+  const {data, loading, error} = useActivities()
+
+  if (loading) return <p>Đang tải dữ liệu...</p>
+  if (error) return <p>Lỗi dữ liệu..</p>
+  if (!data || data.length === 0) return <p>Không có dữ liệu</p>
         
   return (
     <>

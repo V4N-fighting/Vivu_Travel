@@ -11,76 +11,32 @@ interface ListCardProps {
   
 }
 
-const listContent = [
-  <TourCardDetail 
-    key='1'
-    url={"./images/4-900x490.jpg"}
-    title={"Maldives: The Travel and Experience of the Lifetime"}
-    textLocation={"Colombo, England, France"}
-    textTime={"8 Ngày - 6 Đêm"}
-    price={"100,000đ"}
-    textDensity={'1-3 người'}
-    textLevel={'Trung bình'}
-    horizontal={false} textDescr={'Lương Ngọc Văn đẹp trai thì thôi luôn nhé, miễn bàn miễn bàn miễn bàn miễn bàn'}
-    isDensity={false}  />,
-    
-  <TourCardDetail 
-    key='2'
-    url={"./images/4-900x490.jpg"}
-    title={"Maldives: The Travel and Experience of the Lifetime"}
-    textLocation={"Colombo, England, France"}
-    textTime={"8 Ngày - 6 Đêm"}
-    price={"200,000đ"}
-    textDensity={'1-3 người'}
-    textLevel={'Trung bình'}
-    horizontal={false} textDescr={'Lương Ngọc Văn đẹp trai thì thôi luôn nhé, miễn bàn miễn bàn miễn bàn miễn bàn'}  
-    isDensity={false}/>,
-  <TourCardDetail 
-    key='3'
-    url={"./images/4-900x490.jpg"}
-    title={"Maldives: The Travel and Experience of the Lifetime"}
-    textLocation={"Colombo, England, France"}
-    textTime={"8 Ngày - 6 Đêm"}
-    price={"300,000đ"}
-    textDensity={'1-3 người'}
-    textLevel={'Trung bình'}
-    horizontal={false} textDescr={'Lương Ngọc Văn đẹp trai thì thôi luôn nhé, miễn bàn miễn bàn miễn bàn miễn bàn'}  
-    isDensity={false}/>,
-  <TourCardDetail 
-    key='4'
-    url={"./images/4-900x490.jpg"}
-    title={"Maldives: The Travel and Experience of the Lifetime"}
-    textLocation={"Colombo, England, France"}
-    textTime={"8 Ngày - 6 Đêm"}
-    price={"400,000đ"}
-    textDensity={'1-3 người'}
-    textLevel={'Trung bình'}
-    horizontal={false} textDescr={'Lương Ngọc Văn đẹp trai thì thôi luôn nhé, miễn bàn miễn bàn miễn bàn miễn bàn'}  
-    isDensity={false}/>,
-  <TourCardDetail 
-    key='5'
-    url={"./images/4-900x490.jpg"}
-    title={"Maldives: The Travel and Experience of the Lifetime"}
-    textLocation={"Colombo, England, France"}
-    textTime={"8 Ngày - 6 Đêm"}
-    price={"500,000đ"}
-    textDensity={'1-3 người'}
-    textLevel={'Trung bình'}
-    horizontal={false} textDescr={'Lương Ngọc Văn đẹp trai thì thôi luôn nhé, miễn bàn miễn bàn miễn bàn miễn bàn'}  
-    isDensity={false}/>,
-];
 
 const ListCard: React.FC<ListCardProps> = ({}) => {
 
-  const {data, loading, error} = useTour()
-
-  
-
+  const { data: tours, loading: tourLoading, error: tourError } = useTour(6);
   // Xử lý trạng thái tải hoặc lỗi
-  if (loading) return <p>Đang tải dữ liệu...</p>;
-  if (error) return <p>Lỗi: {error}</p>;
-  if (!data || data.length === 0) return <p>Không có dữ liệu.</p>;
+  if (tourLoading) return <p>Đang tải dữ liệu...</p>;
+  if (tourError) return <p>Lỗi: {tourError}</p>;
+  if (!tours || tours.length === 0) return <p>Không có dữ liệu.</p>;
+  console.log(tours);
 
+  const Sildes = tours.map((item, index) => {
+    return (
+      <TourCardDetail
+        key={index}
+        url={'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBS9bJEXw5AYRgmLY_9Nyr79oQFPYEtJjmhA&s'}
+        title={item.name}
+        textLocation={item.countryName}
+        textTime={item.duration}
+        price={item.price.adult}
+        textDensity={item.maxPeople}
+        textLevel={item.adventureLevel}
+        horizontal={false}
+        textDescr={item.description}
+        isDensity={false}
+      />
+    )});
 
   return (
     <Wrapper url="./images/Bg.png">
@@ -91,7 +47,7 @@ const ListCard: React.FC<ListCardProps> = ({}) => {
         <ScrollToShow rightToLeft><ListCardTitle big>Gói du lịch tốt nhất</ListCardTitle></ScrollToShow>
         <ScrollToShow bottomToTop><ListCardText small>Gói du lịch tốt nhất của chúng tôi đã được thiết kế đặc biệt để mang đến cho bạn trải nghiệm tuyệt vời nhất.</ListCardText></ScrollToShow>
       </Header>
-      <ScrollToShow scale><Carousel slides={listContent} autoSlide autoSlideInterval={3000}></Carousel></ScrollToShow>
+      <ScrollToShow scale><Carousel slides={Sildes} autoSlide autoSlideInterval={3000}></Carousel></ScrollToShow>
       <ScrollToShow topToBottom><Button orange>Xem thêm</Button></ScrollToShow>
     </Wrapper>
   );

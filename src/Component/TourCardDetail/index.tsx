@@ -26,9 +26,9 @@ const TourCardDetail: React.FC<TourCardDetailProps> =
   
   const details = [
     { icon: <Icons.LocationDotIcon orange/>, text: textLocation },
-    { icon: <Icons.CalendarIcon orange/>, text: textTime },
-    { icon: <Icons.UserIcon orange/>, text: textDensity },
-    { icon: <Icons.ChartSimpleIcon orange/>, text: textLevel },
+    { icon: <Icons.CalendarIcon orange/>, text: textTime + ' ngày' },
+    { icon: <Icons.UserIcon orange/>, text: textDensity + ' người' },
+    { icon: <Icons.ChartSimpleIcon orange/>, text: textLevel + ' (độ mạo hiểm)' },
   ];
 
   const next_tour = ['Th1 04', 'Th1 05', 'Th1 06' ];
@@ -86,6 +86,7 @@ const WrapperCard = styled.div<{horizontal?: boolean}>`
   overflow: hidden;
   box-shadow: var(--box-shadow);
   `
+
 const WrapperImage = styled.div`
     width: 100%;
     aspect-ratio: 900 / 700;

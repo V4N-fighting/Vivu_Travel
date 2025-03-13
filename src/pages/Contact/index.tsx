@@ -3,9 +3,12 @@ import Banner from "../../Component/Banner";
 import Card from "./Card";
 import { SupTitle, Text, Title } from "../../styled";
 import Button from "../../Component/BaseComponent/Button/Button";
+import { useTour } from "../../service/tourService";
 
 
 function Contact() {
+  const {data, loading, error} = useTour()
+  if (data) console.log(data);
     return ( 
         <ContactPage>
             <Banner 
