@@ -14,7 +14,7 @@ interface ListCardProps {
 
 const ListCard: React.FC<ListCardProps> = ({}) => {
 
-  const { data: tours, loading: tourLoading, error: tourError } = useTour(6);
+  const { data: tours, loading: tourLoading, error: tourError } = useTour(undefined, [5, 6]);
   // Xử lý trạng thái tải hoặc lỗi
   if (tourLoading) return <p>Đang tải dữ liệu...</p>;
   if (tourError) return <p>Lỗi: {tourError}</p>;
