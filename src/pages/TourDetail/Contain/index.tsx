@@ -10,6 +10,7 @@ import { Map } from "./Map";
 
 interface ContainProps {
     formRef: React.RefObject<HTMLFormElement>;
+    data: any;
 }
 
 interface ArrayNavContent {
@@ -20,17 +21,21 @@ interface ArrayNavContent {
 
 
 
-const navContent: ArrayNavContent[] = [
+
+const Contain: React.FC<ContainProps> = ({formRef, data}) => {
+    console.log(data && 'lương ngọ văn', data)
+    
+    const navContent: ArrayNavContent[] = [
     {
-        id: 1, value: <Overview />,
+        id: 1, value: <Overview content={data && data[0].description}/>,
         tab: "Tổng quan"
     },
     {
-        id: 2, value: <Expense  />,
+        id: 2, value: <Expense  content={data && data[0].price}/>,
         tab: "Chi phí"
     },
     {
-        id: 3, value: <Itinerary  />,
+        id: 3, value: <Itinerary  content={data && data[0].itinerary}/>,
         tab: "Hành trình"
     },
     {
@@ -38,13 +43,11 @@ const navContent: ArrayNavContent[] = [
         tab: "FAQs"
     },
     {
-        id: 5, value: <Map  />,
+        id: 5, value: <Map  content={data && data[0].price}/>, // thêm html của map
         tab: "Map"
     },
 ]
 
-
-const Contain: React.FC<ContainProps> = ({formRef}) => {
     const [curTab, setCurTab] = useState<number>(1);
 
     const navRef = useRef<HTMLDivElement>(null);
@@ -104,9 +107,9 @@ const Contain: React.FC<ContainProps> = ({formRef}) => {
     return (
         <Wrapper>
             <Header>
-                <Title medium>Romantic Sri Lanka Honeymoon Package</Title>
+                <Title medium>{data && data[0].name}</Title>
                 <Time>
-                    <span>7</span>
+                    <span>{data && data[0].duration}</span>
                     Ngày
                 </Time>
             </Header>

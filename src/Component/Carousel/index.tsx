@@ -84,7 +84,7 @@ const SliderContainer = styled.div`
 `;
 
 const Slide = styled.div<{ slidesToShow: number }>`
-  min-width: calc(100% / ${props => props.slidesToShow} - 40px);
+  width: calc(100% / ${props => props.slidesToShow} - 40px);
 `;
 
 const DotsContainer = styled.div`

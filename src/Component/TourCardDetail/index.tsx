@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { Title, Text, Icon } from '../../styled';
+import { Title, Text, Icon, FlexBox } from '../../styled';
 import Button from '../BaseComponent/Button/Button';
-import { faChartSimple, faCheck, faLocationDot, faUsers } from '@fortawesome/free-solid-svg-icons';
-import { faCalendar, faClock } from '@fortawesome/free-regular-svg-icons';
-import { LocationDotIcon } from './../BaseComponent/Icons/LocationDotIcon';
 import Icons from '../BaseComponent/Icons';
+import TourItem from '../../types/tour';
+import { useNavigate } from 'react-router-dom';
 
 interface TourCardDetailProps {
+    valueID: string,
     url: string,  
     title: string, 
     textLocation: string,
@@ -21,14 +21,21 @@ interface TourCardDetailProps {
 }
 
 const TourCardDetail: React.FC<TourCardDetailProps> = 
-({url, price, textLocation, title, textTime, textDensity, textLevel, horizontal, textDescr, isDensity = true}) => {
+({valueID, url, price, textLocation, title, textTime, textDensity, textLevel, horizontal, textDescr, isDensity = true}) => {
   const [isfullYear, setIsFullYear] = useState<boolean>(true)
+
+  const navigate = useNavigate();
+
+  const handleViewDetail = () => {
+      navigate(`/tour_detail/${valueID}`, { state: { valueID } }); // Gửi state nếu cần
+      window.scrollTo({ top: 200, behavior: 'smooth' });
+  };
   
   const details = [
     { icon: <Icons.LocationDotIcon orange/>, text: textLocation },
     { icon: <Icons.CalendarIcon orange/>, text: textTime + ' ngày' },
     { icon: <Icons.UserIcon orange/>, text: textDensity + ' người' },
-    { icon: <Icons.ChartSimpleIcon orange/>, text: textLevel + ' (độ mạo hiểm)' },
+    { icon: <Icons.ChartSimpleIcon orange/>, text: textLevel },
   ];
 
   const next_tour = ['Th1 04', 'Th1 05', 'Th1 06' ];
@@ -50,22 +57,22 @@ const TourCardDetail: React.FC<TourCardDetailProps> =
                 <Descr>
                     <Left>
                       {details.map((detail, index) => (
-                        <TextDescr key={index}>
-                          {detail.icon}
-                          {detail.text}
-                        </TextDescr>
+                        <ItemBox key={index}>
+                          <WrapperIcon>{detail.icon}</WrapperIcon>
+                          <TextDescr style={{margin: 0}}>{detail.text}</TextDescr>
+                        </ItemBox>
                       ))}
-                      <TextDescr>{textDescr}</TextDescr>
+                      <TextDescr style={{margin: '20px 0'}}>{textDescr}</TextDescr>
                     </Left>
                     <Right>
                         <Price>{price}</Price>
                         <TextDescr>Chuyến khởi hành tiếp theo</TextDescr>
                         {next_tour.map((day, index) => {
-                          return <TextDescr key={index}><Icon color='orange' icon={faCheck} />{day}</TextDescr>
+                          return <TextDescr key={index}><Icons.CheckIcon />{day}</TextDescr>
                         })}
                     </Right>
                 </Descr>
-                <CardButton orange>Xem chi tiết</CardButton>
+                <CardButton orange onClick={handleViewDetail}>Xem chi tiết</CardButton>
                 {isDensity && <>
                   <TextDescr>{isfullYear ? 'Có sẵn quanh năm' : 'Có ở các tháng'}</TextDescr>
                   <TextDescr style={{fontSize: '12px'}}><Icons.CalendarIcon orange/>{availableMonth}</TextDescr>
@@ -133,15 +140,27 @@ const Descr = styled.div`
   padding: 10px 0;
   border-bottom: var(--border);
 
+
 `
+const ItemBox = styled.div`
+  display: flex;
+  padding: 5px 0;
+  align-items: center;
+`
+
+const WrapperIcon = styled.div`
+  width: 70px;
+`
+
+
 const Left = styled.div`
-  width: calc(60% - 1px);
+  width: calc(50% - 1px);
   margin-bottom: -18px;
   border-right: var(--border);
   padding-right: 15px;
 `
 const Right = styled.div`
-  width: 40%;
+  width: 50%;
   padding: 0 10px;
   display: flex;
   align-items: center;

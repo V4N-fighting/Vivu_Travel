@@ -6,6 +6,7 @@ import { FlexBoxBetween, Text } from "../../../../styled";
 
 
 interface TourInfoProps {
+    title: string,
     total: number,
     hideModal: () => void,
     day: number,
@@ -13,20 +14,24 @@ interface TourInfoProps {
     year: number
 }
 
-const TourInfo: React.FC<TourInfoProps> = ({  total, hideModal, day, month, year}) => {
+const TourInfo: React.FC<TourInfoProps> = ({ title, total, hideModal, day, month, year}) => {
+   
+
     return (
         <>
             <FlexBoxBetween>
                 <Text small style={{ textTransform: 'uppercase' }}>Thông tin đặt tour</Text>
                 <CloseButton white onClick={hideModal} />
             </FlexBoxBetween>
-            <Text bold style={{ width: '70%', textAlign: 'left' }}>Romantic Sri Lanka Honeymoon Package</Text>
+            <Text bold style={{ width: '70%', textAlign: 'left' }}>{title}</Text>
             <Text small  style={{ textAlign: 'left' }}>
                 <span style={{ fontWeight: 'bold' }}>Starting Date:&nbsp;</span>{day}&nbsp;tháng&nbsp;{month}&nbsp;{year}
             </Text>
             <Button blue style={{ borderRadius: 0, pointerEvents: 'none' }}>Package: Cơ bản</Button>
             <Role>Du khách</Role>
-            <Total>Total: {total} USD</Total>
+            <Total>Total: {total} VND</Total>
+            <Total>({total / 1000000} triệu đồng) </Total>
+
         </>
     );
 };
@@ -44,7 +49,7 @@ const Total = styled.div`
     text-align: right;
     font-size: 24px;
     font-weight: bold;
-    padding: 30px;
+    padding: 20px;
 `;
 
 export default TourInfo;

@@ -1,4 +1,8 @@
-
+export interface ItineraryActivity {
+  day: number;
+  title: string;
+  activities: string[];
+}
 
 export default interface TourItem {
     id: string;
@@ -19,4 +23,5 @@ export default interface TourItem {
     transportation: string[];
     altitude: string;
     hotel_star: string;
+    itinerary: ItineraryActivity[];
   }

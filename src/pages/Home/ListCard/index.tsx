@@ -14,7 +14,9 @@ interface ListCardProps {
 
 const ListCard: React.FC<ListCardProps> = ({}) => {
 
-  const { data: tours, loading: tourLoading, error: tourError } = useTour(undefined, [5, 6]);
+  const { data: tours, loading: tourLoading, error: tourError } = useTour({
+    quantity: 10
+  });
   // Xử lý trạng thái tải hoặc lỗi
   if (tourLoading) return <p>Đang tải dữ liệu...</p>;
   if (tourError) return <p>Lỗi: {tourError}</p>;
@@ -24,6 +26,7 @@ const ListCard: React.FC<ListCardProps> = ({}) => {
   const Sildes = tours.map((item, index) => {
     return (
       <TourCardDetail
+        valueID={item.id}
         key={index}
         url={'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBS9bJEXw5AYRgmLY_9Nyr79oQFPYEtJjmhA&s'}
         title={item.name}

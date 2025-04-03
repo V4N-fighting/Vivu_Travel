@@ -2,9 +2,10 @@ import styled from "styled-components"
 import { Text, Title } from "../../../../styled"
 
 interface MapProps {
+    content: string,
 }
 
-export const Map:React.FC<MapProps> = ({}) => {
+export const Map:React.FC<MapProps> = ({content}) => {
     return (
         <Wrap>
             <Title small>Map</Title>

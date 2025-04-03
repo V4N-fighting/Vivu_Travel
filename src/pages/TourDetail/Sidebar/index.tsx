@@ -8,45 +8,50 @@ import Icons from "../../../Component/BaseComponent/Icons";
 import { ReactNode } from "react";
 
 
-const infodetail: {id: number, item: string, value: string, icon: ReactNode}[] = [
-    {
-        id: 1,
-        item: 'Accomodation',
-        value: '3 Stars Hotels',
-        icon: <Icons.HotelIcon />,
-    },
-    {
-        id: 2,
-        item: 'Transportation',
-        value: 'Bus, Airlines',
-        icon: <Icons.CarIcon />,
-    },
-    {
-        id: 3,
-        item: 'Maximum Altitude',
-        value: '5,416 metres',
-        icon: <Icons.MountainSunIcon />,
-    },
-    {
-        id: 4,
-        item: 'Language',
-        value: 'English, Spanish, French, Chinese',
-        icon: <Icons.LanguageIcon />,
-    },
-]
+
 
 interface SidebarProps {
     handleScrollToForm: () => void,
-    showModel: () => void
+    showModel: () => void,
+    data: any
 }
 
-const Sidebar: React.FC<SidebarProps> = ({handleScrollToForm, showModel}) => {
+const Sidebar: React.FC<SidebarProps> = ({handleScrollToForm, showModel, data}) => {
+    const infodetail: {id: number, item: string, value: string, icon: ReactNode}[] = [
+        {
+            id: 1,
+            item: 'Accomodation',
+            value: data && data[0].hotelStar  + ' Stars Hotels',
+            icon: <Icons.HotelIcon />,
+        },
+        {
+            id: 2,
+            item: 'Transportation',
+            value: data && data[0].transportation.join(', '),
+            icon: <Icons.CarIcon />,
+        },
+        {
+            id: 3,
+            item: 'Maximum Altitude',
+            value: data && data[0].altitude,
+            icon: <Icons.MountainSunIcon />,
+        },
+        {
+            id: 4,
+            item: 'Language',
+            value: data && data[0].language.join(', '),
+            icon: <Icons.LanguageIcon />,
+        },
+    ]
+
+    const price = data && data[0].price.adult;
+
     return ( 
         <Wrapper>
             <PriceBox>
                 <Top>
                     <Text small style={{textAlign: 'center'}}>Từ</Text>
-                    <Text small style={{textAlign: 'center'}}><Cost>4.000.000đ</Cost>/Adult</Text>
+                    <Text small style={{textAlign: 'center'}}><Cost>{price}</Cost>/Adult</Text>
                 </Top>
                 <Bottom>
                     <Button orange style={{width: '100%', borderRadius: '0'}} onClick={() => showModel()}>Kiểm tra</Button>

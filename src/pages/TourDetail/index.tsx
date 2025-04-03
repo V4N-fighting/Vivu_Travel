@@ -5,10 +5,17 @@ import Contain from "./Contain";
 import Sidebar from "./Sidebar";
 import { useRef, useState } from "react";
 import MOdel from "./Modal";
+import { useParams } from "react-router-dom";
+import { useTour } from "../../service/tourService";
+import ListCard from "../Home/ListCard";
 
 interface TourDetailProps {}
 
 const TourDetail: React.FC<TourDetailProps> = () => {
+    const { id } = useParams()
+
+    const { data, loading, error } = useTour({id: id});
+    console.log("get được dadtaa: ", data)
    
     const formRef = useRef<HTMLFormElement | null>(null);
 
@@ -39,17 +46,17 @@ const TourDetail: React.FC<TourDetailProps> = () => {
                 <Grid>
                     <GridRow>
                         <GridCol col={8}>
-                            <Contain formRef={formRef} />
+                            <Contain data={data} formRef={formRef} />
                         </GridCol>
                         <GridCol col={4}>
-                            <Sidebar handleScrollToForm={handleScrollToForm} showModel={handleShowModal} />
+                            <Sidebar data={data} handleScrollToForm={handleScrollToForm} showModel={handleShowModal} />
                         </GridCol>
                     </GridRow>
                 </Grid>
                             
-                {showModal && <MOdel hideModal={handleHideModal}/>}
+                {showModal && <MOdel data={data} hideModal={handleHideModal}/>}
             </TourPage>
-
+            <ListCard />
         </>
     );
 };

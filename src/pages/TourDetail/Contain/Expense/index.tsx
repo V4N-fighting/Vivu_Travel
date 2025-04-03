@@ -3,7 +3,7 @@ import {Icon, Text, Title } from "../../../../styled"
 import Icons from "../../../../Component/BaseComponent/Icons"
 
 interface ExpenseProps {
-    
+    content: string[]
 }
 
 const include: string[] = [
@@ -20,12 +20,12 @@ const exclude: string[] = [
     'Pick-up or Drop-off service from and to Airport(in our own vehicle)',
 ]
 
-export const Expense:React.FC<ExpenseProps> = ({}) => {
+export const Expense:React.FC<ExpenseProps> = ({content}) => {
     return (
         <Wrap>
             <Title small>Expense</Title>
             <Include>
-                <Text small bold >Expense includes</Text>
+                <Text small bold >Giá vé người lớn</Text>
                 {include.map((val, index) => {
                     return (
                         <Text small key={index}>
@@ -37,7 +37,7 @@ export const Expense:React.FC<ExpenseProps> = ({}) => {
                 
             </Include>
             <Exclude>
-                <Text small bold >Expense includes</Text>
+                <Text small bold >Giá vé trẻ em</Text>
                 {exclude.map((val, index) => {
                     return (
                         <Text key={index} small>

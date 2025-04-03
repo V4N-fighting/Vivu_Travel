@@ -4,7 +4,8 @@ import { useFetch } from "../Hooks/useFetch";
 
 type CountryItem = {
     id: string,
-    name: string
+    name: string,
+    language: string[]
 }
 
 export const useCountry = () => {

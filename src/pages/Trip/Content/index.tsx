@@ -19,11 +19,12 @@ enum ModeShow {
 const Content: React.FC = () => {
   const [modeShow, setModeShow] =  useState(ModeShow.List)
 
-  const { data: tours, loading: tourLoading, error: tourError } = useTour();
+  const { data: tours, loading: tourLoading, error: tourError } = useTour({});
 
   const listContentDefault = tours ? tours.map((item, index) => {
     return (
       <TourCardDetail 
+        valueID={item.id}
         key={index}
         url={"./images/4-900x490.jpg"}
         title={item.name}

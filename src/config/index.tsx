@@ -15,7 +15,7 @@ const config = {
         tour: '/tours',
         trip: '/trips',
         blog_detail: '/blog_detail',
-        tour_detail: '/tour_detail',
+        tour_detail: '/tour_detail/:id',
         check_out: '/check_out',
     },
 };

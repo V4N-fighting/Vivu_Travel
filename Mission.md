@@ -91,8 +91,9 @@
 
 <!-- ------------------------------------------------------------------------------------------------------------------------------- -->
 # note
-1) Banner gặp vấn đề chỗ mấy con số
-2) chỉnh lại cách dùng icon từ thư viện (hiện đang import trực tiếp icon từ thư viện)
 
-tới tourdetail
+//tourService bổ sung thêm mấy cái lọc
+// render mấy cái activity, time,.. ra trips
+// chỉnh lại tourcarddetail
+// render activity, tour, 
 

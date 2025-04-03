@@ -13,13 +13,13 @@ import { Link } from "react-router-dom";
 
 interface ModalProps {
     hideModal: () => void;
+    data: any;
 }
 
-const Modal: React.FC<ModalProps> = ({ hideModal }) => {
-    const adultCostInit:number = 1500
-    const childCostInit:number = 500
+const Modal: React.FC<ModalProps> = ({ hideModal, data }) => {
+    const adultCostInit:number = data && Number(data[0].price.adult.replace(/[^\d]/g, ''))
+    const childCostInit:number = data && Number(data[0].price.child.replace(/[^\d]/g, ''))
 
-    const now = new Date();
 
     const [step1, setStep1] = useState<boolean>(true);
 
@@ -27,13 +27,11 @@ const Modal: React.FC<ModalProps> = ({ hideModal }) => {
     const [childCost, setChildCost] = useState<number>(0)
     const [total, setTotal] = useState<number>(0);
 
-    const [dateSelect, setDateSelect] = useState<Dayjs>();
-    const [day, setDay] = useState<number>(now.getDate());
-    const [month, setMonth] = useState<number>(now.getMonth() + 1);
-    const [year, setYear] = useState<number>(now.getFullYear());
+    const [year, month, day] = data && data[0].departureDate.split("-");
+
 
     const handleDateChange = (date: Dayjs) => {
-        setDateSelect(date);
+        console.log('change')
     };
 
     const getAdultValue = (value:number) => {
@@ -44,14 +42,6 @@ const Modal: React.FC<ModalProps> = ({ hideModal }) => {
         setChildCost(value*childCostInit);
     }
 
-    // set dữ liệu thời gian 
-    useEffect(() => {
-        if (dateSelect) {
-            setDay(dateSelect.date());
-            setMonth(dateSelect.month() + 1);
-            setYear(dateSelect.year());
-        }
-    }, [dateSelect]);
 
     useEffect(() => {
         setTotal(adultCost + childCost)
@@ -93,12 +83,12 @@ const Modal: React.FC<ModalProps> = ({ hideModal }) => {
                                     </FlexBoxBetween>
                                     <FlexBoxBetween>
                                         <Value>Người lớn</Value>
-                                        <DefaultCost>{adultCostInit} USD / người</DefaultCost>
+                                        <DefaultCost>{adultCostInit} VND / người</DefaultCost>
                                         <Counter onChangeValue={getAdultValue} />
                                     </FlexBoxBetween>
                                     <FlexBoxBetween>
                                         <Value>Trẻ em (từ dưới 15 tuổi)</Value>
-                                        <DefaultCost>{childCostInit} USD / người</DefaultCost>
+                                        <DefaultCost>{childCostInit} VND / người</DefaultCost>
                                         <Counter onChangeValue={getChildValue} />
                                     </FlexBoxBetween>
                                 </Setup>
@@ -112,7 +102,7 @@ const Modal: React.FC<ModalProps> = ({ hideModal }) => {
                             </Bottom>
                         </GridCol>
                         <GridCol col={4}>
-                            <TourInfo total={total} hideModal={hideModal} day={day} month={month} year={year} />
+                            <TourInfo title={data && data[0].name} total={total} hideModal={hideModal} day={day} month={month} year={year} />
                         </GridCol>
                     </GridRow>
                 </Grid>

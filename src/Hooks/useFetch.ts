@@ -39,6 +39,7 @@ export function useFetch<T>(url: string) {
 
     fetchData();
 
+
     return () => {
       isMounted = false;
       source.cancel("Request canceled because component unmounted.");

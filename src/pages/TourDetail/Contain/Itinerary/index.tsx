@@ -4,6 +4,7 @@ import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
 import Button from "../../../../Component/BaseComponent/Button/Button";
 import Icons from "../../../../Component/BaseComponent/Icons";
+import { ItineraryActivity } from "../../../../types/tour";
 
 const setPlan: {id: number, plan: string, detail: string}[] = [
     {
@@ -29,6 +30,7 @@ const setPlan: {id: number, plan: string, detail: string}[] = [
 ]
 
 interface ItineraryProps {
+    content: ItineraryActivity[],
 }
 
 interface ItemProps {
@@ -55,7 +57,7 @@ const Item: React.FC<ItemProps> = ({ plan, detail, showAll, index }) => {
             />
             <Plan onClick={() => setShowDetail(!showDetail)}>
                 <Text small bold  color="red">
-                    <span style={{color: 'black'}}>Ngày {index}: &nbsp;</span>
+                    <span style={{color: 'black'}}>Ngày {index + 1}: &nbsp;</span>
                     {plan}
                 </Text>
                 {showDetail ? <Icons.MinusIcon orange hover/> : <Icons.PlusIcon orange hover/>}
@@ -69,7 +71,8 @@ const Item: React.FC<ItemProps> = ({ plan, detail, showAll, index }) => {
     );
 };
 
-export const Itinerary:React.FC<ItineraryProps> = ({}) => {
+export const Itinerary:React.FC<ItineraryProps> = ({content}) => {
+    console.log('content', content);
     const [showAll, setShowAll] = useState<boolean>(false);
 
     const handleShowAll = () => {
@@ -84,9 +87,9 @@ export const Itinerary:React.FC<ItineraryProps> = ({}) => {
                     {showAll ? "Đóng tất cả" : "Mở tất cả"}
                 </Button>
             </FlexBoxBetween>
-            {setPlan.map((item,index) => {
+            {content.map((item,index) => {
                 return (
-                    <Item key={index} plan={item.plan} detail={item.detail} showAll={showAll} index={item.id}/>
+                    <Item key={index} plan={item.title} detail={item.activities.join(' ')} showAll={showAll} index={index}/>
                 )
             })}
         </Wrap>
