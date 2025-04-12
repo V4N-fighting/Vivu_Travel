@@ -67,7 +67,7 @@ const Name = styled.div`
   font-weight: 500;
   color: #111111;
   text-transform: capitalize;
-  margin: 30px 0;
+  margin: 20px 0 40px; 
   cursor: pointer;
   &:hover {
     color: orange;

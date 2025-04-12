@@ -4,14 +4,12 @@ import type { CalendarProps } from 'antd';
 import type { Dayjs } from 'dayjs';
 
 interface CalendarComponentProps {
+  value: Dayjs,
   onSelectDate: (date: Dayjs) => void; // Hàm callback nhận giá trị date từ cha
 }
 
 
-
-
-
-const CalendarComponent: React.FC<CalendarComponentProps> = ({onSelectDate}) => {
+const CalendarComponent: React.FC<CalendarComponentProps> = ({value, onSelectDate}) => {
   const { token } = theme.useToken();
 
 
@@ -30,11 +28,11 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({onSelectDate}) => 
   return (
     <div style={wrapperStyle}>
       <Calendar 
+        value={value}
         fullscreen={false} 
         onPanelChange={onPanelChange} 
         onSelect={(date, { source }) => {
           if (source === 'date') {
-            console.log('van dep trai')
             onSelectDate(date);
           }
         }}
