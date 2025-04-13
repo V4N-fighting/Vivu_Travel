@@ -3,6 +3,7 @@ import { FlexBox, Title } from '../../../../../styled';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
+import config from '../../../../../config';
 
 const handleScroll = () => {
   window.scrollTo({ top: 200, behavior: 'smooth' });
@@ -18,44 +19,44 @@ const navigation: NavigationArrayProps[] = [
   {
     id: 1,
     value: 'Trang chủ',
-    to: '/'
+    to: config.routes.home
   },
   {
     id: 2,
     value: 'Tours',
-    to: '/tour_detail',
+    to: '',
     children: [
       {
         id: 1,
         value: 'Các điểm đến',
-        to: '/destinations'
+        to: config.routes.destination
       },
       {
         id: 2,
         value: 'Các hoạt động',
-        to: '/activities'
+        to: config.routes.activity
       },
       {
         id: 3,
         value: 'Các loại tour',
-        to: '/tours'
+        to: config.routes.tour
       },
     ],
   },
   {
     id: 3,
     value: 'Về chúng tôi',
-    to: '/about'
+    to: config.routes.about
   },
   {
     id: 4,
     value: 'Blog',
-    to: '/blog'
+    to: config.routes.blog
   },
   {
     id: 5,
     value: 'Liên hệ',
-    to: '/contact'
+    to: config.routes.contact
   },
 ];
 

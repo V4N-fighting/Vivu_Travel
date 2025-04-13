@@ -12,7 +12,7 @@ const config = {
         login: "/login",
         destination: '/destinations',
         activity: '/activities',
-        tour: '/tours',
+        tour: '/tour_type',
         trip: '/trips',
         blog_detail: '/blog_detail',
         tour_detail: '/tour_detail/:id',
