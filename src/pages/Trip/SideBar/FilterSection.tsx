@@ -18,13 +18,13 @@ const FilterSection: React.FC<FilterSectionProps> = ({ label, data, onChange }) 
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
-    setShowAll(false); // Khi tìm kiếm lại, chỉ hiển thị kết quả lọc
+    setShowAll(false);
   };
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
     const isChecked = e.target.checked;
     onChange(e, id);
-
+  
     setCheckedIds(prev => {
       const newSet = new Set(prev);
       if (isChecked) {
@@ -34,11 +34,14 @@ const FilterSection: React.FC<FilterSectionProps> = ({ label, data, onChange }) 
       }
       return newSet;
     });
-
-    if (searchTerm && !showAll) {
-      setShowAll(true);
+  
+    // ✅ Reset tìm kiếm và hiển thị toàn bộ danh sách sau khi chọn
+    if (isChecked) {
+      setSearchTerm("");       // ✅ Xoá ô tìm kiếm
+      setShowAll(true);        // ✅ Mở full danh sách
     }
   };
+  
 
   const filteredData = useMemo(() => {
     if (!data) return [];
@@ -55,6 +58,11 @@ const FilterSection: React.FC<FilterSectionProps> = ({ label, data, onChange }) 
     return filteredData.slice(0, 5);
   }, [showAll, filteredData]);
 
+  const checkedItems = useMemo(() => {
+    if (!data) return [];
+    return data.filter(item => checkedIds.has(item.id));
+  }, [checkedIds, data]);
+
   return (
     <SidebarItem>
       <CollapseComponent label={label}>
@@ -64,6 +72,22 @@ const FilterSection: React.FC<FilterSectionProps> = ({ label, data, onChange }) 
           value={searchTerm}
           onChange={handleSearchChange}
         />
+
+        {checkedItems.length > 0 && (
+          <CheckedListWrapper>
+            {checkedItems.map(item => (
+              <CheckedItem key={item.id}>
+                <input
+                  type="checkbox"
+                  checked={true}
+                  onChange={(e) => handleCheckboxChange(e, item.id)}
+                />
+                <span>{item.name}</span>
+              </CheckedItem>
+            ))}
+          </CheckedListWrapper>
+        )}
+
         {visibleData.map((val, index) => (
           <TypeItem key={index}>
             <input
@@ -74,6 +98,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({ label, data, onChange }) 
             <span>{val.name}</span>
           </TypeItem>
         ))}
+
         {!showAll && filteredData.length > 5 && (
           <Ellipsis>...</Ellipsis>
         )}
@@ -114,6 +139,28 @@ const TypeItem = styled.div`
   }
 `;
 
+const CheckedListWrapper = styled.div`
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+`;
+
+const CheckedItem = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 4px 0 4px 10px;
+
+  & input {
+    font-size: 14px;
+  }
+
+  & span {
+    font-size: 14px;
+    color: #333;
+    margin-left: 20px;
+  }
+`;
+
 const SearchInput = styled.input`
   width: 100%;
   padding: 6px 10px;
@@ -143,6 +190,5 @@ const Ellipsis = styled.div`
   font-size: 24px;
   color: #6b6b6b;
 `;
-
 
 export default FilterSection;
