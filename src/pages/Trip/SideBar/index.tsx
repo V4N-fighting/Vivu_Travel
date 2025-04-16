@@ -1,20 +1,33 @@
-import React, { useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import styled from 'styled-components';
 import CollapseComponent from '../Collapse';
 import { Title } from '../../../styled';
+import { useDestination } from '../../../service/destinationSerive';
+import { useActivityFullData } from '../../../service/activitiesService';
+import { useTourType, useTourTypeFullData } from '../../../service/tourTypeService';
+import FilterSection from './FilterSection';
 
-const destinations = ['Việt Nam', 'Lào', 'Thái Lan', 'USA', 'Australia', 'Ba Lan'];
-const activities = ['Việt Nam', 'Lào', 'Thái Lan', 'USA', 'Australia', 'Ba Lan'];
-const type = ['Vui', 'Buồn'];
-const dangerous = ['Mạnh', 'Trung bình', 'Không mạo hiểm'];
 
-const SideBar: React.FC = () => {
+type SideBarProps = {
+  onCheckDestination: (isChecked: boolean, val: string) => void, 
+  onCheckActivity: (isChecked: boolean, val: string) => void,
+  onCheckType: (isChecked: boolean, val: string) => void
+}
+
+const SideBar: React.FC<SideBarProps> = ({onCheckDestination, onCheckActivity, onCheckType} ) => {
+
+  const {data: destination, isLoading: isDesLoading, isError: isDesError} = useDestination()
+  const {data: activity, isLoading: isActLoading, isError: isActError} = useActivityFullData()
+  const {data: type, isLoading: isTypeLoading, isError: isTypeError} = useTourTypeFullData()
   
     const [minPrice, setMinPrice] = useState<string>("");
   const [maxPrice, setMaxPrice] = useState<string>("");
 
   const [minDay, setMinDay] = useState<string>("");
   const [maxDay, setMaxDay] = useState<string>("");
+
+  
+  
 
   const handleApply = () => {
     console.log(`Từ: ${minPrice}, Đến: ${maxPrice}`);
@@ -24,20 +37,53 @@ const SideBar: React.FC = () => {
     // Thêm logic xử lý khi bấm nút ÁP DỤNG
   };
 
+  const handleChangeInputDestination = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
+    const isChecked = e.target.checked
+    onCheckDestination(isChecked, id)
+  }
+
+  const handleChangeInputActivity = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
+    const isChecked = e.target.checked
+    onCheckActivity(isChecked, id)
+  }
+
+  const handleChangeInputType = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
+    const isChecked = e.target.checked
+    onCheckType(isChecked, id)
+  }
+
+  const filterConfigs = [
+    {
+      label: 'Điểm đến',
+      data: destination,
+      onChange: handleChangeInputDestination
+    },
+    {
+      label: 'Hoạt động',
+      data: activity,
+      onChange: handleChangeInputActivity
+    },
+    {
+      label: 'Loại tour',
+      data: type,
+      onChange: handleChangeInputType
+    }
+  ];
+
+  if (isDesLoading || isActLoading || isTypeLoading) {
+    return <>"Đang tải dữ liệu"</>;
+  } ;
+  
+  if (isDesError || isActError || isTypeError ) {
+    return <>"Lỗi dữ liệu"</>;
+  }
+
   return (
     <Sidebar>
+
                 <SidebarItem>
                   <Title small >Điều kiện lọc</Title>
                   <DeleteAll>Xóa tất cả</DeleteAll>
-                </SidebarItem>
-                <SidebarItem>
-                  <CollapseComponent 
-                    label="Điểm đến" 
-                  >
-                    {destinations.map((val, index) => {
-                      return (<TypeItem key={index}> <input type="checkbox" /> <span>{val}</span></TypeItem>);
-                    })}
-                  </CollapseComponent>
                 </SidebarItem>
                 <SidebarItem>
                   <CollapseComponent label="Giá" >
@@ -87,21 +133,16 @@ const SideBar: React.FC = () => {
                       <ApplyButton onClick={handleApply}>ÁP DỤNG</ApplyButton>
                   </CollapseComponent>
                 </SidebarItem>
-                <SidebarItem>
-                  <CollapseComponent label="Các hoạt động" >
-                    <TypeItem> <input type="checkbox" /> <span>Tào lao</span></TypeItem>
-                  </CollapseComponent>
-                </SidebarItem>
-                <SidebarItem>
-                  <CollapseComponent label="Loại chuyến đi">
-                    <TypeItem> <input type="checkbox" /> <span>Tào lao</span></TypeItem>
-                  </CollapseComponent>
-                </SidebarItem>
-                <SidebarItem>
-                  <CollapseComponent label="Độ mạo hiểm" >
-                    <TypeItem> <input type="checkbox" /> <span>Tào lao</span></TypeItem>
-                  </CollapseComponent>
-                </SidebarItem>
+                {filterConfigs.map((config, index) => (
+                  <FilterSection
+                    key={index}
+                    label={config.label}
+                    data={config.data}
+                    onChange={config.onChange}
+                  />
+                ))}
+
+
               </Sidebar>
   );
 };

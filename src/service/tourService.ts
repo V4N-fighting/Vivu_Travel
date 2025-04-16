@@ -7,40 +7,42 @@ import { useCountry } from "./countryService";
 import { useTourType } from "./tourTypeService";
 
 interface TourItemMap {
-        id: string;
-        name: string;
-        description: string;
-        countryID: string;
-        countryName: string;
-        duration: string;
-        departureDate: string;
-        maxPeople: string;
-        adventureLevel: string;
-        price: {
-          adult: string;
-          child: string;
-        };
-        tourTypeID: string;
-        tourTypeName: string;
-        activityIDs: string[];
-        activityNames: string[]
-        transportation: string[];
-        altitude: string;
-        hotelStar: string;
-        itinerary: ItineraryActivity[]
+  id: string;
+  name: string;
+  description: string;
+  countryID: string;
+  countryName: string;
+  duration: string;
+  departureDate: string;
+  maxPeople: string;
+  adventureLevel: string;
+  price: {
+    adult: string;
+    child: string;
+  };
+  tourTypeID: string;
+  tourTypeName: string;
+  activityIDs: string[];
+  activityNames: string[]
+  transportation: string[];
+  altitude: string;
+  hotelStar: string;
+  itinerary: ItineraryActivity[]
 }
 
 export const useTour = ({
   id,
   quantity,
   typeIDs,
+  destinationIDs,
   durationRange,
   priceRange,
   activityIDs
 }: {
   id?: string,
   quantity?: number;
-  typeIDs?: string;
+  typeIDs?: string[];
+  destinationIDs?: string[];
   durationRange?: [number, number];
   priceRange?: [number, number];
   activityIDs?: string[];
@@ -70,8 +72,15 @@ export const useTour = ({
     return hasID;
   });
 
+  // Lọc theo destination
+  const filteredDataDestination = filteredDataID?.filter((item) => {
+    if (!destinationIDs || destinationIDs.length === 0) return true;
+      const hasDestination = destinationIDs.includes(String(item.countryID))
+    return hasDestination;
+  });
+
   // Lọc theo activity
-  const filteredDataActivity = filteredDataID?.filter((item) => {
+  const filteredDataActivity = filteredDataDestination?.filter((item) => {
     if (!activityIDs || activityIDs.length === 0) return true;
     const hasActivity = item.activityIDs.some((activityID) =>
       activityIDs.includes(String(activityID))
@@ -80,14 +89,21 @@ export const useTour = ({
     return hasActivity;
   });
 
-  // Lọc theo typeid
+ // Lọc theo type
   const filteredDataType = filteredDataActivity?.filter((item) => {
     if (!typeIDs || typeIDs.length === 0) return true;
-    const hasType = typeIDs.includes(String(item.tourTypeID))
+      const hasType = typeIDs.includes(String(item.tourTypeID))
+    return hasType;
+  });
+  
+  // Lọc theo typeid
+  // const filteredDataType = filteredDataActivity?.filter((item) => {
+  //   if (!typeIDs || typeIDs.length === 0) return true;
+  //   const hasType = typeIDs.includes(String(item.tourTypeID))
    
 
-    return hasType;
-  })
+  //   return hasType;
+  // })
 
   // Lọc theo giá
   const filteredDataPrice = filteredDataType?.filter((item) => {
@@ -152,7 +168,7 @@ export const useTour = ({
         adult: item.price.adult,
         child: item.price.child
       },
-      tourTypeID: item.tourTypeID,
+      tourTypeID: item.tourTypeID ,
       tourTypeName: item.tourTypeName,
       activityIDs: item.activityIDs || [],
       activityNames: item.activityNames || [],

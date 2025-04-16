@@ -37,8 +37,7 @@ const ListCard: React.FC<ListCardProps> = ({}) => {
         textLevel={item.adventureLevel}
         horizontal={false}
         textDescr={item.description}
-        isDensity={false}
-      />
+        isDensity={false} type={item.tourTypeName}      />
     )});
 
   return (

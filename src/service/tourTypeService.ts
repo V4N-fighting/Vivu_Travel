@@ -1,6 +1,7 @@
 
 import { GET_TOUR_TYPE } from "../api";
 import { useFetch } from "../Hooks/useFetch";
+import TourTypeItemMap from "../types/tourType";
 import { useTour } from "./tourService";
 
 type TourTypeItem = {
@@ -8,11 +9,7 @@ type TourTypeItem = {
     name: string
 }
 
-interface TourTypeItemMap {
-    id: string,
-    name: string,
-    numberOfTrip: number
-}
+
 
 export const useTourType = () => {
     const { data, loading, error } = useFetch<TourTypeItem[]>(GET_TOUR_TYPE);

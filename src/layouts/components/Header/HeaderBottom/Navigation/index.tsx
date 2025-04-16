@@ -74,7 +74,7 @@ const Navigation: React.FC = () => {
           : 
           <NavItem>
             <NavItemName small>
-              <LinkElement to={item.to} onClick={handleScroll}>{item.value}</LinkElement>
+              <span>{item.value}</span>
               <DropDownIcon icon={faChevronDown} />
             </NavItemName>
             <SubNavBox>

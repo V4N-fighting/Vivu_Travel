@@ -15,11 +15,23 @@ enum ModeShow {
   Menu
 }
 
+interface ContentProps {
+  destinationIDs: string[];
+  activityIDs: string[];
+  typeIDs: string[]
+}
 
-const Content: React.FC = () => {
+
+const Content: React.FC<ContentProps> = ({destinationIDs, activityIDs, typeIDs}) => {
   const [modeShow, setModeShow] =  useState(ModeShow.List)
 
-  const { data: tours, loading: tourLoading, error: tourError } = useTour({});
+  console.log(typeIDs)
+
+  const { data: tours, loading: tourLoading, error: tourError } = useTour({
+    destinationIDs: destinationIDs,
+    activityIDs: activityIDs,
+    typeIDs: typeIDs,
+  });
 
   const listContentDefault = tours ? tours.map((item, index) => {
     return (
@@ -33,9 +45,8 @@ const Content: React.FC = () => {
         price={item.price.adult}
         textDensity={item.maxPeople}
         textLevel={item.adventureLevel}
-        horizontal={true} 
-        textDescr={item.description}  
-      />
+        horizontal={true}
+        textDescr={item.description} type={item.tourTypeName}      />
     )}) : [];
 
   const {

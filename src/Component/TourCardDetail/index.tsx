@@ -16,12 +16,13 @@ interface TourCardDetailProps {
     textDensity: string,
     textLevel: string,
     price: string,
+    type: string,
     horizontal?: boolean,
     isDensity?: boolean
 }
 
 const TourCardDetail: React.FC<TourCardDetailProps> = 
-({valueID, url, price, textLocation, title, textTime, textDensity, textLevel, horizontal, textDescr, isDensity = true}) => {
+({valueID, url, price, textLocation, title, textTime, textDensity, textLevel, horizontal, textDescr, isDensity = true, type}) => {
   const [isfullYear, setIsFullYear] = useState<boolean>(true)
 
   const navigate = useNavigate();
@@ -51,6 +52,7 @@ const TourCardDetail: React.FC<TourCardDetailProps> =
   
   return (
         <WrapperCard horizontal={horizontal}>
+            <Label >{type}</Label>
             <WrapperImage><Image src={url}></Image></WrapperImage>
             <Content>
                 <CardTitle>{title}</CardTitle>
@@ -90,9 +92,36 @@ const WrapperCard = styled.div<{horizontal?: boolean}>`
   max-width: 100%;
   background-color: var(--white-color);
   border-radius: 5px;
-  overflow: hidden;
+  /* overflow: hidden; */
   box-shadow: var(--box-shadow);
+  position: relative;
+  margin: 0 0 20px;
   `
+const Label = styled.div`
+  position: absolute;
+  top: 10%;
+  right: -10px;
+  background-color: #37d4d9;
+  color: #ffffff;
+  font-size: 1.2rem;
+  font-weight: 600;
+  padding: 10px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  z-index: 99;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+  &::after {
+    position: absolute;
+    content: "";
+    top: 100%;
+    right: 0;
+    border-top: 10px solid #37d4d9;
+    border-right: 10px solid transparent;
+    filter: brightness(70%);
+  }
+`
 
 const WrapperImage = styled.div`
     width: 100%;

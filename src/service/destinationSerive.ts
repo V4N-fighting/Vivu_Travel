@@ -1,13 +1,9 @@
+import DestinationItemMap from "../types/destination";
 import TourItem from "../types/tour";
 import { useCountry } from "./countryService";
 import { useTour } from "./tourService";
 
-type DestinationItemMap = {
-  id: string;
-  name: string;
-  language: string[]; 
-  numberOfTrip: number;
-};
+
 
 export const useDestination = () => {
   const { data: country, loading: countryLoading, error: countryError } = useCountry();

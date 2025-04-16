@@ -100,4 +100,10 @@ cần chỉnh lại lịch trong modal (--idea-- data gồm 3 ngày chuyến đi
 
 
 
-// đang làm tourtypeService..................
+
+# _ingggggggggggggggggg
+
+/trips 
+làm chức năng lọc
+
+
