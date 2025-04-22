@@ -111,7 +111,7 @@ export const useTour = ({
     const [min, max] = priceRange;
 
     
-    const priceNumber = parseInt(item.price.adult);
+    const priceNumber = parseInt(item.price.adult.replace(/[^0-9]/g, ""), 10);
 
     if (isNaN(priceNumber)) return false; 
 

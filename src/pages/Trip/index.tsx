@@ -8,11 +8,19 @@ import { useState } from "react";
 
 
 function Trip() {
+  const [price, setPrice] = useState<[number, number]>()
+  const [day, setDay] = useState<[number, number]>()
   const [destinationID, setDestinationID] = useState<string[]>([])
   const [activityID, setActivityID] = useState<string[]>([])
   const [typeID, setTypeID] = useState<string[]>([])
   
-  
+  const handlefilterByPrice = (val: [number, number]) => {
+    setPrice(val);
+  }
+
+  const handlefilterByTime = (val: [number, number]) => {
+    setDay(val);
+  }
   
   const handleCheckDestination = (isChecked: boolean, val: string) => {
     if (isChecked) {
@@ -57,13 +65,15 @@ function Trip() {
           <GridRow margin="10px">
             <GridCol col={3}>
               <SideBar
+                onFilterByPrice = {handlefilterByPrice}
+                onFilterByTime = {handlefilterByTime}
                 onCheckDestination = {handleCheckDestination} 
                 onCheckActivity = {handleCheckActivity} 
                 onCheckType = {handleCheckType} 
               />
             </GridCol>
             <GridCol col={9}>
-              <Content destinationIDs={destinationID} activityIDs={activityID} typeIDs={typeID} />
+              <Content destinationIDs={destinationID} activityIDs={activityID} typeIDs={typeID} price={price} time={day} />
             </GridCol>
           </GridRow>
         </Grid>
@@ -73,7 +83,7 @@ function Trip() {
 }
 
 const Container = styled.div`
-  padding: 100px 0;
+  padding:  50px 0 100px;
   max-width: 1250px;
   width: 100%;
   margin: 0 auto;

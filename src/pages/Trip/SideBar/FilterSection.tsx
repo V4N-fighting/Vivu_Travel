@@ -35,10 +35,10 @@ const FilterSection: React.FC<FilterSectionProps> = ({ label, data, onChange }) 
       return newSet;
     });
   
-    // ✅ Reset tìm kiếm và hiển thị toàn bộ danh sách sau khi chọn
+    // Reset tìm kiếm và hiển thị toàn bộ danh sách sau khi chọn
     if (isChecked) {
-      setSearchTerm("");       // ✅ Xoá ô tìm kiếm
-      setShowAll(true);        // ✅ Mở full danh sách
+      setSearchTerm("");       //  Xoá ô tìm kiếm
+      setShowAll(true);        //  Mở full danh sách
     }
   };
   

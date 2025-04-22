@@ -18,11 +18,13 @@ enum ModeShow {
 interface ContentProps {
   destinationIDs: string[];
   activityIDs: string[];
-  typeIDs: string[]
+  typeIDs: string[];
+  price: [number, number] | undefined;
+  time: [number, number] | undefined;
 }
 
 
-const Content: React.FC<ContentProps> = ({destinationIDs, activityIDs, typeIDs}) => {
+const Content: React.FC<ContentProps> = ({destinationIDs, activityIDs, typeIDs, price, time}) => {
   const [modeShow, setModeShow] =  useState(ModeShow.List)
 
   console.log(typeIDs)
@@ -31,6 +33,8 @@ const Content: React.FC<ContentProps> = ({destinationIDs, activityIDs, typeIDs})
     destinationIDs: destinationIDs,
     activityIDs: activityIDs,
     typeIDs: typeIDs,
+    priceRange: price,
+    durationRange: time
   });
 
   const listContentDefault = tours ? tours.map((item, index) => {
