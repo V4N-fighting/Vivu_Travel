@@ -28,7 +28,7 @@ const TourCardDetail: React.FC<TourCardDetailProps> =
   const navigate = useNavigate();
 
   const handleViewDetail = () => {
-      navigate(`/tour_detail/${valueID}`, { state: { valueID } }); // Gửi state nếu cần
+      navigate('/tour_detail?tourId=' + valueID, { state: { valueID } }); // Gửi state nếu cần
       window.scrollTo({ top: 200, behavior: 'smooth' });
   };
   

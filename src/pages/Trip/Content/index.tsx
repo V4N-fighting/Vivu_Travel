@@ -24,10 +24,9 @@ interface ContentProps {
 }
 
 
-const Content: React.FC<ContentProps> = ({destinationIDs, activityIDs, typeIDs, price, time}) => {
+const Content: React.FC<ContentProps> = ({destinationIDs, activityIDs, typeIDs, price, time, }) => {
   const [modeShow, setModeShow] =  useState(ModeShow.List)
 
-  console.log(typeIDs)
 
   const { data: tours, loading: tourLoading, error: tourError } = useTour({
     destinationIDs: destinationIDs,
@@ -35,7 +34,9 @@ const Content: React.FC<ContentProps> = ({destinationIDs, activityIDs, typeIDs, 
     typeIDs: typeIDs,
     priceRange: price,
     durationRange: time
-  });
+  } );
+
+
 
   const listContentDefault = tours ? tours.map((item, index) => {
     return (

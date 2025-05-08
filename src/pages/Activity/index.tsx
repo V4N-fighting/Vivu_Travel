@@ -59,6 +59,7 @@ function Activity() {
                           url={ "./images/destinations-1-1.jpg"}
                           label={String(item.numberOfTrip) + " trips"}
                           name={item.name}
+                          current={['activity', item.id, item.name]}
                         />
                       </GridCol>
             })}

@@ -35,6 +35,7 @@ const BeautiCity: React.FC<BeautiCityProps> = ({}) => {
         url={activity.url}
         label={activity.label}
         name={activity.name}
+        current={['activity', String(activity.id), activity.name]}
       />
     
   ))

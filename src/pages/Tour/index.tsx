@@ -57,6 +57,7 @@ function Tour() {
                           url={"./images/destinations-1-1.jpg"}
                           label={String(item.numberOfTrip) + " trips"}
                           name={item.name}
+                          current={['tour_type', item.id, item.name]}
                         />
                       </GridCol>
             })}

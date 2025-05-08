@@ -2,20 +2,34 @@ import styled, { keyframes } from "styled-components";
 import {ArrowRightOutlined} from '@ant-design/icons';
 import { Icon } from '../../styled';
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 
 
 interface TourCardProps {
   url: string,
   label: string,
-  name: string
+  name: string,
+  current: [
+    page:string, 
+    id: string,
+    value: string
+  ]
 }
 
 
 
-const TourCard: React.FC<TourCardProps> = ({url, label, name}) => {
+const TourCard: React.FC<TourCardProps> = ({url, label, name, current}) => {
+  const navigate = useNavigate();
+
+  const [page, id, value] = current;
+  const handleViewDetail = () => {
+    navigate(`/trips?${page}=${value}`, { state: { id } }); // Gửi state nếu cần
+    window.scrollTo({ top: 200, behavior: 'smooth' });
+};
+  
   return (
     <Wrapper>
-        <Wrap>
+        <Wrap onClick={handleViewDetail}>
           <Image url={url} />
           <Label>{label}</Label>
         </Wrap>

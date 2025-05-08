@@ -39,7 +39,7 @@ export const useTour = ({
   priceRange,
   activityIDs
 }: {
-  id?: string,
+  id?: string | null,
   quantity?: number;
   typeIDs?: string[];
   destinationIDs?: string[];

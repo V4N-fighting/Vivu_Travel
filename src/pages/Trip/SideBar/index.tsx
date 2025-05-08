@@ -14,10 +14,11 @@ type SideBarProps = {
   onFilterByTime: (val: [number, number]) => void,
   onCheckDestination: (isChecked: boolean, val: string) => void, 
   onCheckActivity: (isChecked: boolean, val: string) => void,
-  onCheckType: (isChecked: boolean, val: string) => void
+  onCheckType: (isChecked: boolean, val: string) => void,
+  onDeleteAll: () => void
 }
 
-const SideBar: React.FC<SideBarProps> = ({onFilterByPrice, onFilterByTime, onCheckDestination, onCheckActivity, onCheckType} ) => {
+const SideBar: React.FC<SideBarProps> = ({onFilterByPrice, onFilterByTime, onCheckDestination, onCheckActivity, onCheckType, onDeleteAll} ) => {
 
   const {data: destination, isLoading: isDesLoading, isError: isDesError} = useDestination()
   const {data: activity, isLoading: isActLoading, isError: isActError} = useActivityFullData()
@@ -48,6 +49,10 @@ const SideBar: React.FC<SideBarProps> = ({onFilterByPrice, onFilterByTime, onChe
   ) => (e: ChangeEvent<HTMLInputElement>, id: string) => {
     handler(e.target.checked, id);
   };
+
+  const handleDeleteAllFilter = () => {
+    onDeleteAll()
+  }
   
 
   const filterConfigs = useMemo(() => [
@@ -81,7 +86,7 @@ const SideBar: React.FC<SideBarProps> = ({onFilterByPrice, onFilterByTime, onChe
     <Sidebar>
       <SidebarItem>
         <Title small >Điều kiện lọc</Title>
-        <DeleteAll>Xóa tất cả</DeleteAll>
+        <DeleteAll onClick={handleDeleteAllFilter}>Xóa tất cả</DeleteAll>
       </SidebarItem>
       <RangeInputFilter
         label="Giá"

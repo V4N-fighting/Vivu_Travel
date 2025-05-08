@@ -13,6 +13,7 @@ function Trip() {
   const [destinationID, setDestinationID] = useState<string[]>([])
   const [activityID, setActivityID] = useState<string[]>([])
   const [typeID, setTypeID] = useState<string[]>([])
+
   
   const handlefilterByPrice = (val: [number, number]) => {
     setPrice(val);
@@ -52,6 +53,14 @@ function Trip() {
     }
   }
 
+  const handleDeleteAllFilter = () => {
+    setPrice(undefined)
+    setDay(undefined)
+    setDestinationID([])
+    setActivityID([])
+    setTypeID([])
+  }
+
   return (
     <>
       <Banner
@@ -70,6 +79,7 @@ function Trip() {
                 onCheckDestination = {handleCheckDestination} 
                 onCheckActivity = {handleCheckActivity} 
                 onCheckType = {handleCheckType} 
+                onDeleteAll = {handleDeleteAllFilter}
               />
             </GridCol>
             <GridCol col={9}>

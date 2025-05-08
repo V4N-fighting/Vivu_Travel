@@ -5,17 +5,18 @@ import Contain from "./Contain";
 import Sidebar from "./Sidebar";
 import { useRef, useState } from "react";
 import MOdel from "./Modal";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { useTour } from "../../service/tourService";
 import ListCard from "../Home/ListCard";
 
 interface TourDetailProps {}
 
 const TourDetail: React.FC<TourDetailProps> = () => {
-    const { id } = useParams()
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const tourId = searchParams.get('tourId');
 
-    const { data, loading, error } = useTour({id: id});
-    console.log("get được dadtaa: ", data)
+    const { data, loading, error } = useTour({id: tourId});
    
     const formRef = useRef<HTMLFormElement | null>(null);
 
@@ -33,6 +34,14 @@ const TourDetail: React.FC<TourDetailProps> = () => {
 
     const handleHideModal = () => {
         setShowModal(false);
+    }
+
+    if (loading) {
+        return <>Đang tải dữ liệu</>
+    }
+
+    if (error ) {
+        return <>Lỗi dữ liệu</>
     }
 
     return (
