@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useMemo, useState } from 'react';
+import React, { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import CollapseComponent from '../Collapse';
 import { Title } from '../../../styled';
@@ -15,10 +15,12 @@ type SideBarProps = {
   onCheckDestination: (isChecked: boolean, val: string) => void, 
   onCheckActivity: (isChecked: boolean, val: string) => void,
   onCheckType: (isChecked: boolean, val: string) => void,
-  onDeleteAll: () => void
+  onDeleteAll: () => void,
+  resetFilters: boolean,
+  onResetDone: () => void,
 }
 
-const SideBar: React.FC<SideBarProps> = ({onFilterByPrice, onFilterByTime, onCheckDestination, onCheckActivity, onCheckType, onDeleteAll} ) => {
+const SideBar: React.FC<SideBarProps> = ({onFilterByPrice, onFilterByTime, onCheckDestination, onCheckActivity, onCheckType, onDeleteAll, resetFilters, onResetDone} ) => {
 
   const {data: destination, isLoading: isDesLoading, isError: isDesError} = useDestination()
   const {data: activity, isLoading: isActLoading, isError: isActError} = useActivityFullData()
@@ -31,7 +33,19 @@ const SideBar: React.FC<SideBarProps> = ({onFilterByPrice, onFilterByTime, onChe
   const [maxDay, setMaxDay] = useState<number>();
 
   
-  
+  useEffect(() => {
+    if (resetFilters) {
+      // Reset inputs
+      setMinPrice(undefined);
+      setMaxPrice(undefined);
+      setMinDay(undefined);
+      setMaxDay(undefined);
+
+      // Reset tất cả checkbox thông qua ref hoặc prop xuống FilterSection (xem bước 3)
+      onResetDone(); // Báo với Trip rằng đã reset xong
+    }
+  }, [resetFilters, onResetDone]);
+
 
   const handleApply = () => {
     if (typeof minPrice === 'number' && typeof maxPrice === 'number') {
@@ -109,8 +123,7 @@ const SideBar: React.FC<SideBarProps> = ({onFilterByPrice, onFilterByTime, onChe
           key={index}
           label={config.label}
           data={config.data}
-          onChange={config.onChange}
-        />
+          onChange={config.onChange} shouldReset={resetFilters}        />
       ))}
     </Sidebar>
   );

@@ -14,6 +14,9 @@ function Trip() {
   const [activityID, setActivityID] = useState<string[]>([])
   const [typeID, setTypeID] = useState<string[]>([])
 
+  const [resetFilters, setResetFilters] = useState(false);
+
+
   
   const handlefilterByPrice = (val: [number, number]) => {
     setPrice(val);
@@ -54,12 +57,14 @@ function Trip() {
   }
 
   const handleDeleteAllFilter = () => {
-    setPrice(undefined)
-    setDay(undefined)
-    setDestinationID([])
-    setActivityID([])
-    setTypeID([])
-  }
+  setPrice(undefined);
+  setDay(undefined);
+  setDestinationID([]);
+  setActivityID([]);
+  setTypeID([]);
+  setResetFilters(true); // Báo hiệu cần reset
+};
+
 
   return (
     <>
@@ -80,6 +85,8 @@ function Trip() {
                 onCheckActivity = {handleCheckActivity} 
                 onCheckType = {handleCheckType} 
                 onDeleteAll = {handleDeleteAllFilter}
+                resetFilters={resetFilters}
+                onResetDone={() => setResetFilters(false)}
               />
             </GridCol>
             <GridCol col={9}>

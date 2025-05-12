@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import DropdownMenu from '../DropdownMenu';
 import { Grid, GridCol, GridRow } from '../../../styled';
@@ -26,6 +26,7 @@ interface ContentProps {
 
 const Content: React.FC<ContentProps> = ({destinationIDs, activityIDs, typeIDs, price, time, }) => {
   const [modeShow, setModeShow] =  useState(ModeShow.List)
+  const [fakeLoading, setFakeLoading] = useState(true);
 
 
   const { data: tours, loading: tourLoading, error: tourError } = useTour({
@@ -36,7 +37,17 @@ const Content: React.FC<ContentProps> = ({destinationIDs, activityIDs, typeIDs, 
     durationRange: time
   } );
 
+  useEffect(() => {
+    if (!tourLoading) {
+      const timeout = setTimeout(() => {
+        setFakeLoading(false);
+      }, 1000); // 0.5s
 
+      return () => clearTimeout(timeout);
+    } else {
+      setFakeLoading(true);
+    }
+  }, [tourLoading]);
 
   const listContentDefault = tours ? tours.map((item, index) => {
     return (
@@ -74,7 +85,8 @@ const Content: React.FC<ContentProps> = ({destinationIDs, activityIDs, typeIDs, 
   }
 
   // Xử lý trạng thái tải hoặc lỗi
-  if (tourLoading) return <p>Đang tải dữ liệu...</p>;
+  if (tourLoading || fakeLoading) return <p>Đang tải dữ liệu...</p>;
+
   if (tourError) return <p>Lỗi: {tourError}</p>;
   if (!tours || tours.length === 0) return <p>Không có dữ liệu.</p>;
 

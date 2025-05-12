@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import styled from "styled-components";
 import CollapseComponent from "../Collapse";
 import DestinationItemMap from "../../../types/destination";
@@ -9,12 +9,21 @@ type FilterSectionProps = {
   label: string;
   data?: DestinationItemMap[] | TourTypeItemMap[] | ActivityItemMap[] | null;
   onChange: (e: React.ChangeEvent<HTMLInputElement>, id: string) => void;
+  shouldReset: boolean;
 };
 
-const FilterSection: React.FC<FilterSectionProps> = ({ label, data, onChange }) => {
+const FilterSection: React.FC<FilterSectionProps> = ({ label, data, onChange, shouldReset }) => {
   const [showAll, setShowAll] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [checkedIds, setCheckedIds] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+  if (shouldReset) {
+    setCheckedIds(new Set());
+    setSearchTerm("");
+    setShowAll(false);
+  }
+}, [shouldReset]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);

@@ -104,6 +104,6 @@ cần chỉnh lại lịch trong modal (--idea-- data gồm 3 ngày chuyến đi
 # _ingggggggggggggggggg
 
 /trips 
-làm chức năng lọc
+làm chức năng xóa tất cả    
 
 
