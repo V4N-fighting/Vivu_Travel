@@ -3,7 +3,6 @@ import styled, { keyframes } from 'styled-components';
 import { Title, Text, Icon, FlexBox } from '../../styled';
 import Button from '../BaseComponent/Button/Button';
 import Icons from '../BaseComponent/Icons';
-import TourItem from '../../types/tour';
 import { useNavigate } from 'react-router-dom';
 
 interface TourCardDetailProps {
@@ -18,11 +17,25 @@ interface TourCardDetailProps {
     price: string,
     type: string,
     horizontal?: boolean,
-    isDensity?: boolean
+    isDensity?: boolean,
+    nextTour?: string[]
 }
 
 const TourCardDetail: React.FC<TourCardDetailProps> = 
-({valueID, url, price, textLocation, title, textTime, textDensity, textLevel, horizontal, textDescr, isDensity = true, type}) => {
+({valueID, 
+  url, 
+  price, 
+  textLocation, 
+  title, 
+  textTime, 
+  textDensity, 
+  textLevel, 
+  horizontal, 
+  textDescr, 
+  isDensity = true, 
+  type,
+  nextTour
+}) => {
   const [isfullYear, setIsFullYear] = useState<boolean>(true)
 
   const navigate = useNavigate();
@@ -39,7 +52,7 @@ const TourCardDetail: React.FC<TourCardDetailProps> =
     { icon: <Icons.ChartSimpleIcon orange/>, text: textLevel },
   ];
 
-  const next_tour = ['Th1 04', 'Th1 05', 'Th1 06' ];
+  // const next_tour = ['Th1 04', 'Th1 05', 'Th1 06' ];
 
   const months = ['Th1', 'Th2', 'Th3', 'Th4', 'Th5', 'Th6', 'Th7', 'Th8', 'Th9', 'Th10', 'Th11', 'Th12' ];
 
@@ -69,7 +82,7 @@ const TourCardDetail: React.FC<TourCardDetailProps> =
                     <Right>
                         <Price>{price}</Price>
                         <TextDescr>Chuyến khởi hành tiếp theo</TextDescr>
-                        {next_tour.map((day, index) => {
+                        {nextTour?.map((day, index) => {
                           return <TextDescr key={index}><Icons.CheckIcon />{day}</TextDescr>
                         })}
                     </Right>

@@ -20,7 +20,18 @@ type SideBarProps = {
   onResetDone: () => void,
 }
 
-const SideBar: React.FC<SideBarProps> = ({onFilterByPrice, onFilterByTime, onCheckDestination, onCheckActivity, onCheckType, onDeleteAll, resetFilters, onResetDone} ) => {
+const SideBar: React.FC<SideBarProps> = (
+  {
+    onFilterByPrice, 
+    onFilterByTime, 
+    onCheckDestination, 
+    onCheckActivity, 
+    onCheckType, 
+    onDeleteAll, 
+    resetFilters, 
+    onResetDone
+  } 
+) => {
 
   const {data: destination, isLoading: isDesLoading, isError: isDesError} = useDestination()
   const {data: activity, isLoading: isActLoading, isError: isActError} = useActivityFullData()
@@ -35,14 +46,11 @@ const SideBar: React.FC<SideBarProps> = ({onFilterByPrice, onFilterByTime, onChe
   
   useEffect(() => {
     if (resetFilters) {
-      // Reset inputs
       setMinPrice(undefined);
       setMaxPrice(undefined);
       setMinDay(undefined);
       setMaxDay(undefined);
-
-      // Reset tất cả checkbox thông qua ref hoặc prop xuống FilterSection (xem bước 3)
-      onResetDone(); // Báo với Trip rằng đã reset xong
+      onResetDone(); 
     }
   }, [resetFilters, onResetDone]);
 
@@ -108,6 +116,7 @@ const SideBar: React.FC<SideBarProps> = ({onFilterByPrice, onFilterByTime, onChe
         setMin={val => setMinPrice(Number(val))}
         setMax={val => setMaxPrice(Number(val))}
         onApply={handleApply}
+        resetFilters={resetFilters}
       />
 
 
@@ -117,6 +126,8 @@ const SideBar: React.FC<SideBarProps> = ({onFilterByPrice, onFilterByTime, onChe
         setMin={val => setMinDay(Number(val))}
         setMax={val => setMaxDay(Number(val))}
         onApply={handleApply}
+        resetFilters={resetFilters}
+
       />
       {filterConfigs.map((config, index) => (
         <FilterSection

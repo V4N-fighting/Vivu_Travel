@@ -273,6 +273,7 @@
     "tours": [
       {
         "id": 0,
+        "image": "https://cdn.pixabay.com/photo/2025/04/23/01/35/bird-9551361_1280.jpg",
         "name": "Khám Phá Paris",
         "description": "Hành trình lãng mạn khám phá Paris, tháp Eiffel, bảo tàng Louvre và ẩm thực Pháp.",
         "countryID": 1,
@@ -296,6 +297,7 @@
       },
       {
         "id": 1,
+        "image": "https://cdn.pixabay.com/photo/2025/05/04/17/47/dog-9578735_1280.jpg",
         "name": "Khám Phá Tokyo",
         "description": "Chuyến đi đầy màu sắc đến Tokyo, nơi giao thoa giữa truyền thống và hiện đại.",
         "countryID": 2,
@@ -319,6 +321,8 @@
       },
       {
         "id": 2,
+        "image": "https://cdn.pixabay.com/photo/2025/04/22/06/54/elephant-9549133_1280.jpg",
+
         "name": "Khám Phá New York",
         "description": "Hành trình khám phá thành phố không bao giờ ngủ với những điểm đến nổi tiếng.",
         "countryID": 3,
@@ -343,6 +347,8 @@
       {
         "id": 3,
         "name": "Khám Phá Sydney",
+        "image": "https://cdn.pixabay.com/photo/2025/03/28/13/06/lamps-9498872_1280.jpg",
+
         "description": "Chuyến đi đến Sydney với những bãi biển tuyệt đẹp và văn hóa đa dạng.",
         "countryID": 4,
         "duration": "5",
@@ -366,6 +372,8 @@
       {
         "id": 4,
         "name": "Khám Phá Rome",
+        "image": "https://cdn.pixabay.com/photo/2021/04/24/18/07/road-6204694_1280.jpg",
+
         "description": "Hành trình khám phá thành phố vĩnh cửu với lịch sử và văn hóa phong phú.",
         "countryID": 5,
         "duration": "6",
@@ -389,6 +397,8 @@
       },
       {
         "id": 5,
+        "image": "https://cdn.pixabay.com/photo/2024/05/23/07/17/woman-8782450_1280.jpg",
+
         "name": "Khám Phá Bangkok",
         "description": "Chuyến đi đến Bangkok với những ngôi đền tuyệt đẹp và ẩm thực đường phố phong phú.",
         "countryID": 6,
@@ -412,6 +422,8 @@
       },
       {
         "id": 6,
+        "image": "https://cdn.pixabay.com/photo/2022/10/20/05/37/mount-haast-7534094_1280.jpg",
+
         "name": "Khám Phá Dubai",
         "description": "Hành trình đến Dubai với những tòa nhà chọc trời và trải nghiệm sa mạc độc đáo.",
         "countryID": 7,
@@ -436,6 +448,8 @@
       },
       {
         "id": 7,
+        "image": "https://cdn.pixabay.com/photo/2023/01/22/19/06/swan-7737169_1280.jpg",
+
         "name": "Khám Phá Istanbul",
         "description": "Hành trình đến Istanbul, nơi giao thoa giữa Đông và Tây với lịch sử phong phú.",
         "countryID": 8,
@@ -459,6 +473,8 @@
       },
       {
         "id": 8,
+        "image": "https://cdn.pixabay.com/photo/2025/04/24/01/29/trees-9554107_1280.jpg",
+
         "name": "Khám Phá Barcelona",
         "description": "Chuyến đi đến Barcelona với kiến trúc độc đáo và văn hóa phong phú.",
         "countryID": 9,
@@ -482,6 +498,8 @@
       },
       {
         "id": 9,
+        "image": "https://cdn.pixabay.com/photo/2022/11/05/19/56/bachalpsee-7572681_1280.jpg",
+
         "name": "Khám Phá Cape Town",
         "description": "Hành trình đến Cape Town với những cảnh đẹp thiên nhiên và văn hóa đa dạng.",
         "countryID": 10,

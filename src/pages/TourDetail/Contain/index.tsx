@@ -23,7 +23,6 @@ interface ArrayNavContent {
 
 
 const Contain: React.FC<ContainProps> = ({formRef, data}) => {
-    console.log(data && 'lương ngọ văn', data)
     
     const navContent: ArrayNavContent[] = [
     {
@@ -113,7 +112,7 @@ const Contain: React.FC<ContainProps> = ({formRef, data}) => {
                     Ngày
                 </Time>
             </Header>
-            <Image src="https://icdn.24h.com.vn/upload/2-2023/images/2023-06-06/kim5_1-1686027959-673-width740height480.jpg" />
+            <Image src={data && data[0].image} />
             <Information>
                 <Nav ref={navRef} >
                     {navContent.map((item, index) => (
@@ -195,6 +194,7 @@ const Image = styled.div<{ src: string }>`
     padding-bottom: 54%;
     background-image: url(${(props) => props.src});
     background-size: cover;
+    background-position: center;
     background-repeat: no-repeat;
 `;
 

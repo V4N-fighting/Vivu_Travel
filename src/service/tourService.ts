@@ -8,6 +8,7 @@ import { useTourType } from "./tourTypeService";
 
 interface TourItemMap {
   id: string;
+  image: string;
   name: string;
   description: string;
   countryID: string;
@@ -95,15 +96,6 @@ export const useTour = ({
       const hasType = typeIDs.includes(String(item.tourTypeID))
     return hasType;
   });
-  
-  // Lọc theo typeid
-  // const filteredDataType = filteredDataActivity?.filter((item) => {
-  //   if (!typeIDs || typeIDs.length === 0) return true;
-  //   const hasType = typeIDs.includes(String(item.tourTypeID))
-   
-
-  //   return hasType;
-  // })
 
   // Lọc theo giá
   const filteredDataPrice = filteredDataType?.filter((item) => {
@@ -156,6 +148,7 @@ export const useTour = ({
   const dataMap: TourItemMap[] | undefined = tours?.map((item) => {
     return {
       id: item.id,
+      image: item.image,
       name: item.name,
       description: item.description,
       countryID: item.countryID,

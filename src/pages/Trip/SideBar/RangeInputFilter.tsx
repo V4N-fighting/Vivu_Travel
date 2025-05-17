@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 import CollapseComponent from "../Collapse";
 
@@ -8,6 +8,7 @@ type RangeInputFilterProps = {
   setMin: (val: string ) => void;
   setMax: (val: string ) => void;
   onApply?: () => void;
+  resetFilters: boolean
 };
 
 const RangeInputFilter: React.FC<RangeInputFilterProps> = ({
@@ -16,13 +17,29 @@ const RangeInputFilter: React.FC<RangeInputFilterProps> = ({
   setMin,
   setMax,
   onApply,
+  resetFilters,
 }) => {
+  
+  const inputFirstRef = useRef<HTMLInputElement>(null);
+  const inputSecondRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (inputFirstRef.current) {
+      inputFirstRef.current.value = ''
+    }
+    if (inputSecondRef.current) {
+      inputSecondRef.current.value = ''
+    }
+  }, [resetFilters])
+
+
   return (
     <CollapseComponent label={label}>
       <InputContainer>
         <InputWrapper>
           <Unit>{unit}</Unit>
           <Input
+            ref={inputFirstRef}
             onChange={(e) => setMin(e.target.value)}
             placeholder="Từ"
           />
@@ -31,6 +48,7 @@ const RangeInputFilter: React.FC<RangeInputFilterProps> = ({
         <InputWrapper>
           <Unit>{unit}</Unit>
           <Input
+            ref={inputSecondRef}
             onChange={(e) => setMax(e.target.value)}
             placeholder="Đến"
           />

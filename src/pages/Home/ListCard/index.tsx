@@ -28,7 +28,7 @@ const ListCard: React.FC<ListCardProps> = ({}) => {
       <TourCardDetail
         valueID={item.id}
         key={index}
-        url={'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBS9bJEXw5AYRgmLY_9Nyr79oQFPYEtJjmhA&s'}
+        url={item.image}
         title={item.name}
         textLocation={item.countryName}
         textTime={item.duration}

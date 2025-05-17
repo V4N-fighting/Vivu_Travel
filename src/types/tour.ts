@@ -6,6 +6,7 @@ export interface ItineraryActivity {
 
 export default interface TourItem {
     id: string;
+    image: string;
     name: string;
     description: string;
     countryID: string;

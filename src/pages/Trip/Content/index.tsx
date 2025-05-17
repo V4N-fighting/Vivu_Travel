@@ -54,7 +54,7 @@ const Content: React.FC<ContentProps> = ({destinationIDs, activityIDs, typeIDs, 
       <TourCardDetail 
         valueID={item.id}
         key={index}
-        url={"./images/4-900x490.jpg"}
+        url={item.image}
         title={item.name}
         textLocation={item.countryName}
         textTime={item.duration}
