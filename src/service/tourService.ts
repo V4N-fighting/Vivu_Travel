@@ -14,7 +14,7 @@ interface TourItemMap {
   countryID: string;
   countryName: string;
   duration: string;
-  departureDate: string;
+  departureDate: string[];
   maxPeople: string;
   adventureLevel: string;
   price: {
@@ -106,6 +106,7 @@ export const useTour = ({
     const priceNumber = parseInt(item.price.adult.replace(/[^0-9]/g, ""), 10);
 
     if (isNaN(priceNumber)) return false; 
+
 
     return priceNumber >= min && priceNumber <= max;
   });

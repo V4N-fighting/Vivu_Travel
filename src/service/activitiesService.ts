@@ -31,9 +31,6 @@ export const useActivityFullData = () => {
 
     const filteredData = data?.map((activity) => {
         const count = tours?.filter((tour) => {
-            
-            console.log("ID: ",typeof(activity.id) )
-            console.log("listID: ", tour.activityIDs)
             return tour.activityIDs.map(String).includes(activity.id)
 
         }).length ?? 0;

@@ -8,133 +8,132 @@ import { useTourTypeFullData } from '../../../service/tourTypeService';
 import FilterSection from './FilterSection';
 import RangeInputFilter from './RangeInputFilter';
 
-
-type SideBarProps = {
-  onFilterByPrice: (val: [number, number]) => void
-  onFilterByTime: (val: [number, number]) => void,
-  onCheckDestination: (isChecked: boolean, val: string) => void, 
-  onCheckActivity: (isChecked: boolean, val: string) => void,
-  onCheckType: (isChecked: boolean, val: string) => void,
-  onDeleteAll: () => void,
-  resetFilters: boolean,
-  onResetDone: () => void,
+export enum typeInput {
+  Price,
+  Time
 }
 
-const SideBar: React.FC<SideBarProps> = (
-  {
-    onFilterByPrice, 
-    onFilterByTime, 
-    onCheckDestination, 
-    onCheckActivity, 
-    onCheckType, 
-    onDeleteAll, 
-    resetFilters, 
-    onResetDone
-  } 
-) => {
+type SideBarProps = {
+  onFilterByPrice: (val: [number, number]) => void;
+  onFilterByTime: (val: [number, number]) => void;
+  onCheckDestination: (isChecked: boolean, val: string) => void;
+  onCheckActivity: (isChecked: boolean, val: string) => void;
+  onCheckType: (isChecked: boolean, val: string) => void;
+  onDeleteAll: () => void;
+  resetFilters: boolean;
+  onResetDone: () => void;
+};
 
-  const {data: destination, isLoading: isDesLoading, isError: isDesError} = useDestination()
-  const {data: activity, isLoading: isActLoading, isError: isActError} = useActivityFullData()
-  const {data: type, isLoading: isTypeLoading, isError: isTypeError} = useTourTypeFullData()
-  
-  const [minPrice, setMinPrice] = useState<number>();
-  const [maxPrice, setMaxPrice] = useState<number>();
+const SideBar: React.FC<SideBarProps> = ({
+  onFilterByPrice,
+  onFilterByTime,
+  onCheckDestination,
+  onCheckActivity,
+  onCheckType,
+  onDeleteAll,
+  resetFilters,
+  onResetDone,
+}) => {
+  const { data: destination, isLoading: isDesLoading, isError: isDesError } = useDestination();
+  const { data: activity, isLoading: isActLoading, isError: isActError } = useActivityFullData();
+  const { data: type, isLoading: isTypeLoading, isError: isTypeError } = useTourTypeFullData();
 
-  const [minDay, setMinDay] = useState<number>();
-  const [maxDay, setMaxDay] = useState<number>();
+  const [priceRange, setPriceRange] = useState<[number?, number?]>([]);
+  const [timeRange, setTimeRange] = useState<[number?, number?]>([]);
 
-  
   useEffect(() => {
     if (resetFilters) {
-      setMinPrice(undefined);
-      setMaxPrice(undefined);
-      setMinDay(undefined);
-      setMaxDay(undefined);
-      onResetDone(); 
+      setPriceRange([]);
+      setTimeRange([]);
+      onResetDone();
     }
   }, [resetFilters, onResetDone]);
 
-
   const handleApply = () => {
-    if (typeof minPrice === 'number' && typeof maxPrice === 'number') {
-      onFilterByPrice([minPrice, maxPrice]);
+    if (priceRange[0] != null && priceRange[1] != null) {
+      const scaledPriceRange: [number, number] = [
+        Number(priceRange[0]) * 1_000_000,
+        Number(priceRange[1]) * 1_000_000,
+      ];
+      onFilterByPrice(scaledPriceRange);
     }
 
-    if (typeof minDay === 'number' && typeof maxDay === 'number') {
-      onFilterByTime([minDay, maxDay])
+    if (timeRange[0] != null && timeRange[1] != null) {
+      const scaledTimeRange: [number, number] = [
+        Number(timeRange[0]),
+        Number(timeRange[1]),
+      ];
+      onFilterByTime(scaledTimeRange);
     }
-  }
-  
-
-  const handleChangeInput = (
-    handler: (isChecked: boolean, val: string) => void
-  ) => (e: ChangeEvent<HTMLInputElement>, id: string) => {
-    handler(e.target.checked, id);
   };
 
-  const handleDeleteAllFilter = () => {
-    onDeleteAll()
-  }
-  
 
-  const filterConfigs = useMemo(() => [
-    {
-      label: 'Điểm đến',
-      data: destination,
-      onChange: handleChangeInput(onCheckDestination)
-    },
-    {
-      label: 'Hoạt động',
-      data: activity,
-      onChange: handleChangeInput(onCheckActivity)
-    },
-    {
-      label: 'Loại tour',
-      data: type,
-      onChange: handleChangeInput(onCheckType)
-    }
-  ],[destination, activity, type]);
-  
+  const createCheckboxHandler = (
+    callback: (checked: boolean, id: string) => void
+  ) => (
+  (e: ChangeEvent<HTMLInputElement>) => {
+    callback(e.target.checked, e.target.value);
+  });
 
-  if (isDesLoading || isActLoading || isTypeLoading) {
-    return <>"Đang tải dữ liệu"</>;
-  } ;
-  
-  if (isDesError || isActError || isTypeError ) {
-    return <>"Lỗi dữ liệu"</>;
-  }
+  //FilterConfigs
+  const filterConfigs = useMemo(
+    () => [
+      {
+        label: 'Điểm đến',
+        data: destination,
+        onChange: createCheckboxHandler(onCheckDestination),
+      },
+      {
+        label: 'Hoạt động',
+        data: activity,
+        onChange: createCheckboxHandler(onCheckActivity),
+      },
+      {
+        label: 'Loại tour',
+        data: type,
+        onChange: createCheckboxHandler(onCheckType),
+      },
+    ],
+    [destination, activity, type]
+  );
+
+  //handle loading or error
+  if (isDesLoading || isActLoading || isTypeLoading) return <>Đang tải dữ liệu...</>;
+  if (isDesError || isActError || isTypeError) return <>Lỗi dữ liệu</>;
 
   return (
     <Sidebar>
       <SidebarItem>
-        <Title small >Điều kiện lọc</Title>
-        <DeleteAll onClick={handleDeleteAllFilter}>Xóa tất cả</DeleteAll>
+        <Title small>Điều kiện lọc</Title>
+        <DeleteAll onClick={onDeleteAll}>Xóa tất cả</DeleteAll>
       </SidebarItem>
+
       <RangeInputFilter
         label="Giá"
-        unit="đ"
-        setMin={val => setMinPrice(Number(val))}
-        setMax={val => setMaxPrice(Number(val))}
+        unit={typeInput.Price}
+        setMin={(val) => setPriceRange((prev) => [Number(val), prev[1]])}
+        setMax={(val) => setPriceRange((prev) => [prev[0], Number(val)])}
         onApply={handleApply}
         resetFilters={resetFilters}
       />
-
 
       <RangeInputFilter
         label="Thời gian"
-        unit="ngày"
-        setMin={val => setMinDay(Number(val))}
-        setMax={val => setMaxDay(Number(val))}
+        unit={typeInput.Time}
+        setMin={(val) => setTimeRange((prev) => [Number(val), prev[1]])}
+        setMax={(val) => setTimeRange((prev) => [prev[0], Number(val)])}
         onApply={handleApply}
         resetFilters={resetFilters}
-
       />
-      {filterConfigs.map((config, index) => (
+
+      {filterConfigs.map((config) => (
         <FilterSection
-          key={index}
+          key={config.label}
           label={config.label}
           data={config.data}
-          onChange={config.onChange} shouldReset={resetFilters}        />
+          onChange={config.onChange}
+          shouldReset={resetFilters}
+        />
       ))}
     </Sidebar>
   );
@@ -144,7 +143,7 @@ const Sidebar = styled.div`
   width: 100%;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   padding: 0 20px;
-`
+`;
 
 const SidebarItem = styled.div`
   width: 100%;
@@ -153,91 +152,13 @@ const SidebarItem = styled.div`
   justify-content: space-between;
   padding: 20px 0;
   border-bottom: 1px solid #d1d1d1;
-
-`
+`;
 
 const DeleteAll = styled.div`
   font-size: 14px;
   text-decoration: underline;
   color: #555555;
   cursor: pointer;
-`
-
-const TypeItem = styled.div`
-    padding: 10px 0 10px 10px;
-
-    & input {
-        font-size: 14px;
-    }
-
-    & span {
-        font-size: 14px;
-        color: black;
-        margin-left: 20px;
-    }
-`;
-
-const InputContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-`;
-
-const InputWrapper = styled.div`
-  position: relative;
-  flex: 1;
-`;
-
-const Currency = styled.span`
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 14px;
-  color: #888;
-`;
-
-const Input = styled.input`
-  width: 100%;
-  padding: 8px 20px 8px 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 12px;
-  color: #333;
-
-  &:focus {
-    outline: none;
-    border-color: #ff5722;
-  }
-`;
-
-const Separator = styled.div`
-  margin: 0 10px;
-  font-size: 16px;
-  color: #888;
-`;
-
-const ApplyButton = styled.button`
-  background-color: #ff5722;
-  width: 100%;
-  color: #fff;
-  padding: 10px 0;
-  margin-top: 20px;
-  font-size: 14px;
-  font-weight: bold;
-  text-transform: uppercase;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #e64a19;
-  }
-
-  &:active {
-    background-color: #d84315;
-  }
 `;
 
 export default SideBar;

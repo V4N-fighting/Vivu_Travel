@@ -1,11 +1,9 @@
 import styled from "styled-components";
 import Banner from "../../Component/Banner";
-import { Grid, GridCol, GridRow, Title } from "../../styled";
+import { Grid, GridCol, GridRow } from "../../styled";
 import SideBar from "./SideBar";
 import Content from "./Content";
 import { useState } from "react";
-
-
 
 function Trip() {
   const [price, setPrice] = useState<[number, number]>()
@@ -13,11 +11,9 @@ function Trip() {
   const [destinationID, setDestinationID] = useState<string[]>([])
   const [activityID, setActivityID] = useState<string[]>([])
   const [typeID, setTypeID] = useState<string[]>([])
-
   const [resetFilters, setResetFilters] = useState(false);
 
 
-  
   const handlefilterByPrice = (val: [number, number]) => {
     setPrice(val);
   }

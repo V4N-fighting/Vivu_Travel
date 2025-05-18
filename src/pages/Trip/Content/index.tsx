@@ -8,8 +8,6 @@ import Pagination from '../../../Component/Pagination';
 import Icons from '../../../Component/BaseComponent/Icons';
 import { useTour } from '../../../service/tourService';
 
-
-
 enum ModeShow {
   List,
   Menu
@@ -26,7 +24,6 @@ interface ContentProps {
 
 const Content: React.FC<ContentProps> = ({destinationIDs, activityIDs, typeIDs, price, time, }) => {
   const [modeShow, setModeShow] =  useState(ModeShow.List)
-  const [fakeLoading, setFakeLoading] = useState(true);
 
 
   const { data: tours, loading: tourLoading, error: tourError } = useTour({
@@ -37,55 +34,19 @@ const Content: React.FC<ContentProps> = ({destinationIDs, activityIDs, typeIDs, 
     durationRange: time
   } );
 
-  useEffect(() => {
-    if (!tourLoading) {
-      const timeout = setTimeout(() => {
-        setFakeLoading(false);
-      }, 1000); // 0.5s
-
-      return () => clearTimeout(timeout);
-    } else {
-      setFakeLoading(true);
-    }
-  }, [tourLoading]);
-
-  const listContentDefault = tours ? tours.map((item, index) => {
-    return (
-      <TourCardDetail 
-        valueID={item.id}
-        key={index}
-        url={item.image}
-        title={item.name}
-        textLocation={item.countryName}
-        textTime={item.duration}
-        price={item.price.adult}
-        textDensity={item.maxPeople}
-        textLevel={item.adventureLevel}
-        horizontal={true}
-        textDescr={item.description} type={item.tourTypeName}      />
-    )}) : [];
+  const itemsPerPage = modeShow === ModeShow.List ? 4 : 2;
 
   const {
     indexOfFirstItem,
     indexOfLastItem,
     totalPages,
     getCurrentPage
-  } =  usePagination(4,listContentDefault.length)
+  } =  usePagination(itemsPerPage, tours?.length || 0);
 
-  const listContent = listContentDefault.slice(indexOfFirstItem,indexOfLastItem)
-
-
-  const handleShowMenu = () => {
-    setModeShow(ModeShow.Menu)
-  }
-
-  const handleShowList = () => {
-    setModeShow(ModeShow.List)
-    
-  }
+  const toggleMode = (mode: ModeShow) => setModeShow(mode);
 
   // Xử lý trạng thái tải hoặc lỗi
-  if (tourLoading || fakeLoading) return <p>Đang tải dữ liệu...</p>;
+  if (tourLoading) return <p>Đang tải dữ liệu...</p>;
 
   if (tourError) return <p>Lỗi: {tourError}</p>;
   if (!tours || tours.length === 0) return <p>Không có dữ liệu.</p>;
@@ -95,31 +56,41 @@ const Content: React.FC<ContentProps> = ({destinationIDs, activityIDs, typeIDs, 
         <Header>
             <Arrange><DropdownMenu /></Arrange>
             <Layout>
-                <Icons.ListIcon onClick={handleShowList} color={modeShow === ModeShow.List ? 'orange' : ''}/>
-                <Icons.GripverticalIcon onClick={handleShowMenu} color={modeShow === ModeShow.Menu  ? 'orange' : ''} />
+                <Icons.ListIcon onClick={() => toggleMode(ModeShow.List)} color={modeShow === ModeShow.List ? 'orange' : ''}/>
+                <Icons.GripverticalIcon onClick={() => toggleMode(ModeShow.Menu)} color={modeShow === ModeShow.Menu  ? 'orange' : ''} />
             </Layout>
         </Header>
         <Contain>
         <Grid>
                 <GridRow margin='10px'>
-                {listContent.map((card, index) => {
-                  return modeShow === ModeShow.Menu ? (
-                    <GridCol col={6} key={index}>
-                      {React.cloneElement(card, { horizontal: false })}
-                    </GridCol>
-                  ) : (
-                    <GridCol col={12} key={index}>
-                      {React.cloneElement(card, { horizontal: true })}
-                    </GridCol>
-                  );
-                })}
+                  {tours
+                    .slice(indexOfFirstItem, indexOfLastItem)
+                    .map((item, index) => (
+                      <GridCol col={modeShow === ModeShow.Menu ? 6 : 12} key={index}>
+                        <TourCardDetail 
+                          valueID={item.id}
+                          url={item.image}
+                          title={item.name}
+                          textLocation={item.countryName}
+                          textTime={item.duration}
+                          price={item.price.adult}
+                          textDensity={item.maxPeople}
+                          textLevel={item.adventureLevel}
+                          horizontal={modeShow === ModeShow.List}
+                          textDescr={item.description}
+                          type={item.tourTypeName}
+                          nextTour={item.departureDate}
+                        />
+                      </GridCol>
+                  ))}
                 </GridRow>
+
               </Grid>
           
           <Pagination 
             totalPage={totalPages}
             onChange={(value : number)=> {getCurrentPage(value)}}
-            itemsPerPage={modeShow === ModeShow.List ? 4 : 2} 
+            itemsPerPage={itemsPerPage} 
             scrollToTop={750}
           />
         </Contain>

@@ -11,7 +11,7 @@ export default interface TourItem {
     description: string;
     countryID: string;
     duration: string;
-    departure_date: string; 
+    departure_date: string[]; 
     max_people: string;
     adventure_level: string;
     price: {
