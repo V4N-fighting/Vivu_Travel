@@ -14,6 +14,13 @@ export enum typeInput {
 }
 
 type SideBarProps = {
+  data: {
+    destinationID: string[];
+    activityID: string[];
+    typeID: string[];
+    price?: [number, number];
+    day?: [number, number];
+  };
   onFilterByPrice: (val: [number, number]) => void;
   onFilterByTime: (val: [number, number]) => void;
   onCheckDestination: (isChecked: boolean, val: string) => void;
@@ -25,6 +32,7 @@ type SideBarProps = {
 };
 
 const SideBar: React.FC<SideBarProps> = ({
+  data,
   onFilterByPrice,
   onFilterByTime,
   onCheckDestination,
@@ -38,8 +46,8 @@ const SideBar: React.FC<SideBarProps> = ({
   const { data: activity, isLoading: isActLoading, isError: isActError } = useActivityFullData();
   const { data: type, isLoading: isTypeLoading, isError: isTypeError } = useTourTypeFullData();
 
-  const [priceRange, setPriceRange] = useState<[number?, number?]>([]);
-  const [timeRange, setTimeRange] = useState<[number?, number?]>([]);
+  const [priceRange, setPriceRange] = useState<[number?, number?]>(data.price || []);
+  const [timeRange, setTimeRange] = useState<[number?, number?]>(data.day || []);
 
   useEffect(() => {
     if (resetFilters) {
@@ -49,21 +57,21 @@ const SideBar: React.FC<SideBarProps> = ({
     }
   }, [resetFilters, onResetDone]);
 
-  const handleApply = () => {
+  const handleApplyPrice = () => {
     if (priceRange[0] != null && priceRange[1] != null) {
-      const scaledPriceRange: [number, number] = [
+      onFilterByPrice([
         Number(priceRange[0]) * 1_000_000,
         Number(priceRange[1]) * 1_000_000,
-      ];
-      onFilterByPrice(scaledPriceRange);
+      ]);
     }
+  };
 
+  const handleApplyTime = () => {
     if (timeRange[0] != null && timeRange[1] != null) {
-      const scaledTimeRange: [number, number] = [
+      onFilterByTime([
         Number(timeRange[0]),
         Number(timeRange[1]),
-      ];
-      onFilterByTime(scaledTimeRange);
+      ]);
     }
   };
 
@@ -71,33 +79,34 @@ const SideBar: React.FC<SideBarProps> = ({
   const createCheckboxHandler = (
     callback: (checked: boolean, id: string) => void
   ) => (
-  (e: ChangeEvent<HTMLInputElement>) => {
-    callback(e.target.checked, e.target.value);
-  });
+    (e: ChangeEvent<HTMLInputElement>, id: string) => {
+      callback(e.target.checked, id);
+    });
 
-  //FilterConfigs
   const filterConfigs = useMemo(
     () => [
       {
         label: 'Điểm đến',
         data: destination,
         onChange: createCheckboxHandler(onCheckDestination),
+        selected: data.destinationID,
       },
       {
         label: 'Hoạt động',
         data: activity,
         onChange: createCheckboxHandler(onCheckActivity),
+        selected: data.activityID,
       },
       {
         label: 'Loại tour',
         data: type,
         onChange: createCheckboxHandler(onCheckType),
+        selected: data.typeID,
       },
     ],
-    [destination, activity, type]
+    [destination, activity, type, data]
   );
 
-  //handle loading or error
   if (isDesLoading || isActLoading || isTypeLoading) return <>Đang tải dữ liệu...</>;
   if (isDesError || isActError || isTypeError) return <>Lỗi dữ liệu</>;
 
@@ -113,8 +122,9 @@ const SideBar: React.FC<SideBarProps> = ({
         unit={typeInput.Price}
         setMin={(val) => setPriceRange((prev) => [Number(val), prev[1]])}
         setMax={(val) => setPriceRange((prev) => [prev[0], Number(val)])}
-        onApply={handleApply}
+        onApply={handleApplyPrice}
         resetFilters={resetFilters}
+        selected={data.price}
       />
 
       <RangeInputFilter
@@ -122,8 +132,10 @@ const SideBar: React.FC<SideBarProps> = ({
         unit={typeInput.Time}
         setMin={(val) => setTimeRange((prev) => [Number(val), prev[1]])}
         setMax={(val) => setTimeRange((prev) => [prev[0], Number(val)])}
-        onApply={handleApply}
+        onApply={handleApplyTime}
         resetFilters={resetFilters}
+        selected={data.day}
+
       />
 
       {filterConfigs.map((config) => (
@@ -132,6 +144,7 @@ const SideBar: React.FC<SideBarProps> = ({
           label={config.label}
           data={config.data}
           onChange={config.onChange}
+          selected={config.selected}
           shouldReset={resetFilters}
         />
       ))}

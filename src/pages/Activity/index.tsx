@@ -5,20 +5,8 @@ import TourCard from "../../Component/TourCard";
 import Pagination from "../../Component/Pagination";
 import { usePagination } from "../../Hooks/usePagination";
 import { useActivityFullData } from "../../service/activitiesService";
+import { PARAM } from "../../api/param";
 
-// Dữ liệu mẫu
-// const activities = [
-//   { id: 1, url: "./images/destinations-1-1.jpg", label: "(2 Trips)", name: "Boating" },
-//   { id: 2, url: "./images/destinations-1-1.jpg", label: "(5 Trips)", name: "City Tour" },
-//   { id: 3, url: "./images/destinations-1-1.jpg", label: "(3 Trips)", name: "Cycling" },
-//   { id: 4, url: "./images/destinations-1-1.jpg", label: "(4 Trips)", name: "Hiking" },
-//   { id: 5, url: "./images/destinations-1-1.jpg", label: "(1 Trip)", name: "Jungle Safari" },
-//   { id: 6, url: "./images/destinations-1-1.jpg", label: "(6 Trips)", name: "Peak Climbing" },
-//   { id: 7, url: "./images/destinations-1-1.jpg", label: "(2 Trips)", name: "Rafting" },
-//   { id: 8, url: "./images/destinations-1-1.jpg", label: "(4 Trips)", name: "Skiing" },
-//   { id: 9, url: "./images/destinations-1-1.jpg", label: "(2 Trips)", name: "Trekking" },
-//   { id: 10, url: "./images/destinations-1-1.jpg", label: "(2 Trips)", name: "Trekking" },
-// ];
 
 const ITEM_PER_PAGE = 6;
 
@@ -59,7 +47,7 @@ function Activity() {
                           url={ "./images/destinations-1-1.jpg"}
                           label={String(item.numberOfTrip) + " trips"}
                           name={item.name}
-                          current={['activity', item.id, item.name]}
+                          current={[PARAM.ACTIVITY, item.id, item.name]}
                         />
                       </GridCol>
             })}

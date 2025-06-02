@@ -10,20 +10,34 @@ type FilterSectionProps = {
   data?: DestinationItemMap[] | TourTypeItemMap[] | ActivityItemMap[] | null;
   onChange: (e: React.ChangeEvent<HTMLInputElement>, id: string) => void;
   shouldReset: boolean;
+  selected: string[];
 };
 
-const FilterSection: React.FC<FilterSectionProps> = ({ label, data, onChange, shouldReset }) => {
+const FilterSection: React.FC<FilterSectionProps> = ({ label, data, onChange, shouldReset, selected }) => {
   const [showAll, setShowAll] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [checkedIds, setCheckedIds] = useState<Set<string>>(new Set());
 
+
   useEffect(() => {
-  if (shouldReset) {
-    setCheckedIds(new Set());
-    setSearchTerm("");
-    setShowAll(false);
-  }
-}, [shouldReset]);
+    if (shouldReset) {
+      setCheckedIds(new Set());
+      setSearchTerm("");
+      setShowAll(false);
+    }
+  }, [shouldReset]);
+
+  useEffect(() => {
+    setCheckedIds(prev => {
+      const newSet = new Set(prev);
+      if (selected) {
+        selected.filter((val) => {
+          newSet.add(val);
+        })
+      } 
+      return newSet;
+    })
+  }, [selected]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -33,6 +47,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({ label, data, onChange, sh
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
     const isChecked = e.target.checked;
     onChange(e, id);
+
   
     setCheckedIds(prev => {
       const newSet = new Set(prev);
@@ -88,8 +103,8 @@ const FilterSection: React.FC<FilterSectionProps> = ({ label, data, onChange, sh
               <CheckedItem key={item.id}>
                 <input
                   type="checkbox"
-                  checked={true}
                   onChange={(e) => handleCheckboxChange(e, item.id)}
+                  checked={true}
                 />
                 <span>{item.name}</span>
               </CheckedItem>

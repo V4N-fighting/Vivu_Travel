@@ -91,7 +91,7 @@
 
 <!-- ------------------------------------------------------------------------------------------------------------------------------- -->
 # note
-
+1) RangeInput ở Trips page khi nhập giá trị không phù hợp rồi xóa, nhập lại giá trị bình thường thì tìm không có dữ liệu
 
 
 
@@ -103,7 +103,7 @@ cần chỉnh lại lịch trong modal (--idea-- data gồm 3 ngày chuyến đi
 
 # _ingggggggggggggggggg
 
-/trips 
-làm chức năng xóa tất cả    
+
+
 
 

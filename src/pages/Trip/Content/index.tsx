@@ -14,8 +14,8 @@ enum ModeShow {
 }
 
 interface ContentProps {
-  destinationIDs: string[];
-  activityIDs: string[];
+  destinationIDs: string[] | undefined;
+  activityIDs: string[] | undefined;
   typeIDs: string[];
   price: [number, number] | undefined;
   time: [number, number] | undefined;
@@ -44,6 +44,9 @@ const Content: React.FC<ContentProps> = ({destinationIDs, activityIDs, typeIDs, 
   } =  usePagination(itemsPerPage, tours?.length || 0);
 
   const toggleMode = (mode: ModeShow) => setModeShow(mode);
+
+  
+
 
   // Xử lý trạng thái tải hoặc lỗi
   if (tourLoading) return <p>Đang tải dữ liệu...</p>;

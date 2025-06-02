@@ -27,7 +27,8 @@ type RangeInputFilterProps = {
   setMin: (val: string ) => void;
   setMax: (val: string ) => void;
   onApply?: () => void;
-  resetFilters: boolean
+  resetFilters: boolean;
+  selected: [number, number] | undefined
 };
 
 const RangeInputFilter: React.FC<RangeInputFilterProps> = ({
@@ -37,6 +38,7 @@ const RangeInputFilter: React.FC<RangeInputFilterProps> = ({
   setMax,
   onApply,
   resetFilters,
+  selected
 }) => {
   const [minVal, setMinVal] = useState('');
   const [maxVal, setMaxVal] = useState('');
@@ -45,7 +47,22 @@ const RangeInputFilter: React.FC<RangeInputFilterProps> = ({
   const [errorMessage, setErrorMessage] = useState('');
 
 
-
+  useEffect(() => {
+     if (selected) {
+      if (unit === typeInput.Price) {
+        setInputLabelMin(JSON.stringify(selected[0] / 1_000_000) + ' triệu đồng')
+        setInputLabelMax(JSON.stringify(selected[1] / 1_000_000) + ' triệu đồng')
+      } else if (unit === typeInput.Time) {
+        setInputLabelMin(JSON.stringify(selected[0]) + ' ngày')
+        setInputLabelMax(JSON.stringify(selected[1]) + ' ngày')
+      } else {
+        setInputLabelMin('')
+        setInputLabelMax('')
+      }
+      setMinVal(JSON.stringify(selected[0]))
+      setMaxVal(JSON.stringify(selected[1]))
+     }
+  }, [selected]);
 
   useEffect(() => {
     

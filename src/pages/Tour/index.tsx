@@ -5,6 +5,7 @@ import TourCard from "../../Component/TourCard";
 import Pagination from "../../Component/Pagination";
 import { usePagination } from "../../Hooks/usePagination";
 import { useTourTypeFullData } from "../../service/tourTypeService";
+import { PARAM } from "../../api/param";
 
 // Dữ liệu mẫu
 // const tours = [
@@ -57,7 +58,7 @@ function Tour() {
                           url={"./images/destinations-1-1.jpg"}
                           label={String(item.numberOfTrip) + " trips"}
                           name={item.name}
-                          current={['tour_type', item.id, item.name]}
+                          current={[PARAM.TOUR_TYPE, item.id, item.name]}
                         />
                       </GridCol>
             })}

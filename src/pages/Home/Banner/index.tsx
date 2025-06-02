@@ -5,6 +5,7 @@ import Button from "../../../Component/BaseComponent/Button/Button";
 import Purify from "./Purify";
 import { Link } from "react-router-dom";
 import { useBanner } from "../../../service/bannerService";
+import config from "../../../config";
 
 
 const TIME_CHANGE = 4000;
@@ -49,7 +50,7 @@ const Banner: React.FC = () => {
             <SupTitle medium orange>Lên đường ngay</SupTitle>
             <AnimatedTitle big>{activeContent?.textContent}</AnimatedTitle>
             <Text>Thiên nhiên đẹp mê hồn với rừng cây xanh mướt, dòng suối trong vắt và những cánh hoa rực rỡ.</Text>
-            <Link to={"/trips"}>
+            <Link to={config.routes.trip}>
               <Button orange>Đặt vé ngay</Button>
             </Link>
           </Content>

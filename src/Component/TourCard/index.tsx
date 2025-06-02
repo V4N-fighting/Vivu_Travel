@@ -23,7 +23,12 @@ const TourCard: React.FC<TourCardProps> = ({url, label, name, current}) => {
 
   const [page, id, value] = current;
   const handleViewDetail = () => {
-    navigate(`/trips?${page}=${value}`, { state: { id } }); // Gửi state nếu cần
+    const queryParams = new URLSearchParams();
+    if (current) queryParams.append(page, String(id));
+
+
+    navigate(`/trips?${queryParams.toString()}`);
+
     window.scrollTo({ top: 200, behavior: 'smooth' });
 };
   

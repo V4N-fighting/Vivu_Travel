@@ -6,6 +6,7 @@ import Pagination from './../../Component/Pagination/index';
 import { usePagination } from "../../Hooks/usePagination";
 import { useDestination } from "../../service/destinationSerive";
 import { useNavigate } from "react-router-dom";
+import { PARAM } from "../../api/param";
 
 const ITEM_PER_PAGE = 6
 
@@ -53,7 +54,7 @@ function Destination() {
                           url="./images/destinations-1-1.jpg"
                           label={item.numberOfTrip + ' trips'}
                           name={item.name}
-                          current={['destination', item.id, item.name]}
+                          current={[PARAM.DESTINATION, item.id, item.name]}
                         />
                       </GridCol>
             })}
