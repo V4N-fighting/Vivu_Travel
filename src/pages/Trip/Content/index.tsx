@@ -48,7 +48,6 @@ const Content: React.FC<ContentProps> = ({destinationIDs, activityIDs, typeIDs, 
   
 
 
-  // Xử lý trạng thái tải hoặc lỗi
   if (tourLoading) return <p>Đang tải dữ liệu...</p>;
 
   if (tourError) return <p>Lỗi: {tourError}</p>;

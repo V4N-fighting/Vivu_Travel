@@ -11,7 +11,7 @@ interface TourCardProps {
     title: string;
     code: string;
     startDate: string;
-    endDate: string;
+    counter: number;
     duration: string;
     price: number;
   };
@@ -26,10 +26,10 @@ const TourCard: React.FC<TourCardProps> = ({ tour }) => {
         <Title medium>{tour.title}</Title>
         <Text>Code: <strong>{tour.code}</strong> </Text>
         <Text>Ngày đi: <strong>{tour.startDate}</strong> </Text>
-        <Text>Thời gian: <strong>{tour.duration}</strong> </Text>
-        <Text>Số du khách: <strong>{tour.duration}</strong> </Text>
-        <Text>Số điện thoại liên lạc: <strong>{tour.duration}</strong> </Text>
-        <Text>Người chịu trách nhiệm liên lạc: <strong>{tour.duration}</strong> </Text>
+        <Text>Thời gian: <strong>{tour.duration} ngày</strong> </Text>
+        <Text>Số du khách: <strong>{tour.counter} người</strong> </Text>
+        <Text>Số điện thoại liên lạc: <strong>*Lấy trong data người dùng*</strong> </Text>
+        <Text>Người chịu trách nhiệm liên lạc: <strong>*Lấy trong data người dùng*</strong> </Text>
         
         <Price>
           Tổng: {tour.price.toLocaleString()} đ

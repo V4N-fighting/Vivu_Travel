@@ -1,53 +1,174 @@
-
-import { faLock, faUser, faEnvelope } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
-import { Link } from "react-router-dom";
+// src/pages/Register.tsx
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Icons from "../../../Component/BaseComponent/Icons";
+import { register } from "../../../service/authService";
 
+interface RegisterForm {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  rememberMe: boolean;
+  avatar: File | null; 
+}
 
 
 const Register: React.FC = () => {
+  const [form, setForm] = useState<RegisterForm>({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    rememberMe: false,
+    avatar: null
+  });
+
+  const navigate = useNavigate();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = e.target;
+    setForm((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const convertToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      let avatarBase64 = "";
+      if (form.avatar) {
+        avatarBase64 = await convertToBase64(form.avatar);
+      }
+
+      await register({
+        firstName: form.firstName,
+        lastName: form.lastName,
+        email: form.email,
+        password: form.password,
+        avatar: avatarBase64, // 👈 truyền base64
+      });
+
+      alert("Đăng ký thành công!");
+      navigate("/login");
+    } catch (err: any) {
+      alert(err.message);
+    }
+  };
+
   return (
     <RegisterContainer>
-      <Top>
-        <span>
-          Have an account? <Link to='/login'>Login</Link>
-        </span>
-        <header>Sign Up</header>
-      </Top>
-      <TwoForms>
+      <form onSubmit={handleSubmit}>
+        <Top>
+          <span>
+            Have an account? <Link to='/login'>Login</Link>
+          </span>
+          <header>Sign Up</header>
+        </Top>
+        <TwoForms>
+          <InputBox>
+            <Icons.UserIcon white/>
+            <Input
+              type='text'
+              name='firstName'
+              placeholder='Firstname'
+              value={form.firstName}
+              onChange={handleChange}
+              required
+            />
+            
+          </InputBox>
+          <InputBox>
+            <Icons.UserIcon white/>
+            <Input
+              type='text'
+              name='lastName'
+              placeholder='Lastname'
+              value={form.lastName}
+              onChange={handleChange}
+              required
+            />
+          </InputBox>
+        </TwoForms>
         <InputBox>
-          <input type="text" placeholder="Firstname" />
-          <Icons.UserIcon />
+          <Icons.EnvelopeIcon white/>
+          <Input
+            type='email'
+            name='email'
+            placeholder='Email'
+            value={form.email}
+            onChange={handleChange}
+            required
+          />
+          
         </InputBox>
         <InputBox>
-          <input type="text" placeholder="Lastname" />
-          <Icons.UserIcon />
+          <Icons.LockIcon white/>
+          <Input
+            type='password'
+            name='password'
+            placeholder='Password'
+            value={form.password}
+            onChange={handleChange}
+            required
+          />
         </InputBox>
-      </TwoForms>
-      <InputBox>
-        <input type="text" placeholder="Email" />
-        <Icons.EnvelopeIcon />
-      </InputBox>
-      <InputBox>
-        <input type="password" placeholder="Password" />
-        <Icons.LockIcon />
-      </InputBox>
-      <Submit type="submit" value="Register" />
-      <TwoCol>
-        <div className="one">
-          <input type="checkbox" id="register-check" />
-          <label htmlFor="register-check">Remember Me</label>
-        </div>
-        <div className="two">
-          <a href="#">Terms & conditions</a>
-        </div>
-      </TwoCol>
+        <InputBox>
+          <Icons.UserIcon white />
+          <input
+            type='file'
+            accept='image/*'
+            onChange={(e) => {
+              const file = e.target.files?.[0] || null;
+              setForm((prev) => ({ ...prev, avatar: file }));
+            }}
+            style={{
+              color: "#fff",
+              fontSize: "14px",
+              padding: "10px 0",
+              border: "none",
+              background: "transparent",
+              flex: 1,
+            }}
+          />
+        </InputBox>
+
+        <Submit type='submit' value='Register' />
+        <TwoCol>
+          <div className='one'>
+            <input
+              type='checkbox'
+              id='register-check'
+              name='rememberMe'
+              checked={form.rememberMe}
+              onChange={handleChange}
+            />
+            <label htmlFor='register-check'>Remember Me</label>
+          </div>
+          <div className='two'>
+            <a href='#'>Terms & conditions</a>
+          </div>
+        </TwoCol>
+      </form>
     </RegisterContainer>
   );
 };
+
+export default Register;
 
 const RegisterContainer = styled.div`
   position: absolute;
@@ -57,38 +178,6 @@ const RegisterContainer = styled.div`
   display: flex;
   flex-direction: column;
   transition: 0.5s ease-in-out;
-`;
-
-const TwoForms = styled.div`
-  display: flex;
-  gap: 10px;
-  margin-bottom: 15px;
-
-  input {
-    font-size: 15px;
-    background: rgba(255, 255, 255, 0.2);
-    color: #fff;
-    height: 50px;
-    width: 100%;
-    padding: 0 10px 0 45px;
-    border: none;
-    border-radius: 30px;
-    outline: none;
-    transition: 0.2s ease;
-
-    &:hover,
-    &:focus {
-      background: rgba(255, 255, 255, 0.25);
-    }
-  }
-
-  i {
-    position: absolute;
-    top: 50%;
-    left: 17px;
-    transform: translateY(-50%);
-    color: #fff;
-  }
 `;
 
 const Top = styled.div`
@@ -118,34 +207,43 @@ const Top = styled.div`
   }
 `;
 
+const TwoForms = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
 const InputBox = styled.div`
-  position: relative;
+  display: flex;
+  align-items: center;
   margin-bottom: 15px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 30px;
+  padding: 0 10px;
 
-  input {
-    font-size: 15px;
-    background: rgba(255, 255, 255, 0.2);
-    color: #fff;
-    height: 50px;
-    width: 100%;
-    padding: 0 10px 0 45px;
-    border: none;
-    border-radius: 30px;
-    outline: none;
-    transition: 0.2s ease;
+`;
 
-    &:hover,
-    &:focus {
-      background: rgba(255, 255, 255, 0.25);
-    }
-  }
+const Input = styled.input`
+  font-size: 15px;
+  background: transparent;
+  height: 50px;
+  width: 100%;
+  border: none;
+  border-radius: 30px;
+  outline: none;
+  transition: 0.2s ease;
+  color: #ffffff;
+  caret-color: #fff;
 
-  i {
-    position: absolute;
-    top: 50%;
-    left: 17px;
-    transform: translateY(-50%);
-    color: #fff;
+
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+    -webkit-text-fill-color: #fff !important;
+    transition: background-color 5000s ease-in-out 0s;
+    background-color: transparent !important;
+    box-shadow: 0 0 0px 1000px transparent inset !important;
   }
 `;
 
@@ -178,10 +276,6 @@ const TwoCol = styled.div`
   .one {
     display: flex;
     gap: 5px;
-
-    input {
-      margin-right: 5px;
-    }
   }
 
   .two a {
@@ -193,14 +287,3 @@ const TwoCol = styled.div`
     }
   }
 `;
-
-const Icon = styled(FontAwesomeIcon)`
-    font-size: 15px;
-    position: absolute;
-    top: 50%;
-    left: 17px;
-    transform: translateY(-50%);
-    color: #fff;
-`
-
-export default Register;

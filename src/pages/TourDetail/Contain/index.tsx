@@ -55,7 +55,7 @@ const Contain: React.FC<ContainProps> = ({formRef, data}) => {
 
     
 
-    // Set line cho Button đầu
+    // Set line for first button
     useEffect(() => {
         const setInitialLinePosition = () => {
             if (buttonRefs.current[0] && LineRef.current) {
@@ -73,7 +73,7 @@ const Contain: React.FC<ContainProps> = ({formRef, data}) => {
 
     
     
-    // hàm click vào tab
+    
     const handleTabClick = (
         e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
         id: number
@@ -84,7 +84,7 @@ const Contain: React.FC<ContainProps> = ({formRef, data}) => {
         changeLineStyle(e);
     };
 
-    // hàm dịch chuyển dòng underline
+    // handle underline
     const changeLineStyle = (e: React.MouseEvent<HTMLButtonElement, MouseEvent> ) => {
         console.log('hàm changeLineStyle hoạt động');
 
@@ -99,8 +99,6 @@ const Contain: React.FC<ContainProps> = ({formRef, data}) => {
         }
     };
     
-
-    // Chọn value cho mỗi
     const activeContent = navContent.find((item) => item.id === curTab);
 
     return (
@@ -137,7 +135,7 @@ const Contain: React.FC<ContainProps> = ({formRef, data}) => {
             <Form ref={formRef}>
                 <Text style={{ gridColumn: 'span 2'}} >Bạn có thể gửi yêu cầu qua mẫu này</Text>
                 <Text style={{ gridColumn: 'span 2'}}  small>Tên chuyến đi: *
-                    <span style={{fontWeight: 'bold'}}> Romantic Sri Lanka Honeymoon Package</span>
+                    <span style={{fontWeight: 'bold'}}> {data && data[0].name}</span>
                 </Text>
                 <Input type="text" placeholder="Nhập tên*" required style={{ gridColumn: 'span 2'}}/>
                 <Input type="email" placeholder="Nhập email *" required style={{ gridColumn: 'span 2'}}/>

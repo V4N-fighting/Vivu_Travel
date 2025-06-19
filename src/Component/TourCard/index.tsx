@@ -1,7 +1,6 @@
-import styled, { keyframes } from "styled-components";
-import {ArrowRightOutlined} from '@ant-design/icons';
+import styled from "styled-components";
 import { Icon } from '../../styled';
-import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import {  faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 
 

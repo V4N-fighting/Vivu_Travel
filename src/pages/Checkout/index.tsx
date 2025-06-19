@@ -4,22 +4,20 @@ import ProgressBar from "./ProgressBar";
 import { FlexBox, Grid, GridCol, GridRow, Icon, Text, Title } from "../../styled";
 import TourCard from "./TourCard";
 import Button from "../../Component/BaseComponent/Button/Button";
-import { useState } from "react";
-import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
-import { CircleCheckIcon } from './../../Component/BaseComponent/Icons/CircleCheckIcon';
+import { useMemo, useState } from "react";
 import Icons from "../../Component/BaseComponent/Icons";
+import { useLocation } from "react-router-dom";
 
-const exampleTour = {
-    image: "https://icdn.24h.com.vn/upload/2-2023/images/2023-06-06/kim5_1-1686027959-673-width740height480.jpg",
-    title: "Du Lịch Tết Nguyên Đán 2025 Phú Quốc - Thiên Đường Giải Trí [Mùng 3 Tết]",
-    code: "STN084-2025-00276",
-    startDate: "31-01-2025",
-    endDate: "02-02-2025",
-    duration: "3 ngày 2 đêm",
-    price: 8979000,
-  };
+type Traveler = {
+  name: string;
+  email: string;
+  country: string;
+  phone: string;
+  address: string;
+};
 
-  const steps_3 = [
+
+const steps_3 = [
     { label: 'Chọn ngày', isActive: false, isCompleted: true },
     { label: 'Du khách', isActive: false, isCompleted: true },
     { label: 'Chi tiết thanh toán', isActive: true, isCompleted: false },
@@ -34,8 +32,59 @@ const steps_4 = [
 ];
 
 function Checkout() {
-    
+    const location = useLocation();
+    const myData: {
+        total: number, 
+        adultCounter: number, 
+        childCounter: number, 
+        data: any
+    } = location.state?.myData;
+
+
+    const exampleTour = useMemo(() => {
+        return {
+            image: myData.data.image,
+            title: myData.data.name,
+            code: "STN084-2025-00276",
+            startDate: myData.data.departureDate,
+            counter: myData.adultCounter + myData.childCounter,
+            duration: myData.data.duration,
+            price: myData.total,
+        }
+    }, [myData]);
+
+    const [travelers, setTravelers] = useState<Traveler[]>(
+    Array.from({ length: myData.childCounter }, () => ({
+        name: '',
+        email: '',
+        country: '',
+        phone: '',
+        address: '',
+    }))
+    );
+
     const [curStep, setCurStep] = useState<number>(3);
+
+
+    
+    const handleInputChange = <K extends keyof Traveler>(
+        index: number,
+        field: K,
+        value: Traveler[K]
+    ) => {
+        setTravelers(prev => {
+            const updated = [...prev];
+            updated[index] = { ...updated[index], [field]: value };
+            return updated;
+        });
+    };
+
+
+    const handleSubmit = () => {
+        console.log('data: ', travelers)
+    }
+
+    
 
     return ( 
         <CheckoutPage>
@@ -54,30 +103,71 @@ function Checkout() {
                         {curStep == 3 
                         ? <CheckoutDetailBox>
                                 <Title small>Chi tiết khách hàng</Title>
-                                <Form >
-                                    <Text style={{ gridColumn: 'span 2'}}>Thông tin liên hệ</Text>
-                                    <Input type="text" placeholder="Nhập tên*" required />
-                                    <Input type="email" placeholder="Nhập email *" required />
-                                    <Input type="" placeholder="Chọn quốc gia *" required />
-                                    <Input type="tel" placeholder="Nhập số liên lạc *" required />
-                                    <Input type="" placeholder="nhập địa chỉ*" required style={{ gridColumn: 'span 2'}}/>
-                                </Form>
-                                <Form >
-                                    <Text style={{ gridColumn: 'span 2'}}>Thông tin khách hàng #1</Text>
-                                    <Input type="text" placeholder="Nhập tên*" required />
-                                    <Input type="email" placeholder="Nhập email *" required />
-                                    <Input type="" placeholder="Chọn quốc gia *" required />
-                                    <Input type="tel" placeholder="Nhập số liên lạc *" required />
-                                    <Input type="" placeholder="nhập địa chỉ*" required style={{ gridColumn: 'span 2'}}/>
-                                </Form>
-                                <Form >
-                                    <Text style={{ gridColumn: 'span 2'}}>Thông tin khách hàng #2</Text>
-                                    <Input type="text" placeholder="Nhập tên*" required />
-                                    <Input type="email" placeholder="Nhập email *" required />
-                                    <Input type="" placeholder="Chọn quốc gia *" required />
-                                    <Input type="tel" placeholder="Nhập số liên lạc *" required />
-                                    <Input type="" placeholder="nhập địa chỉ*" required style={{ gridColumn: 'span 2'}}/>
-                                </Form>
+
+                                {Array.from({ length: myData.adultCounter }, (_, index) => (
+                                    <Form key={index}>
+                                        <Text style={{ gridColumn: 'span 2' }}>Du khách #{index + 1} <strong>(Người lớn)</strong></Text>
+                                        <Input 
+                                            type="text" 
+                                            placeholder="Nhập tên*"
+                                            value={travelers[0].name}
+                                            onChange={(e) => handleInputChange(index, 'name', e.target.value)} 
+                                            required />
+                                        <Input 
+                                            type="email" 
+                                            placeholder="Nhập email *" 
+                                            value={travelers[0].email}
+                                            onChange={(e) => handleInputChange(index, 'email', e.target.value)} 
+                                            required />
+                                        <Input 
+                                            type="text" 
+                                            placeholder="Chọn quốc gia *" 
+                                            value={travelers[0].country}
+                                            onChange={(e) => handleInputChange(index, 'country', e.target.value)}
+                                            required />
+                                        <Input 
+                                            type="tel" 
+                                            placeholder="Nhập số liên lạc *" 
+                                             value={travelers[0].country}
+                                            onChange={(e) => handleInputChange(index, 'country', e.target.value)}
+                                            required />
+                                        <Input 
+                                            type="text" 
+                                            placeholder="Nhập địa chỉ*"
+                                            value={travelers[0].address}
+                                            onChange={(e) => handleInputChange(index, 'address', e.target.value)} 
+                                            required 
+                                            style={{ gridColumn: 'span 2' }} />
+                                    </Form>
+                                ))}
+
+                                {Array.from({ length: myData.childCounter }, (_, index) => (
+                                    <Form key={index}>
+                                        <Text style={{ gridColumn: 'span 2' }}>Du khách #{index + 1} <strong>(Trẻ em)</strong></Text>
+                                        <Input 
+                                            type="text" 
+                                            placeholder="Nhập tên*" 
+                                            value={travelers[0].name}
+                                            onChange={(e) => handleInputChange(index, 'name', e.target.value)} 
+                                            required />
+                                        <Input 
+                                            type="text" 
+                                            placeholder="Chọn quốc gia *" 
+                                            value={travelers[0].country}
+                                            onChange={(e) => handleInputChange(index, 'country', e.target.value)}
+                                            required />
+                                        <Input 
+                                            type="text" 
+                                            placeholder="Nhập địa chỉ*" 
+                                            value={travelers[0].address}
+                                            onChange={(e) => handleInputChange(index, 'address', e.target.value)} 
+                                            required 
+                                            style={{ gridColumn: 'span 2' }} />
+                                    </Form>
+                                ))}
+
+                                
+                                
                                 <Button orange onClick={() => setCurStep(4)}>Tiếp theo</Button>
                             </CheckoutDetailBox>
                         : <ConfirmBox>

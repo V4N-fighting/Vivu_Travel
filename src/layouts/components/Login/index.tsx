@@ -1,44 +1,100 @@
-// Login.tsx
-
-import { faLock, faUser } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
-import { Link } from "react-router-dom";
+// src/pages/Login.tsx
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Icons from "../../../Component/BaseComponent/Icons";
+import { login } from "../../../service/authService";
+import config from "../../../config";
 
-
+interface LoginForm {
+  email: string;
+  password: string;
+  rememberMe: boolean;
+}
 
 const Login: React.FC = () => {
+  const [form, setForm] = useState<LoginForm>({
+    email: "",
+    password: "",
+    rememberMe: false,
+  });
+
+  const navigate = useNavigate();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = e.target;
+    setForm((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const user = await login(form.email, form.password);
+      localStorage.setItem("user", JSON.stringify(user));
+      navigate(config.routes.home);
+    } catch (err: any) {
+      alert(err.message);
+    }
+  };
+
   return (
     <LoginContainer>
-      <Top>
-        <span>
-          Don&apos;t have an account? <Link to='/register'>Sign Up</Link>
-        </span>
-        <header>Login</header>
-      </Top>
-      <InputBox>
-        <input type="text" placeholder="Username or Email" />
-        <Icons.UserIcon />
-      </InputBox>
-      <InputBox>
-        <input type="password" placeholder="Password" />
-        <Icons.LockIcon />
-      </InputBox>
-      <Submit type="submit" value="Sign In" />
-      <TwoCol>
-        <div className="one">
-          <input type="checkbox" id="login-check" />
-          <label htmlFor="login-check">Remember Me</label>
-        </div>
-        <div className="two">
-          <a href="#">Forgot password?</a>
-        </div>
-      </TwoCol>
+      <form onSubmit={handleSubmit}>
+        <Top>
+          <span>
+            Don&apos;t have an account? <Link to={config.routes.register}>Sign Up</Link>
+          </span>
+          <header>Login</header>
+        </Top>
+        <InputBox>
+          <Icons.UserIcon white/>
+
+          <Input
+            type='text'
+            name='email'
+            placeholder='Username or Email'
+            value={form.email}
+            onChange={handleChange}
+            required
+          />
+        </InputBox>
+        <InputBox>
+          <Icons.LockIcon white/>
+
+          <Input
+            type='password'
+            name='password'
+            placeholder='Password'
+            value={form.password}
+            onChange={handleChange}
+            required
+          />
+        </InputBox>
+        <Submit type='submit' value='Sign In' />
+        <TwoCol>
+          <div className='one'>
+            <input
+              type='checkbox'
+              id='login-check'
+              name='rememberMe'
+              checked={form.rememberMe}
+              onChange={handleChange}
+            />
+            <label htmlFor='login-check'>Remember Me</label>
+          </div>
+          <div className='two'>
+            <a href='#'>Forgot password?</a>
+          </div>
+        </TwoCol>
+      </form>
     </LoginContainer>
   );
 };
+
+export default Login;
 
 const LoginContainer = styled.div`
   position: absolute;
@@ -78,35 +134,40 @@ const Top = styled.div`
 `;
 
 const InputBox = styled.div`
-  position: relative;
+  display: flex;
+  align-items: center;
   margin-bottom: 15px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 30px;
+  padding: 0 10px;
 
-  input {
-    font-size: 15px;
-    background: rgba(255, 255, 255, 0.2);
-    color: #fff;
-    height: 50px;
-    width: 100%;
-    padding: 0 10px 0 45px;
-    border: none;
-    border-radius: 30px;
-    outline: none;
-    transition: 0.2s ease;
+`;
 
-    &:hover,
-    &:focus {
-      background: rgba(255, 255, 255, 0.25);
-    }
-  }
+const Input = styled.input`
+  font-size: 15px;
+  background: transparent;
+  height: 50px;
+  width: 100%;
+  border: none;
+  border-radius: 30px;
+  outline: none;
+  transition: 0.2s ease;
+  color: #ffffff;
+  caret-color: #fff;
 
-  i {
-    position: absolute;
-    top: 50%;
-    left: 17px;
-    transform: translateY(-50%);
-    color: #fff;
+
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+    -webkit-text-fill-color: #fff !important;
+    transition: background-color 5000s ease-in-out 0s;
+    background-color: transparent !important;
+    box-shadow: 0 0 0px 1000px transparent inset !important;
   }
 `;
+
 
 const Submit = styled.input`
   font-size: 15px;
@@ -137,10 +198,6 @@ const TwoCol = styled.div`
   .one {
     display: flex;
     gap: 5px;
-
-    input {
-      margin-right: 5px;
-    }
   }
 
   .two a {
@@ -152,14 +209,3 @@ const TwoCol = styled.div`
     }
   }
 `;
-
-const Icon = styled(FontAwesomeIcon)`
-    font-size: 15px;
-    position: absolute;
-    top: 50%;
-    left: 17px;
-    transform: translateY(-50%);
-    color: #fff;
-`
-
-export default Login;

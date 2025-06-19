@@ -4,6 +4,8 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import CircleIcon from "../../../../Component/BaseComponent/Icons/CircleIcon";
 import Icons from "../../../../Component/BaseComponent/Icons";
+import { useCurrentUser } from "../../../../Hooks/useCurrentUser";
+import {User} from "../../../../service/authService"
 
 interface ItemContentProps {
     icon: ReactNode;
@@ -24,12 +26,14 @@ const ItemContent: React.FC<ItemContentProps> = ({ icon, text }) => {
 const UserContent: React.FC<ItemContentProps> = ({ icon }) => {
     return (
         <ItemWrapper>
-            <User>{icon}</User>
+            <UserBox>{icon}</UserBox>
         </ItemWrapper>
     );
 };
 
 const HeaderTop: React.FC = () => {
+    const user: User | null = useCurrentUser();
+    console.log("hình: ", user)
     return (
         <Contain>
             <Wrapper>
@@ -39,7 +43,18 @@ const HeaderTop: React.FC = () => {
                         <ItemContent icon={<Icons.PhoneIcon />} text='1900 636 648' />
                     </FlexBoxPadding>
                     <FlexBoxPadding style={{justifyContent: 'end'}}>
-                        <Link to='/login'><UserContent icon={<Icons.CircleUserIcon white style={{padding: 0, margin: 0}}/>}  /></Link>
+                        {!user 
+                        ? <Link to='/login'>
+                            <UserContent icon={<Icons.CircleUserIcon white style={{padding: 0, margin: 0}}/>}  />
+                        </Link>
+                        : <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                            <img
+                                src={user.avatar}
+                                alt="Avatar"
+                                style={{ width: 40, height: 40, borderRadius: "50%" }}
+                            />
+                        </div>}
+                        
                     </FlexBoxPadding>
                 </FlexBoxBetween>
             </Wrapper>
@@ -52,7 +67,7 @@ const Contain = styled.div`
 `
 
 
-const User = styled.a`
+const UserBox = styled.a`
     display: block;
     padding: 17px 22px;
     color: var(--white-color);

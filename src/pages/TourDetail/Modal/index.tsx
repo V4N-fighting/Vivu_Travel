@@ -2,14 +2,13 @@ import styled from "styled-components";
 import Button from "../../../Component/BaseComponent/Button/Button";
 import { FlexBox, FlexBoxBetween, Grid, GridCol, GridRow, Icon, Text } from "../../../styled";
 import CalendarComponent from "./Calendar";
-import CloseButton from "../../../Component/BaseComponent/Button/CloseButton";
 import { faCalendar } from "@fortawesome/free-regular-svg-icons";
 import { faTeletype } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import dayjs, { Dayjs } from 'dayjs';
 import Counter from "./Counter";
 import TourInfo from "./TourInfo";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface ModalProps {
     hideModal: () => void;
@@ -17,29 +16,53 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ hideModal, data }) => {
-    
+    const navigate = useNavigate();
 
-    const [counterAdult, setCounterAdult] = useState(0);
-    const [counterChild, setCounterChild] = useState(0);
+    const [adultCounter, setAdultCounter] = useState<number>(0);
+    const [childCounter, setChildCounter] = useState<number>(0);
 
-    // state show time or show type
+   
     const [isShowTimeBox, setIsShowTimeBox] = useState<boolean>(true);
 
-    // state lưu giá cho người lớn, trẻ em và tổng tiền
+ 
     const [adultCost, setAdultCost] = useState<number>(0)
     const [childCost, setChildCost] = useState<number>(0)
     const [total, setTotal] = useState<number>(0);
 
-    // state lưu thời gian của chuyển đi từ data
-    const [year, month, day] = data && data[0].departureDate.split("-");
 
-    // giá gốc của người lớn và trẻ em
+    const [year, month, day] = data[0] && data[0].departureDate.toString().split("-");
+
+    
     const adultCostInit:number = data && Number(data[0].price.adult.replace(/[^\d]/g, ''))
     const childCostInit:number = data && Number(data[0].price.child.replace(/[^\d]/g, ''))
+
+    
+
+    useEffect(() => {
+        setTotal(adultCost + childCost)
+    }, [adultCost, childCost]);
+
 
     const handleDateChange = (date: Dayjs) => {
         alert('Chỉ có 1 chuyến đi')
     };
+
+    const handleSubmit = () => {
+        if (adultCounter > 0 || childCounter > 0) {
+            navigate(`/check_out`,  {
+                state: {
+                    myData: {
+                        total, 
+                        adultCounter, 
+                        childCounter, 
+                        data: data[0],
+                    }
+                }
+            });
+        } else {
+            alert("Vui lòng điền số lượng du khách")
+        }
+    }
 
     const getAdultValue = (value:number) => {
         setAdultCost(value*adultCostInit);
@@ -48,11 +71,6 @@ const Modal: React.FC<ModalProps> = ({ hideModal, data }) => {
     const getChildValue = (value:number) => {
         setChildCost(value*childCostInit);
     }
-
-
-    useEffect(() => {
-        setTotal(adultCost + childCost)
-    }, [adultCost, childCost]);
 
 
     return (
@@ -93,20 +111,30 @@ const Modal: React.FC<ModalProps> = ({ hideModal, data }) => {
                                     <FlexBoxBetween>
                                         <Value>Người lớn</Value>
                                         <DefaultCost>{adultCostInit} VND / người</DefaultCost>
-                                        <Counter  value={counterAdult} setValue={setCounterAdult} onChangeValue={(newValue) => getAdultValue(newValue)}/>
+                                        <Counter  value={adultCounter} setValue={setAdultCounter} onChangeValue={(newValue) => getAdultValue(newValue)}/>
                                     </FlexBoxBetween>
                                     <FlexBoxBetween>
                                         <Value>Trẻ em (từ dưới 15 tuổi)</Value>
                                         <DefaultCost>{childCostInit} VND / người</DefaultCost>
-                                        <Counter value={counterChild}  setValue={setCounterChild} onChangeValue={(newValue) => getChildValue(newValue)} />
+                                        <Counter value={childCounter}  setValue={setChildCounter} onChangeValue={(newValue) => getChildValue(newValue)} />
                                     </FlexBoxBetween>
                                 </Setup>
                             )}
                             <Bottom>
                                 {isShowTimeBox 
                                     ? <Button orange onClick={() => setIsShowTimeBox(false)} style={{ margin: '60px 10px 0', borderRadius: 0, padding: '20px 50px' }}>Tiếp tục</Button>
-                                    : <><Button orange onClick={()=> setIsShowTimeBox(true)} style={{ margin: '60px 10px 0', borderRadius: 0, padding: '20px 50px' }}>Trở lại</Button>
-                                        <Link to={"/check_out"}><Button orange  style={{ margin: '60px 10px 0', borderRadius: 0, padding: '20px 50px' }}>Thanh toán</Button></Link></>
+                                    :   <>
+                                            <Button orange onClick={()=> setIsShowTimeBox(true)} style={{ margin: '60px 10px 0', borderRadius: 0, padding: '20px 50px' }}>Trở lại</Button>
+                                            {/* <Link to={"/check_out"}> */}
+                                                <Button 
+                                                    orange  
+                                                    style={{ margin: '60px 10px 0', borderRadius: 0, padding: '20px 50px' }}
+                                                    onClick={handleSubmit}
+                                                >
+                                                Thanh toán
+                                                </Button>
+                                            {/* </Link> */}
+                                        </>
                                 }
                             </Bottom>
                         </GridCol>
