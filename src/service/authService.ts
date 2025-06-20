@@ -38,5 +38,7 @@ export const login = async (email: string, password: string): Promise<User> => {
 
 export const logout = () => {
   localStorage.removeItem("user");
+  localStorage.removeItem("rememberMe");
+
 };
 

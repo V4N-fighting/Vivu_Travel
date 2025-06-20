@@ -12,6 +12,9 @@ import ListCard from "../Home/ListCard";
 interface TourDetailProps {}
 
 const TourDetail: React.FC<TourDetailProps> = () => {
+
+    const [showModal, setShowModal] = useState<boolean>(false)
+    
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const tourId = searchParams.get('tourId');
@@ -19,8 +22,6 @@ const TourDetail: React.FC<TourDetailProps> = () => {
     const { data, loading, error } = useTour({id: tourId});
    
     const formRef = useRef<HTMLFormElement | null>(null);
-
-    const [showModal, setShowModal] = useState<boolean>(false)
 
     const handleScrollToForm = () => {
         if (formRef.current) {

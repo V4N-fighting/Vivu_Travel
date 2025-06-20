@@ -1,31 +1,48 @@
 import styled from "styled-components";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "../../../Component/BaseComponent/Button/Button";
 import { Title } from "../../../styled";
 import Icons from "../../../Component/BaseComponent/Icons";
+import { useCurrentUser } from "../../../Hooks/useCurrentUser";
+import { User } from "../../../service/authService";
 
 const AccountInfo = () => {
   const [isChangePassword, setIsChangePassword] = useState(false);
 
   const [avatar, setAvatar] = useState<string | null>(
     "https://cdn11.dienmaycholon.vn/filewebdmclnew/public/userupload/files/Image%20FP_2024/avatar-cute-3.jpg"
-  ); // State để lưu ảnh
-  const fileInputRef = useRef<HTMLInputElement>(null); // Tham chiếu đến input file
+  ); 
 
-  // Hàm mở file explorer khi nhấn vào camera icon
+  const [userInfo, setUserInfo] = useState<
+    {firstName: string | undefined, lastName: string | undefined, email: string | undefined}
+    >({firstName: '', lastName: '', email: ''})
+
+  const fileInputRef = useRef<HTMLInputElement>(null); 
+
+  const user: User | null = useCurrentUser();
+
+  useEffect(() => {
+    if (user) {
+      setAvatar(user.avatar ?? null)
+      setUserInfo({firstName: user.firstName, lastName: user.lastName, email: user.email})
+    }
+  }, [user])
+
+  // open file explorer
   const handleIconClick = () => {
-    fileInputRef.current?.click(); // Trigger input file
+    fileInputRef.current?.click(); 
   };
 
-  // Hàm cập nhật ảnh khi người dùng chọn file
+  // handle update image
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file); // Tạo URL cho file ảnh
-      setAvatar(imageUrl); // Cập nhật state
+      const imageUrl = URL.createObjectURL(file); // Create URL for image file
+      setAvatar(imageUrl); 
     }
   };
+
   return (
     <>
       <Title medium>Tài khoản</Title>
@@ -41,12 +58,11 @@ const AccountInfo = () => {
             alt="Avatar"
           />
 
-          {/* Icon Camera */}
           <CameraIconWrapper onClick={handleIconClick}>
             <Icons.CameraIcon />
           </CameraIconWrapper>
 
-          {/* Input File Ẩn */}
+          {/* Input hide File */}
           <HiddenFileInput
             type="file"
             accept="image/*"
@@ -56,15 +72,15 @@ const AccountInfo = () => {
         </AvatarWrapper>
         <InputWrapper>
           <Label>First Name:*</Label>
-          <Input type="text" placeholder="Nhập First Name" />
+          <Input type="text" placeholder="Nhập First Name" value={userInfo.firstName}/>
         </InputWrapper>
         <InputWrapper>
           <Label>Last Name:*</Label>
-          <Input type="text" placeholder="Nhập Last Name" />
+          <Input type="text" placeholder="Nhập Last Name" value={userInfo.lastName}/>
         </InputWrapper>
         <InputWrapper>
           <Label>Email:*</Label>
-          <Input type="email" defaultValue="ngocvanluong14102004@gmail.com" />
+          <Input type="email"  value={userInfo.email}/>
         </InputWrapper>
         <InputWrapper>
           <Label>Thay đổi mật khẩu:</Label>

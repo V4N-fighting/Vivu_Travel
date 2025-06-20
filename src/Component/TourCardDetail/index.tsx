@@ -4,6 +4,7 @@ import { Title, Text, Icon, FlexBox } from '../../styled';
 import Button from '../BaseComponent/Button/Button';
 import Icons from '../BaseComponent/Icons';
 import { useNavigate } from 'react-router-dom';
+import config from '../../config';
 
 interface TourCardDetailProps {
     valueID: string,
@@ -41,7 +42,7 @@ const TourCardDetail: React.FC<TourCardDetailProps> =
   const navigate = useNavigate();
 
   const handleViewDetail = () => {
-      navigate('/tour_detail?tourId=' + valueID, { state: { valueID } }); // Gửi state nếu cần
+      navigate(config.routes.tour_detail + '?tourId=' + valueID, { state: { valueID } }); // Gửi state nếu cần
       window.scrollTo({ top: 200, behavior: 'smooth' });
   };
   

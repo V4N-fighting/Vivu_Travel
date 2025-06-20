@@ -3,6 +3,8 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import ScrollToTop from "../components/ScrollToTop";
 import styled from "styled-components";
+import { useAutoLogoutOnLeave } from "../../Hooks/useAutoLogoutOnLeave";
+import { logout } from "../../service/authService";
 
 interface DefaultLayoutProps {
     children: ReactNode;
@@ -10,6 +12,7 @@ interface DefaultLayoutProps {
 
 
 function DefaultLayout({ children }: DefaultLayoutProps): JSX.Element {
+    useAutoLogoutOnLeave(logout)
     return (
         <Wrapper>
             <Header />

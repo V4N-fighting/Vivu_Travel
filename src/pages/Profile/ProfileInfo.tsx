@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
@@ -12,6 +12,10 @@ import OrderInfo from "./Component/OdderInfo";
 import AccountInfo from "./Component/AccountInfo";
 import { ProfileMenu, ProfileTab } from "./config";
 import { countryList } from "../../Component/CountryList";
+import { useLocation, useNavigate } from "react-router-dom";
+import { MenuOptionUser } from "../../layouts/components/Header/HeaderBottom";
+import { logout } from "../../service/authService";
+import config from "../../config";
 
 interface ProfileInfoProps {
   user?: string;
@@ -32,6 +36,27 @@ const MainProfile = ({
 const ProfileInfo = ({ user }: ProfileInfoProps) => {
   const [activeTab, setActiveTab] = useState<ProfileTab>(ProfileTab.Order);
 
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const action = searchParams.get('action');
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (action === MenuOptionUser.Information.toString()) {
+      setActiveTab(ProfileTab.Account);
+    }
+
+    if (action === MenuOptionUser.History.toString()) {
+      setActiveTab(ProfileTab.Order);
+    }
+  }, [action]);
+
+  const handleLogout = () => {
+    logout();
+    navigate(config.routes.login);
+    
+  }
 
   return (
     <Contain>
@@ -40,7 +65,7 @@ const ProfileInfo = ({ user }: ProfileInfoProps) => {
           <Icon icon={faUser} />
           <span>Xin chào {user}!</span>
         </Left>
-        <Button orange>
+        <Button orange onClick={handleLogout}>
           <Icon icon={faArrowRightFromBracket} />
           &nbsp; Đăng xuất
         </Button>

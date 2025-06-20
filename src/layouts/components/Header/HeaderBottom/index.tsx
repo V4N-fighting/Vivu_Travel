@@ -12,7 +12,7 @@ import {logout, User} from "../../../../service/authService"
 import { useClickAway } from "react-use";
 import config from "../../../../config";
 
-export enum Option {
+export enum MenuOptionUser {
     History,
     Information,
     Setting,
@@ -23,22 +23,22 @@ const menuAvatarList = [
         {
             id: 0,
             name: 'Lịch sử du lịch',
-            action: Option.History
+            action: MenuOptionUser.History
         },
         {
             id: 1,
             name: 'Thông tin tài khoản',
-            action: Option.Information
+            action: MenuOptionUser.Information
         },
         {
             id: 2,
             name: 'Cài đặt',
-            action: Option.Setting
+            action: MenuOptionUser.Setting
         },
         {
             id: 3,
             name: 'Đăng xuất',
-            action: Option.Logout
+            action: MenuOptionUser.Logout
         },
     ]
 
@@ -81,20 +81,21 @@ const HeaderBottom: React.FC = () => {
         setAvatarMenuVisible(prev => !prev);
     };
 
-    const handleAvatarItemClick = (action: Option) => {
+    const handleAvatarItemClick = (action: MenuOptionUser) => {
         switch (action ) {
-            case Option.Logout: 
+            case MenuOptionUser.Logout: 
                 logout();
                 navigate(config.routes.login);
             break;
-            case Option.History: 
-                alert("Wait.....")
-            break;
-            case Option.Information: 
+            case MenuOptionUser.History: 
                 setAvatarMenuVisible(false)
-                navigate(config.routes.profile);
+                navigate(config.routes.profile + '?action=' + MenuOptionUser.History);
             break;
-            case Option.Setting: 
+            case MenuOptionUser.Information: 
+                setAvatarMenuVisible(false)
+                navigate(config.routes.profile + '?action=' + MenuOptionUser.Information);
+            break;
+            case MenuOptionUser.Setting: 
                 alert("Wait.....")
             break;
         }

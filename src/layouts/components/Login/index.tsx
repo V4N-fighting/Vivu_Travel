@@ -34,6 +34,7 @@ const Login: React.FC = () => {
     try {
       const user = await login(form.email, form.password);
       localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("rememberMe", JSON.stringify(form.rememberMe));
       navigate(config.routes.home);
     } catch (err: any) {
       alert(err.message);
