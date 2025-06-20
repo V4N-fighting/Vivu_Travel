@@ -40,6 +40,7 @@ const CircleIconBox = styled.div<CircleIconBoxProps>`
     z-index: 33;
     cursor: pointer;
     text-align: center;
+    overflow: hidden;
 
     &:hover {
         background-color: ${({ white }) => (white ? "white" : "var(--secondary-color)")};

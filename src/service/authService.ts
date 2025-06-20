@@ -35,3 +35,8 @@ export const login = async (email: string, password: string): Promise<User> => {
 
   return res.data[0];
 };
+
+export const logout = () => {
+  localStorage.removeItem("user");
+};
+

@@ -33,7 +33,6 @@ const UserContent: React.FC<ItemContentProps> = ({ icon }) => {
 
 const HeaderTop: React.FC = () => {
     const user: User | null = useCurrentUser();
-    console.log("hình: ", user)
     return (
         <Contain>
             <Wrapper>
@@ -43,17 +42,10 @@ const HeaderTop: React.FC = () => {
                         <ItemContent icon={<Icons.PhoneIcon />} text='1900 636 648' />
                     </FlexBoxPadding>
                     <FlexBoxPadding style={{justifyContent: 'end'}}>
-                        {!user 
-                        ? <Link to='/login'>
+                        {!user && <Link to='/login'>
                             <UserContent icon={<Icons.CircleUserIcon white style={{padding: 0, margin: 0}}/>}  />
                         </Link>
-                        : <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                            <img
-                                src={user.avatar}
-                                alt="Avatar"
-                                style={{ width: 40, height: 40, borderRadius: "50%" }}
-                            />
-                        </div>}
+                        }
                         
                     </FlexBoxPadding>
                 </FlexBoxBetween>

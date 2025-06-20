@@ -1,18 +1,65 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import { FlexBox, Wrapper } from "../../../../styled";
 import Navigation from "./Navigation";
-import SideMenu from "./SideMenu"; // Import SideMenu component
+import SideMenu from "./SideMenu"; 
 import SideSearch from "./SideSearch";
-import { Link } from "react-router-dom";
-import { faMagnifyingGlass, faBars } from "@fortawesome/free-solid-svg-icons";
+import { Link, useNavigate } from "react-router-dom";
 import CircleIcon from "../../../../Component/BaseComponent/Icons/CircleIcon";
 import Icons from "../../../../Component/BaseComponent/Icons";
+import { useCurrentUser } from "../../../../Hooks/useCurrentUser";
+import {logout, User} from "../../../../service/authService"
+import { useClickAway } from "react-use";
+import config from "../../../../config";
+
+export enum Option {
+    History,
+    Information,
+    Setting,
+    Logout
+}
+
+const menuAvatarList = [
+        {
+            id: 0,
+            name: 'Lịch sử du lịch',
+            action: Option.History
+        },
+        {
+            id: 1,
+            name: 'Thông tin tài khoản',
+            action: Option.Information
+        },
+        {
+            id: 2,
+            name: 'Cài đặt',
+            action: Option.Setting
+        },
+        {
+            id: 3,
+            name: 'Đăng xuất',
+            action: Option.Logout
+        },
+    ]
 
 
 const HeaderBottom: React.FC = () => {
+
+
     const [isSideMenuVisible, setSideMenuVisible] = useState(false);
     const [isSideSearchVisible, setSideSearchVisible] = useState(false);
+    const [isAvatarMenuVisible, setAvatarMenuVisible] = useState(false);
+
+    const menuAvatarRef = useRef(null);
+
+    const user: User | null = useCurrentUser();
+
+    const navigate = useNavigate();
+
+    // handle hide menuAvatar when clicking anywhere else MenuAvatar
+    useClickAway(menuAvatarRef, () => {
+        setAvatarMenuVisible(false);
+    });
 
     const handleMenuClick = () => {
         setSideMenuVisible(true);
@@ -29,6 +76,30 @@ const HeaderBottom: React.FC = () => {
     const handleCloseSideSearch = () => {
         setSideSearchVisible(false);
     };
+
+    const handleAvatarClick = () => {
+        setAvatarMenuVisible(prev => !prev);
+    };
+
+    const handleAvatarItemClick = (action: Option) => {
+        switch (action ) {
+            case Option.Logout: 
+                logout();
+                navigate(config.routes.login);
+            break;
+            case Option.History: 
+                alert("Wait.....")
+            break;
+            case Option.Information: 
+                setAvatarMenuVisible(false)
+                navigate(config.routes.profile);
+            break;
+            case Option.Setting: 
+                alert("Wait.....")
+            break;
+        }
+    }
+
 
     return (
         <Contain>
@@ -55,12 +126,22 @@ const HeaderBottom: React.FC = () => {
                             {/* 2 button */}
                             <CircleIcon  onClick={handleSearchClick}><Icons.MagnifyingGlassIcon  /></CircleIcon>
                             <CircleIcon  onClick={handleMenuClick}><Icons.BarIcon /></CircleIcon>
+                            {user && <AvatarBox>
+                                <CircleIcon  onClick={handleAvatarClick}><Avatar src={user.avatar ?? "https://via.placeholder.com/40"} /></CircleIcon>
+                                {isAvatarMenuVisible && <MenuAvatar ref={menuAvatarRef}>
+                                    {menuAvatarList.map((item) => {
+                                        return <MenuAvtItem key={item.id} onClick={() => handleAvatarItemClick(item.action)}>{item.name}</MenuAvtItem>
+                                    })}
+                                    
+                                </MenuAvatar>}
+                            </AvatarBox>}
+                            
                         </FlexBoxPadding>
                     </Flex20Percent>
                 </FlexBox>
             </Wrapper>
 
-            {/* Render SideMenu if isSideMenuVisible is true */}
+            
             <SideMenu onClose={handleCloseSideMenu} isVisible={isSideMenuVisible} />
             <SideSearch onClose={handleCloseSideSearch} isVisible={isSideSearchVisible} />
         </Contain>
@@ -100,6 +181,38 @@ export const Logo = styled.img<{ src?: string }>`
     box-shadow: none;
     src: ${(props) => props.src};
 `;
+
+const AvatarBox = styled.div`
+    position: relative;
+`
+
+const Avatar = styled.img<{src: string}>`
+    max-width: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    box-shadow: none;
+    src: ${(props) => props.src};
+`
+const MenuAvatar = styled.div`
+    position: absolute;
+    top: 130%;
+    right: 0;
+    z-index: 99;
+    background-color: #fff;
+    padding: 10px 0;
+    width: max-content;
+    max-width: 200px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+`
+const MenuAvtItem = styled.div`
+    padding: 10px 15px;
+    font-size: 16px;
+
+    &:hover {
+        color: red;
+        cursor: pointer;
+    }
+`
 
 // const IconOnHeaderBottom = styled(Icon)`
 //     width: 20px;
