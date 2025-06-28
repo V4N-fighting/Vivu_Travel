@@ -9,7 +9,7 @@ export enum ProfileTab {
 }
 export const ProfileMenu = [
   {
-    name: "Dat tour",
+    name: "Đặt tour",
     icon: <Icons.MenuIcon/>,
     code: ProfileTab.Order,
   },

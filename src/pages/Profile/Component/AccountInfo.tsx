@@ -4,44 +4,70 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "../../../Component/BaseComponent/Button/Button";
 import { Title } from "../../../styled";
 import Icons from "../../../Component/BaseComponent/Icons";
-import { useCurrentUser } from "../../../Hooks/useCurrentUser";
 import { User } from "../../../service/authService";
+import { updateUser } from "../../../service/userService";
 
-const AccountInfo = () => {
+
+const AccountInfo = ({user} : {user: User | null}) => {
   const [isChangePassword, setIsChangePassword] = useState(false);
 
-  const [avatar, setAvatar] = useState<string | null>(
-    "https://cdn11.dienmaycholon.vn/filewebdmclnew/public/userupload/files/Image%20FP_2024/avatar-cute-3.jpg"
-  ); 
+  const [avatar, setAvatar] = useState<string | undefined>(user?.avatar); 
 
-  const [userInfo, setUserInfo] = useState<
-    {firstName: string | undefined, lastName: string | undefined, email: string | undefined}
-    >({firstName: '', lastName: '', email: ''})
+  const [userInfo, setUserInfo] = useState<User>
+  ({
+      id: user?.id,
+      firstName: user?.firstName,
+      lastName: user?.lastName,
+      email: user?.email,
+      password: user?.password,
+  })
 
   const fileInputRef = useRef<HTMLInputElement>(null); 
 
-  const user: User | null = useCurrentUser();
-
   useEffect(() => {
     if (user) {
-      setAvatar(user.avatar ?? null)
-      setUserInfo({firstName: user.firstName, lastName: user.lastName, email: user.email})
+      setUserInfo({
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        password: user.password,
+      });
+      setAvatar(user.avatar);
     }
-  }, [user])
+  }, [user]);
+
+
 
   // open file explorer
   const handleIconClick = () => {
     fileInputRef.current?.click(); 
   };
 
-  // handle update image
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file); // Create URL for image file
-      setAvatar(imageUrl); 
-    }
+  const convertToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
   };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+  if (file) {
+    const base64Image = await convertToBase64(file);
+    setAvatar(base64Image); 
+    localStorage.setItem("avatar", base64Image);
+  }
+};
+
+
+  const handleSaveChange = () => {
+    const updatedUser = { ...userInfo, avatar };
+    updateUser(updatedUser)
+  }
 
   return (
     <>
@@ -72,15 +98,44 @@ const AccountInfo = () => {
         </AvatarWrapper>
         <InputWrapper>
           <Label>First Name:*</Label>
-          <Input type="text" placeholder="Nhập First Name" value={userInfo.firstName}/>
+          <Input 
+            type="text" 
+            placeholder="Nhập First Name" 
+            value={userInfo.firstName}
+            onChange={(e) =>
+              setUserInfo((prev) => ({
+                ...prev,
+                firstName: e.target.value,
+              }))
+            }
+          />
         </InputWrapper>
         <InputWrapper>
           <Label>Last Name:*</Label>
-          <Input type="text" placeholder="Nhập Last Name" value={userInfo.lastName}/>
+          <Input 
+            type="text" 
+            placeholder="Nhập Last Name" 
+            value={userInfo.lastName}
+            onChange={(e) =>
+              setUserInfo((prev) => ({
+                ...prev,
+                lastName: e.target.value,
+              }))
+            }
+          />
         </InputWrapper>
         <InputWrapper>
           <Label>Email:*</Label>
-          <Input type="email"  value={userInfo.email}/>
+          <Input 
+            type="email"  
+            value={userInfo.email}
+            onChange={(e) =>
+              setUserInfo((prev) => ({
+                ...prev,
+                email: e.target.value,
+              }))
+            }
+          />
         </InputWrapper>
         <InputWrapper>
           <Label>Thay đổi mật khẩu:</Label>
@@ -98,7 +153,7 @@ const AccountInfo = () => {
           <>
             <InputWrapper>
               <Label>Mật khẩu cũ:*</Label>
-              <Input type="password" placeholder="Nhập mật khẩu cũ" />
+              <Input type="password" value={userInfo.password} placeholder="Nhập mật khẩu cũ" />
             </InputWrapper>
             <InputWrapper>
               <Label>Mật khẩu mới:*</Label>
@@ -116,7 +171,7 @@ const AccountInfo = () => {
             </InputWrapper>
           </>
         )}
-        <Button orange>Lưu thay đổi</Button>
+        <Button orange onClick={handleSaveChange}>Lưu thay đổi</Button>
       </AccountForm>
     </>
   );

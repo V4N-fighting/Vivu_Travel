@@ -109,3 +109,14 @@ làm log in, log out
 
 
 
+
+
+
+
+# _Fix
+1) Dùng redux
+2) validate form
+3) code confirm (email)
+
+
+

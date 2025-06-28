@@ -7,8 +7,8 @@ export interface User {
   id?: number;
   firstName?: string;
   lastName?: string;
-  email: string;
-  password: string;
+  email?: string;
+  password?: string;
   avatar?: string;
 }
 
@@ -39,6 +39,5 @@ export const login = async (email: string, password: string): Promise<User> => {
 export const logout = () => {
   localStorage.removeItem("user");
   localStorage.removeItem("rememberMe");
-
 };
 

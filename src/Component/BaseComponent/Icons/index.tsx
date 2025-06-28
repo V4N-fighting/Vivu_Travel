@@ -33,6 +33,8 @@ import { BarIcon } from "./BarIcon";
 import { MagnifyingGlassIcon } from "./MagnifyingGlassIcon";
 import { PhoneIcon } from "./PhoneIcon";
 import { CircleUserIcon } from "./CircleUserIcon";
+import { ArrowRightFromBracket } from "./ArrowRightFromBracket";
+import { Ticket } from './Ticket';
 
 const Icons = {
     CalendarIcon,
@@ -69,7 +71,8 @@ const Icons = {
     BarIcon,
     MagnifyingGlassIcon,
     PhoneIcon,
-    CircleUserIcon
-
+    CircleUserIcon,
+    ArrowRightFromBracket,
+    Ticket
 }
 export default Icons

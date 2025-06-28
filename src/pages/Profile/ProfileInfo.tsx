@@ -1,11 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-regular-svg-icons";
-import {
-  faArrowRightFromBracket,
-  faTicket,
-} from "@fortawesome/free-solid-svg-icons";
 import Button from "../../Component/BaseComponent/Button/Button";
 import AddressInfo from "./Component/AddressInfo";
 import OrderInfo from "./Component/OdderInfo";
@@ -14,24 +9,15 @@ import { ProfileMenu, ProfileTab } from "./config";
 import { countryList } from "../../Component/CountryList";
 import { useLocation, useNavigate } from "react-router-dom";
 import { MenuOptionUser } from "../../layouts/components/Header/HeaderBottom";
-import { logout } from "../../service/authService";
+import { logout, User } from "../../service/authService";
 import config from "../../config";
+import Icons from "../../Component/BaseComponent/Icons";
 
 interface ProfileInfoProps {
-  user?: string;
+  user?: User | null;
 }
 
-const MainProfile = ({
-  profileDetailInfo,
-}: {
-  profileDetailInfo: ProfileTab;
-}) => {
-  if (profileDetailInfo === ProfileTab.Account) return <AccountInfo />;
-  if (profileDetailInfo === ProfileTab.Address)
-    return <AddressInfo countryList={countryList} />;
-  if (profileDetailInfo === ProfileTab.Order) return <OrderInfo />;
-  return <></>;
-};
+
 
 const ProfileInfo = ({ user }: ProfileInfoProps) => {
   const [activeTab, setActiveTab] = useState<ProfileTab>(ProfileTab.Order);
@@ -55,18 +41,29 @@ const ProfileInfo = ({ user }: ProfileInfoProps) => {
   const handleLogout = () => {
     logout();
     navigate(config.routes.login);
-    
   }
+
+  const MainProfile = ({profileDetailInfo}: {profileDetailInfo: ProfileTab}) => {
+  if (profileDetailInfo === ProfileTab.Account) {
+    return <AccountInfo user={user ? user : null}/>
+  } else if (profileDetailInfo === ProfileTab.Address) {
+    return <AddressInfo countryList={countryList} />
+  } else if (profileDetailInfo === ProfileTab.Order) {
+    return <OrderInfo />
+  } else {
+    return <></>;
+  }
+};
 
   return (
     <Contain>
       <Header>
         <Left>
-          <Icon icon={faUser} />
-          <span>Xin chào {user}!</span>
+          <Icons.UserIcon />
+          <span>Xin chào {user?.firstName}!</span>
         </Left>
         <Button orange onClick={handleLogout}>
-          <Icon icon={faArrowRightFromBracket} />
+          <Icons.ArrowRightFromBracket  white/>
           &nbsp; Đăng xuất
         </Button>
       </Header>
@@ -77,7 +74,7 @@ const ProfileInfo = ({ user }: ProfileInfoProps) => {
               active={activeTab === item.code}
               onClick={() => setActiveTab(item.code)}
             >
-              <Icon icon={faTicket} />
+              <Icons.Ticket />
               {item.name}
             </SidebarItem>
           ))}

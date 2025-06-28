@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { FlexBox, Wrapper } from "../../../../styled";
 import Navigation from "./Navigation";
@@ -7,10 +7,10 @@ import SideSearch from "./SideSearch";
 import { Link, useNavigate } from "react-router-dom";
 import CircleIcon from "../../../../Component/BaseComponent/Icons/CircleIcon";
 import Icons from "../../../../Component/BaseComponent/Icons";
-import { useCurrentUser } from "../../../../Hooks/useCurrentUser";
-import {logout, User} from "../../../../service/authService"
+import {logout} from "../../../../service/authService"
 import { useClickAway } from "react-use";
 import config from "../../../../config";
+import { getDataUser } from "../../../../service/userService";
 
 export enum MenuOptionUser {
     History,
@@ -46,13 +46,28 @@ const menuAvatarList = [
 const HeaderBottom: React.FC = () => {
 
 
+
     const [isSideMenuVisible, setSideMenuVisible] = useState(false);
     const [isSideSearchVisible, setSideSearchVisible] = useState(false);
     const [isAvatarMenuVisible, setAvatarMenuVisible] = useState(false);
+    const [user, setUser] = useState(() => {
+    const local = localStorage.getItem('user');
+        return local ? JSON.parse(local) : null;    
+    });
 
     const menuAvatarRef = useRef(null);
 
-    const user: User | null = useCurrentUser();
+    useEffect(() => {
+    const listener = () => {
+        const updatedUser = localStorage.getItem('user');
+        if (updatedUser) setUser(JSON.parse(updatedUser));
+    };
+        window.addEventListener('userUpdated', listener);
+        return () => window.removeEventListener('userUpdated', listener);
+    }, []);
+
+
+
 
     const navigate = useNavigate();
 

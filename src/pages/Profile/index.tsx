@@ -2,12 +2,14 @@
 import React from "react";
 import Banner from "../../Component/Banner";
 import ProfileInfo from "./ProfileInfo";
+import { useCurrentUser } from "../../Hooks/useCurrentUser";
+import { User } from "../../service/authService";
 
 interface ProfileProps {
-  user?: string;
 }
 
-const Profile: React.FC<ProfileProps> = ({ user = "ngocvan" }) => {
+const Profile: React.FC<ProfileProps> = () => {
+  const user: User | null = useCurrentUser();
   return (
     <>
       <Banner

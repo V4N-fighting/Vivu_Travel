@@ -1,10 +1,13 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import ScrollToTop from "../components/ScrollToTop";
 import styled from "styled-components";
 import { useAutoLogoutOnLeave } from "../../Hooks/useAutoLogoutOnLeave";
-import { logout } from "../../service/authService";
+import { logout, User } from "../../service/authService";
+
+
+
 
 interface DefaultLayoutProps {
     children: ReactNode;
@@ -12,7 +15,15 @@ interface DefaultLayoutProps {
 
 
 function DefaultLayout({ children }: DefaultLayoutProps): JSX.Element {
+    const [user, setUser] = useState<User | null>(null);
+
     useAutoLogoutOnLeave(logout)
+    useEffect(() => {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
+        }
+    }, []);
     return (
         <Wrapper>
             <Header />

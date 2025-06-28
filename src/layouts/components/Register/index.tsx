@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Icons from "../../../Component/BaseComponent/Icons";
 import { register } from "../../../service/authService";
+import config from "../../../config";
 
 interface RegisterForm {
   firstName: string;
@@ -60,11 +61,11 @@ const Register: React.FC = () => {
         lastName: form.lastName,
         email: form.email,
         password: form.password,
-        avatar: avatarBase64, // 👈 truyền base64
+        avatar: avatarBase64, 
       });
 
       alert("Đăng ký thành công!");
-      navigate("/login");
+      navigate(config.routes.login);
     } catch (err: any) {
       alert(err.message);
     }
@@ -150,14 +151,6 @@ const Register: React.FC = () => {
         <Submit type='submit' value='Register' />
         <TwoCol>
           <div className='one'>
-            <input
-              type='checkbox'
-              id='register-check'
-              name='rememberMe'
-              checked={form.rememberMe}
-              onChange={handleChange}
-            />
-            <label htmlFor='register-check'>Remember Me</label>
           </div>
           <div className='two'>
             <a href='#'>Terms & conditions</a>
