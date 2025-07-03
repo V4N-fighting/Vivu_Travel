@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import { FlexBoxBetween, Icon, Text, Title } from "../../../../styled"
+import { RowBetween, Icon, Text, Title } from "../../../../styled"
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
 import Button from "../../../../Component/BaseComponent/Button/Button";
@@ -81,12 +81,12 @@ export const Itinerary:React.FC<ItineraryProps> = ({content}) => {
 
     return (
         <Wrap>
-            <FlexBoxBetween>
+            <RowBetween>
                 <Title small>Itinerary</Title>
                 <Button white onClick={handleShowAll}>
                     {showAll ? "Đóng tất cả" : "Mở tất cả"}
                 </Button>
-            </FlexBoxBetween>
+            </RowBetween>
             {content.map((item,index) => {
                 return (
                     <Item key={index} plan={item.title} detail={item.activities.join(' ')} showAll={showAll} index={index}/>

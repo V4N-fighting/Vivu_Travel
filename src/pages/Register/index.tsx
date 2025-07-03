@@ -2,9 +2,9 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import Icons from "../../../Component/BaseComponent/Icons";
-import { register } from "../../../service/authService";
-import config from "../../../config";
+import { register } from "../../service/authService";
+import Icons from "../../Component/BaseComponent/Icons";
+import config from "../../config";
 
 interface RegisterForm {
   firstName: string;

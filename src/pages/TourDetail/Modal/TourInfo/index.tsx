@@ -2,7 +2,7 @@
 import styled from "styled-components";
 import Button from "../../../../Component/BaseComponent/Button/Button";
 import CloseButton from "../../../../Component/BaseComponent/Button/CloseButton";
-import { FlexBoxBetween, Text } from "../../../../styled";
+import { RowBetween, Text } from "../../../../styled";
 
 
 interface TourInfoProps {
@@ -19,10 +19,10 @@ const TourInfo: React.FC<TourInfoProps> = ({ title, total, hideModal, day, month
 
     return (
         <>
-            <FlexBoxBetween>
+            <RowBetween>
                 <Text small style={{ textTransform: 'uppercase' }}>Thông tin đặt tour</Text>
                 <CloseButton white onClick={hideModal} />
-            </FlexBoxBetween>
+            </RowBetween>
             <Text bold style={{ width: '70%', textAlign: 'left' }}>{title}</Text>
             <Text small  style={{ textAlign: 'left' }}>
                 <span style={{ fontWeight: 'bold' }}>Starting Date:&nbsp;</span>{day}&nbsp;tháng&nbsp;{month}&nbsp;{year}

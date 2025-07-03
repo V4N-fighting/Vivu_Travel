@@ -11,9 +11,9 @@ type CountryItem = {
 export const useCountry = () => {
     const { data, loading, error } = useFetch<CountryItem[]>(GET_COUNTRY);
     return {
-        data, 
-        loading, 
-        error
+        countries: data, 
+        isLoading: loading, 
+        isError: error
     }
 } 
 

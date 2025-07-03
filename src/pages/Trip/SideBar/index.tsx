@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useMemo, useState } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, ChangeEvent } from 'react';
 import styled from 'styled-components';
 import CollapseComponent from '../Collapse';
 import { Title } from '../../../styled';
@@ -42,69 +42,83 @@ const SideBar: React.FC<SideBarProps> = ({
   resetFilters,
   onResetDone,
 }) => {
-  const { data: destination, isLoading: isDesLoading, isError: isDesError } = useDestination();
-  const { data: activity, isLoading: isActLoading, isError: isActError } = useActivityFullData();
-  const { data: type, isLoading: isTypeLoading, isError: isTypeError } = useTourTypeFullData();
+  const { destinations, isLoading: isDesLoading, isError: isDesError } = useDestination();
+  const { activities, isLoading: isActLoading, isError: isActError } = useActivityFullData();
+  const { types, isLoading: isTypeLoading, isError: isTypeError } = useTourTypeFullData();
 
-  const [priceRange, setPriceRange] = useState<[number?, number?]>(data.price || []);
-  const [timeRange, setTimeRange] = useState<[number?, number?]>(data.day || []);
+  // Đảm bảo state luôn là [number, number]
+  const [selectedPriceRange, setSelectedPriceRange] = useState<[number, number]>(data.price || [0, 0]);
+  const [selectedTimeRange, setSelectedTimeRange] = useState<[number, number]>(data.day || [0, 0]);
+
+  // Đồng bộ state với props data khi props thay đổi
+  useEffect(() => {
+    setSelectedPriceRange(data.price || [0, 0]);
+  }, [data.price]);
 
   useEffect(() => {
+    setSelectedTimeRange(data.day || [0, 0]);
+  }, [data.day]);
+
+  // Xử lý reset filter
+  useEffect(() => {
     if (resetFilters) {
-      setPriceRange([]);
-      setTimeRange([]);
+      setSelectedPriceRange([0, 0]);
+      setSelectedTimeRange([0, 0]);
       onResetDone();
     }
   }, [resetFilters, onResetDone]);
 
-  const handleApplyPrice = () => {
-    if (priceRange[0] != null && priceRange[1] != null) {
+
+  const handleApplyPrice = useCallback(() => {
+    if (selectedPriceRange[0] && selectedPriceRange[1]) {
       onFilterByPrice([
-        Number(priceRange[0]) * 1_000_000,
-        Number(priceRange[1]) * 1_000_000,
+        Number(selectedPriceRange[0]) * 1_000_000,
+        Number(selectedPriceRange[1]) * 1_000_000,
       ]);
     }
-  };
+  }, [selectedPriceRange, onFilterByPrice]);
 
-  const handleApplyTime = () => {
-    if (timeRange[0] != null && timeRange[1] != null) {
+  const handleApplyTime = useCallback(() => {
+    if (selectedTimeRange[0] && selectedTimeRange[1]) {
       onFilterByTime([
-        Number(timeRange[0]),
-        Number(timeRange[1]),
+        Number(selectedTimeRange[0]),
+        Number(selectedTimeRange[1]),
       ]);
     }
-  };
+  }, [selectedTimeRange, onFilterByTime]);
 
+  // Memo hóa handler để tránh tạo lại mỗi lần render
+  const createCheckboxHandler = useCallback(
+    (callback: (checked: boolean, id: string) => void) =>
+      (e: ChangeEvent<HTMLInputElement>, id: string) => {
+        callback(e.target.checked, id);
+      },
+    []
+  );
 
-  const createCheckboxHandler = (
-    callback: (checked: boolean, id: string) => void
-  ) => (
-    (e: ChangeEvent<HTMLInputElement>, id: string) => {
-      callback(e.target.checked, id);
-    });
-
+  // Chỉ phụ thuộc các trường cần thiết
   const filterConfigs = useMemo(
     () => [
       {
         label: 'Điểm đến',
-        data: destination,
+        data: destinations,
         onChange: createCheckboxHandler(onCheckDestination),
         selected: data.destinationID,
       },
       {
         label: 'Hoạt động',
-        data: activity,
+        data: activities,
         onChange: createCheckboxHandler(onCheckActivity),
         selected: data.activityID,
       },
       {
         label: 'Loại tour',
-        data: type,
+        data: types,
         onChange: createCheckboxHandler(onCheckType),
         selected: data.typeID,
       },
     ],
-    [destination, activity, type, data]
+    [destinations, activities, types, data.destinationID, data.activityID, data.typeID, onCheckDestination, onCheckActivity, onCheckType, createCheckboxHandler]
   );
 
   if (isDesLoading || isActLoading || isTypeLoading) return <>Đang tải dữ liệu...</>;
@@ -120,22 +134,21 @@ const SideBar: React.FC<SideBarProps> = ({
       <RangeInputFilter
         label="Giá"
         unit={typeInput.Price}
-        setMin={(val) => setPriceRange((prev) => [Number(val), prev[1]])}
-        setMax={(val) => setPriceRange((prev) => [prev[0], Number(val)])}
+        setMin={(val) => setSelectedPriceRange((prev) => [Number(val), prev[1]])}
+        setMax={(val) => setSelectedPriceRange((prev) => [prev[0], Number(val)])}
         onApply={handleApplyPrice}
         resetFilters={resetFilters}
-        selected={data.price}
+        selected={selectedPriceRange}
       />
 
       <RangeInputFilter
         label="Thời gian"
         unit={typeInput.Time}
-        setMin={(val) => setTimeRange((prev) => [Number(val), prev[1]])}
-        setMax={(val) => setTimeRange((prev) => [prev[0], Number(val)])}
+        setMin={(val) => setSelectedTimeRange((prev) => [Number(val), prev[1]])}
+        setMax={(val) => setSelectedTimeRange((prev) => [prev[0], Number(val)])}
         onApply={handleApplyTime}
         resetFilters={resetFilters}
-        selected={data.day}
-
+        selected={selectedTimeRange}
       />
 
       {filterConfigs.map((config) => (

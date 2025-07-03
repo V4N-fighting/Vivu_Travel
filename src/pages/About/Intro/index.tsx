@@ -1,6 +1,6 @@
 
 import styled from "styled-components";
-import { FlexBox, FlexBoxStretch, SupTitle, Title, Text, Wrapper, WrapperPadding } from "../../../styled";
+import { FlexBox, RowStretch, SupTitle, Title, Text, Wrapper, WrapperPadding } from "../../../styled";
 import Button from "../../../Component/BaseComponent/Button/Button";
 
 
@@ -14,7 +14,7 @@ const Intro: React.FC<IntroProps> = ({mainImg, circleImg}) => {
     return ( 
         <Wrapper>
             <WrapperPadding>
-                <FlexBoxStretch>
+                <RowStretch>
                     <ImgCol>
                         <MainImg src={mainImg}/>
                         <CircleImg src={circleImg}/>
@@ -43,7 +43,7 @@ const Intro: React.FC<IntroProps> = ({mainImg, circleImg}) => {
                         </ListContainer>
                         <Button orange>Xem thêm</Button>
                     </ContentCol>
-                </FlexBoxStretch>
+                </RowStretch>
             </WrapperPadding>
         </Wrapper>
      );

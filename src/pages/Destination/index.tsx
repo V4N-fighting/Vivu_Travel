@@ -12,11 +12,11 @@ const ITEM_PER_PAGE = 6
 
 function Destination() {
 
-  const {data, isLoading, isError} = useDestination()
+  const {destinations, isLoading, isError} = useDestination()
 
 
 
-  const dataLenth = data ? data.length : 0
+  const dataLenth = destinations ? destinations.length : 0
 
   const {
     indexOfFirstItem,
@@ -27,7 +27,7 @@ function Destination() {
 
   
       
-  const listContent = data && data.slice(indexOfFirstItem,indexOfLastItem)
+  const listContent = destinations && destinations.slice(indexOfFirstItem,indexOfLastItem)
 
   
   if (isLoading) {

@@ -14,15 +14,15 @@ import News from "./News";
 function Home() {
     return ( 
         <HomePage>
-            <Banner></Banner>
-            <Tip></Tip>
-            <ListCard></ListCard>
-            <BestCity></BestCity>
-            <ListFeatures></ListFeatures>
-            <SpecialOffer></SpecialOffer>
-            <BeautiCity></BeautiCity>
-            <Feedback />
-            <News />
+            <Banner/>
+            <Tip/>
+            <ListCard/>
+            <BestCity/>
+            <ListFeatures/>
+            <SpecialOffer/>
+            <BeautiCity/>
+            <Feedback/>
+            <News/>
         </HomePage>
     );
 }

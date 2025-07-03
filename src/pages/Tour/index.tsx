@@ -7,27 +7,15 @@ import { usePagination } from "../../Hooks/usePagination";
 import { useTourTypeFullData } from "../../service/tourTypeService";
 import { PARAM } from "../../api/param";
 
-// Dữ liệu mẫu
-// const tours = [
-//   { id: 1, url: "./images/destinations-1-1.jpg", label: "(2 Trips)", name: "Boating" },
-//   { id: 2, url: "./images/destinations-1-1.jpg", label: "(5 Trips)", name: "City Tour" },
-//   { id: 3, url: "./images/destinations-1-1.jpg", label: "(3 Trips)", name: "Cycling" },
-//   { id: 4, url: "./images/destinations-1-1.jpg", label: "(4 Trips)", name: "Hiking" },
-//   { id: 5, url: "./images/destinations-1-1.jpg", label: "(1 Trip)", name: "Jungle Safari" },
-//   { id: 6, url: "./images/destinations-1-1.jpg", label: "(6 Trips)", name: "Peak Climbing" },
-//   { id: 7, url: "./images/destinations-1-1.jpg", label: "(2 Trips)", name: "Rafting" },
-//   { id: 8, url: "./images/destinations-1-1.jpg", label: "(4 Trips)", name: "Skiing" },
-//   { id: 9, url: "./images/destinations-1-1.jpg", label: "(2 Trips)", name: "Trekking" },
-// ];
 
 
 const ITEM_PER_PAGE = 6
 
 function Tour() {
 
-   const {data, isLoading, isError} = useTourTypeFullData()
+   const {types, isLoading, isError} = useTourTypeFullData()
 
-   const dataLenth = data ? data.length : 0
+   const dataLenth = types ? types.length : 0
 
   const {
     indexOfFirstItem,
@@ -36,11 +24,11 @@ function Tour() {
     getCurrentPage
   } =  usePagination(ITEM_PER_PAGE, dataLenth)
       
-  const listContent = data?.slice(indexOfFirstItem,indexOfLastItem)
+  const listContent = types?.slice(indexOfFirstItem,indexOfLastItem)
 
   if (isLoading) return <p>Đang tải dữ liệu...</p>
   if (isError) return <p>Lỗi dữ liệu..</p>
-  if (!data || data.length === 0) return <p>Không có dữ liệu</p>
+  if (!types || types.length === 0) return <p>Không có dữ liệu</p>
 
   return (
     <>

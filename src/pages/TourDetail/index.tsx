@@ -19,7 +19,7 @@ const TourDetail: React.FC<TourDetailProps> = () => {
     const searchParams = new URLSearchParams(location.search);
     const tourId = searchParams.get('tourId');
 
-    const { data, loading, error } = useTour({id: tourId});
+    const { tours, isLoading, isError } = useTour({id: tourId});
    
     const formRef = useRef<HTMLFormElement | null>(null);
 
@@ -37,11 +37,11 @@ const TourDetail: React.FC<TourDetailProps> = () => {
         setShowModal(false);
     }
 
-    if (loading) {
+    if (isLoading) {
         return <>Đang tải dữ liệu</>
     }
 
-    if (error ) {
+    if (isError ) {
         return <>Lỗi dữ liệu</>
     }
 
@@ -56,15 +56,15 @@ const TourDetail: React.FC<TourDetailProps> = () => {
                 <Grid>
                     <GridRow>
                         <GridCol col={8}>
-                            <Contain data={data} formRef={formRef} />
+                            <Contain data={tours?.[0]} formRef={formRef} />
                         </GridCol>
                         <GridCol col={4}>
-                            <Sidebar data={data} handleScrollToForm={handleScrollToForm} showModel={handleShowModal} />
+                            <Sidebar data={tours?.[0]} handleScrollToForm={handleScrollToForm} showModel={handleShowModal} />
                         </GridCol>
                     </GridRow>
                 </Grid>
                             
-                {showModal && <MOdel data={data} hideModal={handleHideModal}/>}
+                {showModal && <MOdel data={tours?.[0]} hideModal={handleHideModal}/>}
             </TourPage>
             <ListCard />
         </>

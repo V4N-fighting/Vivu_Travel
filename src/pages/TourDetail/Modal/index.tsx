@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Button from "../../../Component/BaseComponent/Button/Button";
-import { FlexBox, FlexBoxBetween, Grid, GridCol, GridRow, Icon, Text } from "../../../styled";
+import { RowBetween, Grid, GridCol, GridRow, Icon, Text } from "../../../styled";
 import CalendarComponent from "./Calendar";
 import { faCalendar } from "@fortawesome/free-regular-svg-icons";
 import { faTeletype } from "@fortawesome/free-solid-svg-icons";
@@ -104,20 +104,20 @@ const Modal: React.FC<ModalProps> = ({ hideModal, data }) => {
                                 />
                             ) : (
                                 <Setup>
-                                    <FlexBoxBetween>
+                                    <RowBetween>
                                         <Topic>Du khách</Topic>
                                         <Topic>Số lượng (người)</Topic>
-                                    </FlexBoxBetween>
-                                    <FlexBoxBetween>
+                                    </RowBetween>
+                                    <RowBetween>
                                         <Value>Người lớn</Value>
                                         <DefaultCost>{adultCostInit} VND / người</DefaultCost>
                                         <Counter  value={adultCounter} setValue={setAdultCounter} onChangeValue={(newValue) => getAdultValue(newValue)}/>
-                                    </FlexBoxBetween>
-                                    <FlexBoxBetween>
+                                    </RowBetween>
+                                    <RowBetween>
                                         <Value>Trẻ em (từ dưới 15 tuổi)</Value>
                                         <DefaultCost>{childCostInit} VND / người</DefaultCost>
                                         <Counter value={childCounter}  setValue={setChildCounter} onChangeValue={(newValue) => getChildValue(newValue)} />
-                                    </FlexBoxBetween>
+                                    </RowBetween>
                                 </Setup>
                             )}
                             <Bottom>

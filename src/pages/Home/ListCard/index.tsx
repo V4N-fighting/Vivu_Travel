@@ -14,7 +14,7 @@ interface ListCardProps {
 
 const ListCard: React.FC<ListCardProps> = ({}) => {
 
-  const { data: tours, loading: tourLoading, error: tourError } = useTour({
+  const { tours, isLoading: tourLoading, isError: tourError } = useTour({
     quantity: 10
   });
   // Xử lý trạng thái tải hoặc lỗi

@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { Wrapper, FlexBox, Text, FlexBoxBetween, Icon } from "../../../../styled";
+import { Wrapper, FlexBox, Text, RowBetween, Icon } from "../../../../styled";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import CircleIcon from "../../../../Component/BaseComponent/Icons/CircleIcon";
@@ -36,7 +36,7 @@ const HeaderTop: React.FC = () => {
     return (
         <Contain>
             <Wrapper>
-                <FlexBoxBetween>
+                <RowBetween>
                     <FlexBoxPadding>
                         <ItemContent icon={<Icons.EnvelopeIcon />} text='info@themona.global' />
                         <ItemContent icon={<Icons.PhoneIcon />} text='1900 636 648' />
@@ -48,7 +48,7 @@ const HeaderTop: React.FC = () => {
                         }
                         
                     </FlexBoxPadding>
-                </FlexBoxBetween>
+                </RowBetween>
             </Wrapper>
         </Contain>
     );

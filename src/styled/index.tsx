@@ -85,19 +85,19 @@ export const FlexBox = styled.div`
   width: 100%;
 `;
 
-export const FlexBoxStretch = styled(FlexBox)`
+export const RowStretch = styled(FlexBox)`
   align-items: stretch;
 `;
 
-export const FlexBoxBetween = styled(FlexBox)`
+export const RowBetween = styled(FlexBox)`
   justify-content: space-between;
 `;
 
-export const FlexBoxAround = styled(FlexBox)`
+export const RowAround = styled(FlexBox)`
   justify-content: space-around;
 `;
 
-export const FlexBoxEvenly = styled(FlexBox)`
+export const RowEvenly = styled(FlexBox)`
   justify-content: space-evenly;
 `;
 

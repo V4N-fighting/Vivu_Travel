@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import { FlexBoxBetween, Text, Title } from "../../../../styled"
+import { RowBetween, Text, Title } from "../../../../styled"
 import { useEffect, useState } from "react"
 import Button from "../../../../Component/BaseComponent/Button/Button"
 import Icons from "../../../../Component/BaseComponent/Icons"
@@ -82,12 +82,12 @@ export const FAQs: React.FC<FAQsProps> = ({}) => {
 
     return (
         <Wrap>
-            <FlexBoxBetween>
+            <RowBetween>
                 <Title small>FAQs</Title>
                 <Button white onClick={handleShowAll}>
                     {showAll ? "Đóng tất cả" : "Mở tất cả"}
                 </Button>
-            </FlexBoxBetween>
+            </RowBetween>
             {setQuestionAnswer.map((item, index) => {
                 return (
                     <Item

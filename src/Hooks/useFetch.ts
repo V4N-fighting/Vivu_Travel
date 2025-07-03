@@ -4,7 +4,7 @@ import axios, { AxiosError } from "axios";
 interface FetchState<T> {
   data: T | null;
   loading: boolean;
-  error: string | null;
+  error: boolean;
 }
 
 /**
@@ -15,7 +15,7 @@ export function useFetch<T>(url: string) {
   const [state, setState] = useState<FetchState<T>>({
     data: null,
     loading: true,
-    error: null,
+    error: true,
   });
 
   useEffect(() => {
@@ -27,12 +27,12 @@ export function useFetch<T>(url: string) {
         const response = await axios.get<T>(url, { cancelToken: source.token });
 
         if (isMounted) {
-          setState({ data: response.data, loading: false, error: null });
+          setState({ data: response.data, loading: false, error: false });
         }
       } catch (err) {
         if (isMounted) {
           const error = err as AxiosError;
-          setState({ data: null, loading: false, error: error.message });
+          setState({ data: null, loading: false, error: true });
         }
       }
     };

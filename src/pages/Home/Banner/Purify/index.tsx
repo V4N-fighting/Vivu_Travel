@@ -2,7 +2,7 @@ import styled from "styled-components";
 import PurifyItem from "./PurifyItem";
 import Button from "../../../../Component/BaseComponent/Button/Button";
 import Icons from "../../../../Component/BaseComponent/Icons";
-import { useActivities } from "../../../../service/activitiesService";
+import { useActivityFullData } from "../../../../service/activitiesService";
 import { useCountry } from "../../../../service/countryService";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -11,8 +11,8 @@ import { PARAM } from "../../../../api/param";
 interface PurifyProps {}
 
 const Purify: React.FC<PurifyProps> = ({}) => {
-  const { data: activity } = useActivities();
-  const { data: country } = useCountry();
+  const { activities } = useActivityFullData();
+  const { countries } = useCountry();
 
   const navigate = useNavigate();
 
@@ -30,14 +30,14 @@ const Purify: React.FC<PurifyProps> = ({}) => {
     }));
   };
 
-  const countryOptions = country
+  const countryOptions = countries
     ?.map((item) => ({
       value: Number(item.id),
       label: item.name,
     }))
     .sort((a, b) => a.label.localeCompare(b.label));
 
-  const activityOptions = activity?.map((item) => ({
+  const activityOptions = activities?.map((item) => ({
     value: Number(item.id),
     label: item.name,
   }));

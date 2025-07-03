@@ -7,8 +7,8 @@ import BannerHomeItem from "../types/banner";
 export const useBanner = () => {
     const { data, loading, error } = useFetch<BannerHomeItem[]>(GET_BANNER);
     return {
-        data, 
-        loading, 
-        error
+        banner: data, 
+        isLoading: loading,
+        isError: error
     }
 }  

@@ -26,7 +26,7 @@ const Content: React.FC<ContentProps> = ({destinationIDs, activityIDs, typeIDs, 
   const [modeShow, setModeShow] =  useState(ModeShow.List)
 
 
-  const { data: tours, loading: tourLoading, error: tourError } = useTour({
+  const { tours, isLoading: tourLoading, isError: tourError } = useTour({
     destinationIDs: destinationIDs,
     activityIDs: activityIDs,
     typeIDs: typeIDs,

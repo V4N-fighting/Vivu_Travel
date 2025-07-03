@@ -10,7 +10,6 @@ import Icons from "../../../../Component/BaseComponent/Icons";
 import {logout} from "../../../../service/authService"
 import { useClickAway } from "react-use";
 import config from "../../../../config";
-import { getDataUser } from "../../../../service/userService";
 
 export enum MenuOptionUser {
     History,

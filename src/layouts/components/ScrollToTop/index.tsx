@@ -1,9 +1,8 @@
-import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import Icons from "../../../Component/BaseComponent/Icons";
-
+import { ScrollToTopComponent } from "../../../Component/ScrollToTop";
 
 
 const ScrollToTop: React.FC = () => {
@@ -25,12 +24,8 @@ const ScrollToTop: React.FC = () => {
     };
   }, []);
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
   return (
-    <ScrollToTopButton show={showButton} onClick={scrollToTop}>
+    <ScrollToTopButton show={showButton} onClick={ScrollToTopComponent}>
       <Icons.ArrowUpIcon white style={{padding: 0, margin: 0}}/>
     </ScrollToTopButton>
     

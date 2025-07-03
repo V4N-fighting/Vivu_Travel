@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-
+import config from "../../config";
 
 
 interface BannerProps {
@@ -15,7 +15,7 @@ const Banner: React.FC<BannerProps> = ({background, pageName, thisPage}) => {
             <Contain>
                 <PageName>{pageName}</PageName>
                 <Navigate>
-                    <LinkPage to={"/home"}>Trang chủ</LinkPage>
+                    <LinkPage to={config.routes.home}>Trang chủ</LinkPage>
                     <Space>/</Space>
                     <LinkPage to={thisPage}>{pageName}</LinkPage>
                 </Navigate>

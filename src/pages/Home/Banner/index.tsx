@@ -15,20 +15,20 @@ const Banner: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState<number>(DEFAULT_BANNER_INDEX);
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const { data, loading, error } = useBanner()
+  const { banner, isLoading, isError } = useBanner()
 
 
   useEffect(() => {
-    if (!data || data.length === 0) return;
+    if (!banner || banner.length === 0) return;
 
     intervalRef.current = setInterval(() => {
-      setActiveIndex((prevIndex) => (prevIndex + 1) % data.length);
+      setActiveIndex((prevIndex) => (prevIndex + 1) % banner.length);
     }, TIME_CHANGE);
 
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [data]); 
+  }, [banner]); 
 
   const handleClick = (index: number) => {
     setActiveIndex(index); // Cập nhật active index
@@ -36,11 +36,11 @@ const Banner: React.FC = () => {
   
 
   // Xử lý trạng thái tải hoặc lỗi
-  if (loading) return <p>Đang tải dữ liệu...</p>;
-  if (error) return <p>Lỗi: {error}</p>;
-  if (!data || data.length === 0) return <p>Không có dữ liệu.</p>;
+  if (isLoading) return <p>Đang tải dữ liệu...</p>;
+  if (isError) return <p>Lỗi: {isError}</p>;
+  if (!banner || banner.length === 0) return <p>Không có dữ liệu.</p>;
 
-  const activeContent = data[activeIndex];
+  const activeContent = banner[activeIndex];
 
   return (
     <BannerWrapper>
@@ -65,7 +65,7 @@ const Banner: React.FC = () => {
         </Container>
         <WrapperPavigation>
           <BannerPavigation>
-            {data.map((item, index) => (
+            {banner.map((item, index) => (
               <PavigationBtn key={item.id} onClick={() => handleClick(index)} style={{ backgroundColor: activeIndex === index ? '#FF681A' : '#ffffff', color:  activeIndex === index ? '#fff' : '#FF681A'}}>
                 {item.id}
               </PavigationBtn>

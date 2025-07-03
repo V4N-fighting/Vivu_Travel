@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { FlexBox, FlexBoxBetween,  Wrapper } from "../../../styled";
+import { RowBetween,  Wrapper } from "../../../styled";
 import FeatureCard from "./FeatureCard";
 
 interface ListFeaturesProps {
@@ -9,12 +9,12 @@ interface ListFeaturesProps {
 const ListFeatures: React.FC<ListFeaturesProps> = ({}) => {
     return <Wrap>
             <MarginBottom>
-                <FlexBoxBetween>
+                <RowBetween>
                     <FeatureCard></FeatureCard>
                     <FeatureCard></FeatureCard>
                     <FeatureCard></FeatureCard>
                     <FeatureCard></FeatureCard>
-                </FlexBoxBetween>
+                </RowBetween>
             </MarginBottom>
     </Wrap>
 };

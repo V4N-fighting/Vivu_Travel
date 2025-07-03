@@ -1,6 +1,6 @@
 
 import Button from "../../../Component/BaseComponent/Button/Button";
-import { FlexBoxBetween, SupTitle, Title, Wrapper, Text } from "../../../styled";
+import { RowBetween, SupTitle, Title, Wrapper, Text } from "../../../styled";
 import { styled } from 'styled-components';
 
 
@@ -14,7 +14,7 @@ const SpecialOffer: React.FC<SpecialOfferProps> = ({}) => {
   return (
     <Wrap>
       <Wrapper>
-        <FlexBoxBetween>
+        <RowBetween>
         <Content>
             <SupTitle white small>Go & Discover</SupTitle>
             <Title white big>Ưu đãi đặt biệt</Title>
@@ -31,7 +31,7 @@ const SpecialOffer: React.FC<SpecialOfferProps> = ({}) => {
               </Box2>
             </ImageBox>
           </Content>
-        </FlexBoxBetween>
+        </RowBetween>
       </Wrapper>
     </Wrap>
   );

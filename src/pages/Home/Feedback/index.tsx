@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { FlexBoxBetween, SupTitle, Title, Wrapper, WrapperPadding, Text } from "../../../styled";
+import { RowBetween, SupTitle, Title, Wrapper, WrapperPadding, Text } from "../../../styled";
 import Button from "../../../Component/BaseComponent/Button/Button";
 import { StarFilled } from '@ant-design/icons';
 import StarRating from "../../../Component/StarRating";
@@ -14,7 +14,7 @@ const Feedback: React.FC<FeedbackProps> = ({}) => {
     return <Background>
             <Wrapper>
                 <WrapperPadding>
-                        <FlexBoxBetween>
+                        <RowBetween>
                             <Content>
                                 <SupTitle blue>Đi & Khám phá</SupTitle>
                                 <Title white big>Khách hàng của chúng tôi</Title>
@@ -46,7 +46,7 @@ const Feedback: React.FC<FeedbackProps> = ({}) => {
                                     </BorderLine>
                                 </FeedbackContent>
                             </Content>
-                        </FlexBoxBetween>
+                        </RowBetween>
                 </WrapperPadding>
             </Wrapper>
      </Background>

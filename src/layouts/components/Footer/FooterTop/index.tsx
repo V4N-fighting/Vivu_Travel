@@ -1,6 +1,8 @@
-import styled from 'styled-components';
-import {  FlexBoxBetween, Title, Wrapper } from '../../../../styled';
+
+import { RowBetween, Title, Wrapper } from '../../../../styled';
 import Button from '../../../../Component/BaseComponent/Button/Button';
+import styled from 'styled-components';
+
 
 
 const FooterTop: React.FC = () => {
@@ -8,7 +10,7 @@ const FooterTop: React.FC = () => {
         <FooterTopWrapper>
             <ContentWrapper>
                     <Content>
-                        <FlexBoxBetween>
+                        <RowBetween>
                             <FlexContent>
                                 <ContentTitle white>Bạn đã sẵn sàng</ContentTitle>
                                 <ContentDescr small white>Chỉ mất vài phút để đăng ký tài khoản VIvu MIỄN PHÍ.</ContentDescr>
@@ -19,7 +21,7 @@ const FooterTop: React.FC = () => {
                                     <ImageInFooterTop src="./images/newsletter.png" />
                                 </BoxImage>
                             </FlexImage>
-                        </FlexBoxBetween>
+                        </RowBetween>
                     </Content>
             </ContentWrapper>
         </FooterTopWrapper>

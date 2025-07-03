@@ -1,8 +1,8 @@
 
-import { GET_TOUR_TYPE } from "../api";
+import { GET_TOUR_TYPE, GET_TOUR } from "../api";
 import { useFetch } from "../Hooks/useFetch";
 import TourTypeItemMap from "../types/tourType";
-import { useTour } from "./tourService";
+import { TourItemMap } from "./tourService";
 
 type TourTypeItem = {
     id: string,
@@ -11,25 +11,16 @@ type TourTypeItem = {
 
 
 
-export const useTourType = () => {
-    const { data, loading, error } = useFetch<TourTypeItem[]>(GET_TOUR_TYPE);
-    return {
-        data, 
-        loading, 
-        error
-    }
-} 
-
 export const useTourTypeFullData = () => {
-    const {data, loading, error} = useTourType();
-    const {data: tours, loading: toursLoading, error: toursError} = useTour({})
+    const {data, loading, error} = useFetch<TourTypeItem[]>(GET_TOUR_TYPE);
+    const {data: tours, loading: toursLoading, error: toursError} = useFetch<TourItemMap[]>(GET_TOUR)
     
 
     const isLoading = loading || toursLoading;
     const isError = error || toursError;
 
-    const filteredData = data?.map((type) => {
-        const count = tours?.filter((tour) => {
+    const filteredData = data?.map((type: TourTypeItem) => {
+        const count = tours?.filter((tour: TourItemMap) => {
             
             return Number(type.id) === Number(tour.tourTypeID)
 
@@ -52,7 +43,7 @@ export const useTourTypeFullData = () => {
     });
 
     return {
-        data: dataMap,
+        types: dataMap,
         isLoading,
         isError,
     }

@@ -11,9 +11,9 @@ import { PARAM } from "../../api/param";
 const ITEM_PER_PAGE = 6;
 
 function Activity() {
-  const {data, isLoading, isError} = useActivityFullData()
+  const {activities, isLoading, isError} = useActivityFullData()
 
-  const dataLenth = data ? data.length : 0
+  const dataLenth = activities ? activities.length : 0
   
 
 
@@ -24,12 +24,12 @@ function Activity() {
     getCurrentPage
   } =  usePagination(ITEM_PER_PAGE, dataLenth)
       
-  const listContent = data?.slice(indexOfFirstItem,indexOfLastItem)
+  const listContent = activities?.slice(indexOfFirstItem,indexOfLastItem)
 
 
   if (isLoading) return <p>Đang tải dữ liệu...</p>
   if (isError) return <p>Lỗi dữ liệu..</p>
-  if (!data || data.length === 0) return <p>Không có dữ liệu</p>
+  if (!activities || activities.length === 0) return <p>Không có dữ liệu</p>
         
   return (
     <>

@@ -2,11 +2,11 @@
 import { GET_TOUR } from "../api";
 import { useFetch } from "../Hooks/useFetch";
 import TourItem, { ItineraryActivity } from "../types/tour";
-import { useActivities } from "./activitiesService";
+import { useActivityFullData } from "./activitiesService";
 import { useCountry } from "./countryService";
-import { useTourType } from "./tourTypeService";
+import { useTourTypeFullData } from "./tourTypeService";
 
-interface TourItemMap {
+export interface TourItemMap {
   id: string;
   image: string;
   name: string;
@@ -40,21 +40,21 @@ export const useTour = ({
   priceRange,
   activityIDs
 }: {
-  id?: string | null,
+  id?: string | null;
   quantity?: number;
   typeIDs?: string[];
   destinationIDs?: string[];
   durationRange?: [number, number];
   priceRange?: [number, number];
   activityIDs?: string[];
-}) => {
+}): { tours: TourItemMap[] | undefined; isLoading: boolean; isError: boolean } => {
   const { data, loading, error } = useFetch<TourItem[]>(GET_TOUR);
-  const { data: countries, loading: countryLoading, error: countryError } = useCountry();
-  const { data: types, loading: typesLoading, error: typesError } = useTourType();
-  const { data: activities, loading: activityLoading, error: activityError } = useActivities();
+  const { countries, isLoading: countryLoading, isError: countryError } = useCountry();
+  const { types, isLoading: typesLoading, isError: typesError } = useTourTypeFullData();
+  const { activities, isLoading: activitiesLoading, isError: activitiesError } = useActivityFullData();
 
-  const isLoading = loading || countryLoading || typesLoading || activityLoading;
-  const isError = error || countryError || typesError || activityError;
+  const isLoading = loading || countryLoading || typesLoading || activitiesLoading;
+  const isError = error || countryError || typesError || activitiesError;
 
   const normalizedData = data?.map(item => ({
     ...item,
@@ -146,14 +146,15 @@ export const useTour = ({
     };
   });
 
-  const dataMap: TourItemMap[] | undefined = tours?.map((item) => {
+  const dataMap: TourItemMap[] = (tours?? []).map((item: TourItemMap) => {
+    const country = countries?.find(c => c.id === item.countryID);
     return {
       id: item.id,
       image: item.image,
       name: item.name,
       description: item.description,
       countryID: item.countryID,
-      countryName: item.countryName,
+      countryName: country?.name || '',
       duration: item.duration,
       departureDate: item.departureDate,
       maxPeople: item.maxPeople,
@@ -162,7 +163,7 @@ export const useTour = ({
         adult: item.price.adult,
         child: item.price.child
       },
-      tourTypeID: item.tourTypeID ,
+      tourTypeID: item.tourTypeID,
       tourTypeName: item.tourTypeName,
       activityIDs: item.activityIDs || [],
       activityNames: item.activityNames || [],
@@ -170,13 +171,13 @@ export const useTour = ({
       altitude: item.altitude,
       hotelStar: item.hotelStar,
       itinerary: item.itinerary,
-      language: item.language
+      language: country?.language || 'unknown'
     };
   });
 
   return {
-    data: dataMap,
-    loading: isLoading,
-    error: isError
+    tours: dataMap,
+    isLoading: isLoading,
+    isError: isError
   };
 };

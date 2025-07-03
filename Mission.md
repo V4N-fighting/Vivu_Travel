@@ -119,4 +119,9 @@ làm log in, log out
 3) code confirm (email)
 
 
+# NOte: 
+1) Nhiều state thì dùng useReducer thay cho 
+2) truyền obj vào depend vào tất cả các hook thì k có tác dụng trừ khi dùng Json stringify(obj)
+
+
 
