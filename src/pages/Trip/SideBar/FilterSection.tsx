@@ -73,19 +73,19 @@ const FilterSection: React.FC<FilterSectionProps> = ({ label, data, onChange, sh
       .slice()
       .sort((a, b) => a.name.localeCompare(b.name))
       .filter(item => item.name.toLowerCase().includes(searchTerm.toLowerCase()));
-  }, [data, searchTerm]);
+  }, [searchTerm]);
 
   const visibleData = useMemo(() => {
     if (showAll) {
       return filteredData;
     }
     return filteredData.slice(0, 5);
-  }, [showAll, filteredData]);
+  }, [showAll]);
 
   const checkedItems = useMemo(() => {
     if (!data) return [];
     return data.filter(item => checkedIds.has(item.id));
-  }, [checkedIds, data]);
+  }, [checkedIds]);
 
   return (
     <SidebarItem>

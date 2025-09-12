@@ -1,5 +1,3 @@
-import { Icon } from "../../styled";
-import { faTicket } from "@fortawesome/free-solid-svg-icons";
 import Icons from './../../Component/BaseComponent/Icons/index';
 
 export enum ProfileTab {

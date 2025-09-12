@@ -5,7 +5,9 @@ import Button from "../../../Component/BaseComponent/Button/Button";
 import { Title } from "../../../styled";
 import Icons from "../../../Component/BaseComponent/Icons";
 import { User } from "../../../service/authService";
-import { updateUser } from "../../../service/userService";
+import { updateUser } from "../../../features/user/userSlice";
+import { AsyncThunkAction, ThunkDispatch } from "@reduxjs/toolkit";
+import { UnknownAction } from "redux";
 
 
 const AccountInfo = ({user} : {user: User | null}) => {
@@ -13,14 +15,7 @@ const AccountInfo = ({user} : {user: User | null}) => {
 
   const [avatar, setAvatar] = useState<string | undefined>(user?.avatar); 
 
-  const [userInfo, setUserInfo] = useState<User>
-  ({
-      id: user?.id,
-      firstName: user?.firstName,
-      lastName: user?.lastName,
-      email: user?.email,
-      password: user?.password,
-  })
+  const [userInfo, setUserInfo] = useState<User>(user ?? {} as User)
 
   const fileInputRef = useRef<HTMLInputElement>(null); 
 
@@ -66,7 +61,7 @@ const AccountInfo = ({user} : {user: User | null}) => {
 
   const handleSaveChange = () => {
     const updatedUser = { ...userInfo, avatar };
-    updateUser(updatedUser)
+    dispatch(updateUser(updatedUser))
   }
 
   return (
@@ -298,3 +293,7 @@ const HiddenFileInput = styled.input`
   display: none;
 `;
 export default AccountInfo;
+function dispatch(arg0: AsyncThunkAction<User, User, { state?: unknown; dispatch?: ThunkDispatch<unknown, unknown, UnknownAction>; extra?: unknown; rejectValue?: unknown; serializedErrorType?: unknown; pendingMeta?: unknown; fulfilledMeta?: unknown; rejectedMeta?: unknown; }>) {
+  throw new Error("Function not implemented.");
+}
+

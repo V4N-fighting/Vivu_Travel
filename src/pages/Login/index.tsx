@@ -5,6 +5,10 @@ import styled from "styled-components";
 import Icons from "../../Component/BaseComponent/Icons";
 import { login } from "../../service/authService";
 import config from "../../config";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../app/store";
+import { fetchUser } from "../../features/user/userSlice";
+
 
 interface LoginForm {
   email: string;
@@ -21,6 +25,9 @@ const Login: React.FC = () => {
 
   const navigate = useNavigate();
 
+  const dispatch = useDispatch<AppDispatch>();
+
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
     setForm((prev) => ({
@@ -33,13 +40,20 @@ const Login: React.FC = () => {
     e.preventDefault();
     try {
       const user = await login(form.email, form.password);
+  
+      // lưu localStorage nếu muốn giữ đăng nhập
       localStorage.setItem("user", JSON.stringify(user));
       localStorage.setItem("rememberMe", JSON.stringify(form.rememberMe));
+  
+      // cập nhật vào Redux Store
+      dispatch(fetchUser(user.id?.toString() || ""));
+  
       navigate(config.routes.home);
     } catch (err: any) {
       alert(err.message);
     }
   };
+  
 
   return (
     <LoginContainer>

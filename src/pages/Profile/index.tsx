@@ -2,14 +2,16 @@
 import React from "react";
 import Banner from "../../Component/Banner";
 import ProfileInfo from "./ProfileInfo";
-import { useCurrentUser } from "../../Hooks/useCurrentUser";
-import { User } from "../../service/authService";
+import { useSelector } from "react-redux";
+import { RootState } from "../../app/store";
 
 interface ProfileProps {
 }
 
 const Profile: React.FC<ProfileProps> = () => {
-  const user: User | null = useCurrentUser();
+  const user = useSelector((state: RootState) => state.user.data);
+
+  console.log("user ở trang profile: ", user)
   return (
     <>
       <Banner

@@ -1,9 +1,9 @@
-export const GET_BANNER = "http://localhost:4000/banners";
-export const GET_TOUR = "http://localhost:4000/tours";
-export const GET_ACTIVITY = "http://localhost:4000/activities";
-export const GET_COUNTRY = "http://localhost:4000/countries";
-export const GET_TOUR_TYPE = "http://localhost:4000/tour_types";
+export const GET_BANNER = "https://json-server-for-vivu.onrender.com/banners";
+export const GET_TOUR = "https://json-server-for-vivu.onrender.com/tours";
+export const GET_ACTIVITY = "https://json-server-for-vivu.onrender.com/activities";
+export const GET_COUNTRY = "https://json-server-for-vivu.onrender.com/countries";
+export const GET_TOUR_TYPE = "https://json-server-for-vivu.onrender.com/tour_types";
 
-export const API_URL = "http://localhost:4000/users"; 
+export const API_URL = "https://json-server-for-vivu.onrender.com/users"; 
 
 

@@ -8,7 +8,7 @@ import { useTourTypeFullData } from '../../../service/tourTypeService';
 import FilterSection from './FilterSection';
 import RangeInputFilter from './RangeInputFilter';
 
-export enum typeInput {
+export enum TypeInput {
   Price,
   Time
 }
@@ -31,6 +31,9 @@ type SideBarProps = {
   onResetDone: () => void;
 };
 
+const isValidRange = (range: [number, number]) =>
+  range[0] !== undefined && range[1] !== undefined && !isNaN(range[0]) && !isNaN(range[1]);
+
 const SideBar: React.FC<SideBarProps> = ({
   data,
   onFilterByPrice,
@@ -46,83 +49,98 @@ const SideBar: React.FC<SideBarProps> = ({
   const { activities, isLoading: isActLoading, isError: isActError } = useActivityFullData();
   const { types, isLoading: isTypeLoading, isError: isTypeError } = useTourTypeFullData();
 
-  // Đảm bảo state luôn là [number, number]
-  const [selectedPriceRange, setSelectedPriceRange] = useState<[number, number]>(data.price || [0, 0]);
-  const [selectedTimeRange, setSelectedTimeRange] = useState<[number, number]>(data.day || [0, 0]);
+  // State chỉ dùng cho reset, còn lại controlled từ props cha
+  const [localPriceRange, setLocalPriceRange] = useState<[number, number]>(data.price || [0, 0]);
+  const [localTimeRange, setLocalTimeRange] = useState<[number, number]>(data.day || [0, 0]);
 
-  // Đồng bộ state với props data khi props thay đổi
-  useEffect(() => {
-    setSelectedPriceRange(data.price || [0, 0]);
-  }, [data.price]);
-
-  useEffect(() => {
-    setSelectedTimeRange(data.day || [0, 0]);
-  }, [data.day]);
-
-  // Xử lý reset filter
+  // Khi resetFilters, set lại state local
   useEffect(() => {
     if (resetFilters) {
-      setSelectedPriceRange([0, 0]);
-      setSelectedTimeRange([0, 0]);
+      setLocalPriceRange([0, 0]);
+      setLocalTimeRange([0, 0]);
       onResetDone();
     }
   }, [resetFilters, onResetDone]);
 
+  // Khi props data thay đổi, đồng bộ local state (chỉ khi giá trị khác)
+  useEffect(() => {
+    if (
+      (data.price && (data.price[0] !== localPriceRange[0] || data.price[1] !== localPriceRange[1])) ||
+      (!data.price && (localPriceRange[0] !== 0 || localPriceRange[1] !== 0))
+    ) {
+      setLocalPriceRange(data.price || [0, 0]);
+    }
+  }, [data.price]);
 
+  useEffect(() => {
+    if (
+      (data.day && (data.day[0] !== localTimeRange[0] || data.day[1] !== localTimeRange[1])) ||
+      (!data.day && (localTimeRange[0] !== 0 || localTimeRange[1] !== 0))
+    ) {
+      setLocalTimeRange(data.day || [0, 0]);
+    }
+  }, [data.day]);
+
+  // Handler apply
   const handleApplyPrice = useCallback(() => {
-    if (selectedPriceRange[0] && selectedPriceRange[1]) {
+    if (isValidRange(localPriceRange)) {
       onFilterByPrice([
-        Number(selectedPriceRange[0]) * 1_000_000,
-        Number(selectedPriceRange[1]) * 1_000_000,
+        Number(localPriceRange[0]) * 1_000_000,
+        Number(localPriceRange[1]) * 1_000_000,
       ]);
     }
-  }, [selectedPriceRange, onFilterByPrice]);
+  }, [localPriceRange, onFilterByPrice]);
 
   const handleApplyTime = useCallback(() => {
-    if (selectedTimeRange[0] && selectedTimeRange[1]) {
+    if (isValidRange(localTimeRange)) {
       onFilterByTime([
-        Number(selectedTimeRange[0]),
-        Number(selectedTimeRange[1]),
+        Number(localTimeRange[0]),
+        Number(localTimeRange[1]),
       ]);
     }
-  }, [selectedTimeRange, onFilterByTime]);
+  }, [localTimeRange, onFilterByTime]);
 
-  // Memo hóa handler để tránh tạo lại mỗi lần render
-  const createCheckboxHandler = useCallback(
-    (callback: (checked: boolean, id: string) => void) =>
+  // Gom handler checkbox
+  const handleCheckbox = useCallback(
+    (type: 'destination' | 'activity' | 'type') =>
       (e: ChangeEvent<HTMLInputElement>, id: string) => {
-        callback(e.target.checked, id);
+        const checked = e.target.checked;
+        if (type === 'destination') onCheckDestination(checked, id);
+        else if (type === 'activity') onCheckActivity(checked, id);
+        else if (type === 'type') onCheckType(checked, id);
       },
-    []
+    [onCheckDestination, onCheckActivity, onCheckType]
   );
 
-  // Chỉ phụ thuộc các trường cần thiết
+  // Memo filterConfigs
   const filterConfigs = useMemo(
     () => [
       {
         label: 'Điểm đến',
         data: destinations,
-        onChange: createCheckboxHandler(onCheckDestination),
+        onChange: handleCheckbox('destination'),
         selected: data.destinationID,
       },
       {
         label: 'Hoạt động',
         data: activities,
-        onChange: createCheckboxHandler(onCheckActivity),
+        onChange: handleCheckbox('activity'),
         selected: data.activityID,
       },
       {
         label: 'Loại tour',
         data: types,
-        onChange: createCheckboxHandler(onCheckType),
+        onChange: handleCheckbox('type'),
         selected: data.typeID,
       },
     ],
-    [destinations, activities, types, data.destinationID, data.activityID, data.typeID, onCheckDestination, onCheckActivity, onCheckType, createCheckboxHandler]
+    [destinations, activities, types, data.destinationID, data.activityID, data.typeID, handleCheckbox]
   );
 
-  if (isDesLoading || isActLoading || isTypeLoading) return <>Đang tải dữ liệu...</>;
-  if (isDesError || isActError || isTypeError) return <>Lỗi dữ liệu</>;
+  if (isDesLoading || isActLoading || isTypeLoading)
+    return <SidebarLoading>Đang tải dữ liệu...</SidebarLoading>;
+  if (isDesError || isActError || isTypeError)
+    return <SidebarLoading>Lỗi dữ liệu</SidebarLoading>;
 
   return (
     <Sidebar>
@@ -133,23 +151,21 @@ const SideBar: React.FC<SideBarProps> = ({
 
       <RangeInputFilter
         label="Giá"
-        unit={typeInput.Price}
-        setMin={(val) => setSelectedPriceRange((prev) => [Number(val), prev[1]])}
-        setMax={(val) => setSelectedPriceRange((prev) => [prev[0], Number(val)])}
+        unit={TypeInput.Price}
+        setMin={(val) => setLocalPriceRange((prev) => [Number(val), prev[1]])}
+        setMax={(val) => setLocalPriceRange((prev) => [prev[0], Number(val)])}
         onApply={handleApplyPrice}
         resetFilters={resetFilters}
-        selected={selectedPriceRange}
-      />
+        selected={localPriceRange}/>
 
       <RangeInputFilter
         label="Thời gian"
-        unit={typeInput.Time}
-        setMin={(val) => setSelectedTimeRange((prev) => [Number(val), prev[1]])}
-        setMax={(val) => setSelectedTimeRange((prev) => [prev[0], Number(val)])}
+        unit={TypeInput.Time}
+        setMin={(val) => setLocalTimeRange((prev) => [Number(val), prev[1]])}
+        setMax={(val) => setLocalTimeRange((prev) => [prev[0], Number(val)])}
         onApply={handleApplyTime}
         resetFilters={resetFilters}
-        selected={selectedTimeRange}
-      />
+        selected={localTimeRange}/>
 
       {filterConfigs.map((config) => (
         <FilterSection
@@ -185,6 +201,13 @@ const DeleteAll = styled.div`
   text-decoration: underline;
   color: #555555;
   cursor: pointer;
+`;
+
+const SidebarLoading = styled.div`
+  width: 100%;
+  padding: 32px 0;
+  text-align: center;
+  color: #888;
 `;
 
 export default SideBar;

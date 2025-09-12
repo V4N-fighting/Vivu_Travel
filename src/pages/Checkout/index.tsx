@@ -4,7 +4,7 @@ import ProgressBar from "./ProgressBar";
 import { FlexBox, Grid, GridCol, GridRow, Icon, Text, Title } from "../../styled";
 import TourCard from "./TourCard";
 import Button from "../../Component/BaseComponent/Button/Button";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import Icons from "../../Component/BaseComponent/Icons";
 import { useLocation } from "react-router-dom";
 
@@ -41,17 +41,15 @@ function Checkout() {
     } = location.state?.myData;
 
 
-    const exampleTour = useMemo(() => {
-        return {
-            image: myData.data.image,
-            title: myData.data.name,
-            code: "STN084-2025-00276",
-            startDate: myData.data.departureDate,
-            counter: myData.adultCounter + myData.childCounter,
-            duration: myData.data.duration,
-            price: myData.total,
-        }
-    }, [myData]);
+    const exampleTour = {
+        image: myData.data.image,
+        title: myData.data.name,
+        code: "STN084-2025-00276",
+        startDate: myData.data.departureDate,
+        counter: myData.adultCounter + myData.childCounter,
+        duration: myData.data.duration,
+        price: myData.total,
+    }
 
     const [travelers, setTravelers] = useState<Traveler[]>(
     Array.from({ length: myData.childCounter }, () => ({

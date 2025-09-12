@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import CollapseComponent from "../Collapse";
-import { typeInput } from ".";
+import { TypeInput } from ".";
 
 
 
@@ -49,10 +49,10 @@ const RangeInputFilter: React.FC<RangeInputFilterProps> = ({
 
   useEffect(() => {
      if (selected) {
-      if (unit === typeInput.Price) {
+      if (unit === TypeInput.Price) {
         setInputLabelMin(JSON.stringify(selected[0] / 1_000_000) + ' triệu đồng')
         setInputLabelMax(JSON.stringify(selected[1] / 1_000_000) + ' triệu đồng')
-      } else if (unit === typeInput.Time) {
+      } else if (unit === TypeInput.Time) {
         setInputLabelMin(JSON.stringify(selected[0]) + ' ngày')
         setInputLabelMax(JSON.stringify(selected[1]) + ' ngày')
       } else {
@@ -94,9 +94,9 @@ const RangeInputFilter: React.FC<RangeInputFilterProps> = ({
   ) => {
     setter(value);
 
-    if (unit === typeInput.Price) {
+    if (unit === TypeInput.Price) {
       setLabel(value ? formatToVietnameseCurrency(value) : '');
-    } else if (unit === typeInput.Time) {
+    } else if (unit === TypeInput.Time) {
       setLabel(value ? value + ' ngày' : '');
     } else {
       setLabel('');
