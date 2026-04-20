@@ -1,0 +1,62 @@
+@import-normalize;
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+#root {
+    position: relative;
+    inset: 0;
+
+    --primary-color: #ff6600;
+    --secondary-color: #37D4D9;
+
+    --white-color: #ffffff;
+    --black-color: #000000;
+
+    /* text */
+    --white-text-color: #ffffff;
+    --blue-text-color: #37D4D9;
+    --orange-text-color: #FF681A;
+
+    --primary-text-color: #1C1C1C;
+    --secondary-text-color: #505050;
+    --disable-text-color: #797979;
+
+    /* box shadow */
+    --box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+
+
+    /* border */
+    --border: 1px solid #9f9f9f;
+  }
+
+/* WebKit (Chrome, Safari, Edge) */
+/* Bo tròn thanh cuộn trên WebKit */
+::-webkit-scrollbar {
+    width: 10px; /* Độ rộng của thanh cuộn */
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px; /* Bo tròn phần nền thanh cuộn */
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #ff6600;
+    border-radius: 10px; /* Bo tròn thanh trượt */
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #e65300;
+  }
+  
+  
+  /* Firefox */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #ff6600 #f1f1f1;
+  }
+  
