@@ -21,8 +21,8 @@ let ToursController = class ToursController {
     constructor(toursService) {
         this.toursService = toursService;
     }
-    async findAll(countryId) {
-        return this.toursService.findAll({ countryId });
+    async findAll(search, countryId, minPrice, maxPrice) {
+        return this.toursService.findAll({ search, countryId, minPrice, maxPrice });
     }
     async findOne(id) {
         return this.toursService.findOne(id);
@@ -34,9 +34,12 @@ let ToursController = class ToursController {
 exports.ToursController = ToursController;
 __decorate([
     (0, common_1.Get)(),
-    __param(0, (0, common_1.Query)('country_id')),
+    __param(0, (0, common_1.Query)('search')),
+    __param(1, (0, common_1.Query)('country_id')),
+    __param(2, (0, common_1.Query)('min_price')),
+    __param(3, (0, common_1.Query)('max_price')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [String, Number, Number, Number]),
     __metadata("design:returntype", Promise)
 ], ToursController.prototype, "findAll", null);
 __decorate([

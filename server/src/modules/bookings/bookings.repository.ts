@@ -8,14 +8,39 @@ export class BookingsRepository {
 
   async create(bookingData: any) {
     const {
-      userId, tourId, departureDateId, 
+      userId, tourId, departureDate, 
       adultCount, childCount, totalPrice, 
       note, travelers 
     } = bookingData;
+    
+    let { departureDateId } = bookingData;
 
     const client = await this.pool.connect();
     try {
       await client.query('BEGIN'); // Bắt đầu Transaction
+
+      if (!departureDateId && departureDate) {
+        // Look up departureDateId
+        const dateResult = await client.query('SELECT id FROM tour_departure_dates WHERE tour_id = $1 AND departure_date = $2 LIMIT 1', [tourId, departureDate]);
+        if (dateResult.rows.length > 0) {
+          departureDateId = dateResult.rows[0].id;
+        } else {
+          // If no specific date found, just pick any valid for this tour based on slots
+          const fallbackDate = await client.query('SELECT id FROM tour_departure_dates WHERE tour_id = $1 AND available_slots >= $2 LIMIT 1', [tourId, adultCount + childCount]);
+          if (fallbackDate.rows.length > 0) {
+            departureDateId = fallbackDate.rows[0].id;
+          } else {
+            throw new Error('Not enough slots available');
+          }
+        }
+      } else if (!departureDateId) {
+          const fallbackDate = await client.query('SELECT id FROM tour_departure_dates WHERE tour_id = $1 AND available_slots >= $2 LIMIT 1', [tourId, adultCount + childCount]);
+          if (fallbackDate.rows.length > 0) {
+            departureDateId = fallbackDate.rows[0].id;
+          } else {
+            throw new Error('Not enough slots available');
+          }      
+      }
 
       // 1. Tạo mã đặt chỗ ngẫu nhiên (VD: VV-123456)
       const bookingCode = `VV-${Math.floor(100000 + Math.random() * 900000)}`;

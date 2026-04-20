@@ -13,7 +13,7 @@ export class UsersRepository {
   }
 
   async findById(id: number) {
-    const query = 'SELECT * FROM users WHERE id = $1';
+    const query = `SELECT id, first_name as "firstName", last_name as "lastName", email, avatar, role FROM users WHERE id = $1`;
     const result = await this.pool.query(query, [id]);
     return result.rows[0];
   }
@@ -23,7 +23,7 @@ export class UsersRepository {
     const query = `
       INSERT INTO users (first_name, last_name, email, password, role)
       VALUES ($1, $2, $3, $4, $5)
-      RETURNING id, first_name, last_name, email, role
+      RETURNING id, first_name as "firstName", last_name as "lastName", email, role
     `;
     const result = await this.pool.query(query, [
       firstName,
@@ -34,4 +34,26 @@ export class UsersRepository {
     ]);
     return result.rows[0];
   }
+
+  async update(id: number, userData: any) {
+    const { firstName, lastName, email, avatar } = userData;
+    const query = `
+      UPDATE users 
+      SET first_name = COALESCE($1, first_name), 
+          last_name = COALESCE($2, last_name), 
+          email = COALESCE($3, email),
+          avatar = COALESCE($4, avatar),
+          updated_at = CURRENT_TIMESTAMP
+      WHERE id = $5
+      RETURNING id, first_name as "firstName", last_name as "lastName", email, avatar, role
+    `;
+    const result = await this.pool.query(query, [firstName, lastName, email, avatar, id]);
+    return result.rows[0];
+  }
+
+  async updatePassword(id: number, hashedPassword: string) {
+    const query = 'UPDATE users SET password = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2';
+    await this.pool.query(query, [hashedPassword, id]);
+  }
 }
+

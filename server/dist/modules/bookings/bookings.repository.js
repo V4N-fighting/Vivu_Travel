@@ -21,10 +21,35 @@ let BookingsRepository = class BookingsRepository {
         this.pool = pool;
     }
     async create(bookingData) {
-        const { userId, tourId, departureDateId, adultCount, childCount, totalPrice, note, travelers } = bookingData;
+        const { userId, tourId, departureDate, adultCount, childCount, totalPrice, note, travelers } = bookingData;
+        let { departureDateId } = bookingData;
         const client = await this.pool.connect();
         try {
             await client.query('BEGIN');
+            if (!departureDateId && departureDate) {
+                const dateResult = await client.query('SELECT id FROM tour_departure_dates WHERE tour_id = $1 AND departure_date = $2 LIMIT 1', [tourId, departureDate]);
+                if (dateResult.rows.length > 0) {
+                    departureDateId = dateResult.rows[0].id;
+                }
+                else {
+                    const fallbackDate = await client.query('SELECT id FROM tour_departure_dates WHERE tour_id = $1 AND available_slots >= $2 LIMIT 1', [tourId, adultCount + childCount]);
+                    if (fallbackDate.rows.length > 0) {
+                        departureDateId = fallbackDate.rows[0].id;
+                    }
+                    else {
+                        throw new Error('Not enough slots available');
+                    }
+                }
+            }
+            else if (!departureDateId) {
+                const fallbackDate = await client.query('SELECT id FROM tour_departure_dates WHERE tour_id = $1 AND available_slots >= $2 LIMIT 1', [tourId, adultCount + childCount]);
+                if (fallbackDate.rows.length > 0) {
+                    departureDateId = fallbackDate.rows[0].id;
+                }
+                else {
+                    throw new Error('Not enough slots available');
+                }
+            }
             const bookingCode = `VV-${Math.floor(100000 + Math.random() * 900000)}`;
             const bookingQuery = `
         INSERT INTO bookings (booking_code, user_id, tour_id, departure_date_id, adult_count, child_count, total_price, status, note)

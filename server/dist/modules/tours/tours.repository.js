@@ -29,13 +29,47 @@ let ToursRepository = class ToursRepository {
       WHERE t.is_active = true
     `;
         const params = [];
+        if (filters.search) {
+            params.push(`%${filters.search}%`);
+            query += ` AND t.name ILIKE $${params.length}`;
+        }
         if (filters.countryId) {
             params.push(filters.countryId);
             query += ` AND t.country_id = $${params.length}`;
         }
+        if (filters.minPrice) {
+            params.push(filters.minPrice);
+            query += ` AND t.price_adult >= $${params.length}`;
+        }
+        if (filters.maxPrice) {
+            params.push(filters.maxPrice);
+            query += ` AND t.price_adult <= $${params.length}`;
+        }
         query += ` ORDER BY t.created_at DESC`;
         const result = await this.pool.query(query, params);
-        return result.rows;
+        const tours = result.rows;
+        for (const tour of tours) {
+            const datesQuery = 'SELECT departure_date FROM tour_departure_dates WHERE tour_id = $1 AND departure_date >= CURRENT_DATE';
+            const datesResult = await this.pool.query(datesQuery, [tour.id]);
+            tour.departure_date = datesResult.rows.map(r => r.departure_date);
+            const activitiesQuery = 'SELECT activity_id FROM tour_activities WHERE tour_id = $1';
+            const activitiesResult = await this.pool.query(activitiesQuery, [tour.id]);
+            tour.activityIDs = activitiesResult.rows.map(r => r.activity_id.toString());
+            tour.activityNames = [];
+            const transportQuery = 'SELECT transportation FROM tour_transportations WHERE tour_id = $1';
+            const transportResult = await this.pool.query(transportQuery, [tour.id]);
+            tour.transportation = transportResult.rows.map(r => r.transportation);
+            tour.type_id = tour.tour_type_id?.toString() || '';
+            tour.countryID = tour.country_id?.toString() || '';
+            tour.price = {
+                adult: tour.price_adult,
+                child: tour.price_child
+            };
+            tour.max_people = tour.max_people;
+            tour.adventure_level = tour.adventure_level;
+            tour.hotel_star = tour.hotel_star;
+        }
+        return tours;
     }
     async findById(id) {
         const query = `
@@ -45,18 +79,20 @@ let ToursRepository = class ToursRepository {
       LEFT JOIN tour_types tt ON t.tour_type_id = tt.id
       WHERE t.id = $1
     `;
-        const tourResult = await this.pool.query(query, [id]);
-        const tour = tourResult.rows[0];
+        const result = await this.pool.query(query, [id]);
+        const tour = result.rows[0];
         if (tour) {
-            const datesQuery = 'SELECT * FROM tour_departure_dates WHERE tour_id = $1';
-            const datesResult = await this.pool.query(datesQuery, [id]);
+            const datesResult = await this.pool.query('SELECT * FROM tour_departure_dates WHERE tour_id = $1', [id]);
             tour.departure_dates = datesResult.rows;
-            const imagesQuery = 'SELECT * FROM tour_images WHERE tour_id = $1 ORDER BY sort_order ASC';
-            const imagesResult = await this.pool.query(imagesQuery, [id]);
+            const imagesResult = await this.pool.query('SELECT * FROM tour_images WHERE tour_id = $1', [id]);
             tour.images = imagesResult.rows;
-            const itineraryQuery = 'SELECT * FROM tour_itineraries WHERE tour_id = $1 ORDER BY day_number ASC';
-            const itineraryResult = await this.pool.query(itineraryQuery, [id]);
+            const itineraryResult = await this.pool.query('SELECT * FROM tour_itineraries WHERE tour_id = $1 ORDER BY day_number ASC', [id]);
             tour.itineraries = itineraryResult.rows;
+            tour.countryID = tour.country_id?.toString() || '';
+            tour.price = {
+                adult: tour.price_adult,
+                child: tour.price_child
+            };
         }
         return tour;
     }

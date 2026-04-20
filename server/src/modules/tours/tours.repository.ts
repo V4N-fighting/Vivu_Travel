@@ -40,12 +40,33 @@ export class ToursRepository {
 
     const result = await this.pool.query(query, params);
     
-    // Lấy thêm departure_dates cho từng tour trong danh sách
     const tours = result.rows;
     for (const tour of tours) {
-      const datesQuery = 'SELECT * FROM tour_departure_dates WHERE tour_id = $1 AND departure_date >= CURRENT_DATE';
+      const datesQuery = 'SELECT departure_date FROM tour_departure_dates WHERE tour_id = $1 AND departure_date >= CURRENT_DATE';
       const datesResult = await this.pool.query(datesQuery, [tour.id]);
-      tour.departure_dates = datesResult.rows;
+      tour.departure_date = datesResult.rows.map(r => r.departure_date);
+
+      const activitiesQuery = 'SELECT activity_id FROM tour_activities WHERE tour_id = $1';
+      const activitiesResult = await this.pool.query(activitiesQuery, [tour.id]);
+      tour.activityIDs = activitiesResult.rows.map(r => r.activity_id.toString());
+      tour.activityNames = [];
+
+      const transportQuery = 'SELECT transportation FROM tour_transportations WHERE tour_id = $1';
+      const transportResult = await this.pool.query(transportQuery, [tour.id]);
+      tour.transportation = transportResult.rows.map(r => r.transportation);
+
+      tour.type_id = tour.tour_type_id?.toString() || '';
+      tour.countryID = tour.country_id?.toString() || '';
+      
+      tour.price = {
+        adult: tour.price_adult,
+        child: tour.price_child
+      };
+      
+      // Some fields the frontend also uses directly:
+      tour.max_people = tour.max_people;
+      tour.adventure_level = tour.adventure_level;
+      tour.hotel_star = tour.hotel_star;
     }
 
     return tours;
@@ -61,24 +82,27 @@ export class ToursRepository {
     `;
     
     // Lấy thông tin cơ bản của tour
-    const tourResult = await this.pool.query(query, [id]);
-    const tour = tourResult.rows[0];
+    const result = await this.pool.query(query, [id]);
+    const tour = result.rows[0];
 
     if (tour) {
-      // Lấy thêm ngày khởi hành
-      const datesQuery = 'SELECT * FROM tour_departure_dates WHERE tour_id = $1';
-      const datesResult = await this.pool.query(datesQuery, [id]);
+      // Lấy ngày khởi hành
+      const datesResult = await this.pool.query('SELECT * FROM tour_departure_dates WHERE tour_id = $1', [id]);
       tour.departure_dates = datesResult.rows;
 
-      // Lấy thêm hình ảnh
-      const imagesQuery = 'SELECT * FROM tour_images WHERE tour_id = $1 ORDER BY sort_order ASC';
-      const imagesResult = await this.pool.query(imagesQuery, [id]);
+      // Lấy hình ảnh
+      const imagesResult = await this.pool.query('SELECT * FROM tour_images WHERE tour_id = $1', [id]);
       tour.images = imagesResult.rows;
 
-      // Lấy thêm lịch trình (itinerary)
-      const itineraryQuery = 'SELECT * FROM tour_itineraries WHERE tour_id = $1 ORDER BY day_number ASC';
-      const itineraryResult = await this.pool.query(itineraryQuery, [id]);
+      // Lấy lịch trình
+      const itineraryResult = await this.pool.query('SELECT * FROM tour_itineraries WHERE tour_id = $1 ORDER BY day_number ASC', [id]);
       tour.itineraries = itineraryResult.rows;
+      tour.countryID = tour.country_id?.toString() || '';
+      
+      tour.price = {
+        adult: tour.price_adult,
+        child: tour.price_child
+      };
     }
 
     return tour;
