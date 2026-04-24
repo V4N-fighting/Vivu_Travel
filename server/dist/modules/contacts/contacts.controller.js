@@ -25,6 +25,9 @@ let ContactsController = class ContactsController {
     async findAll() {
         return this.contactsService.findAll();
     }
+    async reply(id, replyData) {
+        return this.contactsService.reply(Number(id), replyData.message);
+    }
 };
 exports.ContactsController = ContactsController;
 __decorate([
@@ -40,6 +43,14 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], ContactsController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.Post)(':id/reply'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], ContactsController.prototype, "reply", null);
 exports.ContactsController = ContactsController = __decorate([
     (0, common_1.Controller)('contacts'),
     __metadata("design:paramtypes", [contacts_service_1.ContactsService])

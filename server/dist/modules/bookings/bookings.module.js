@@ -8,16 +8,25 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BookingsModule = void 0;
 const common_1 = require("@nestjs/common");
-const bookings_service_1 = require("./bookings.service");
 const bookings_controller_1 = require("./bookings.controller");
+const bookings_service_1 = require("./bookings.service");
 const bookings_repository_1 = require("./bookings.repository");
+const coupons_repository_1 = require("../coupons/coupons.repository");
+const tours_repository_1 = require("../tours/tours.repository");
+const users_repository_1 = require("../users/users.repository");
 let BookingsModule = class BookingsModule {
 };
 exports.BookingsModule = BookingsModule;
 exports.BookingsModule = BookingsModule = __decorate([
     (0, common_1.Module)({
         controllers: [bookings_controller_1.BookingsController],
-        providers: [bookings_service_1.BookingsService, bookings_repository_1.BookingsRepository],
+        providers: [
+            bookings_service_1.BookingsService,
+            bookings_repository_1.BookingsRepository,
+            coupons_repository_1.CouponsRepository,
+            tours_repository_1.ToursRepository,
+            users_repository_1.UsersRepository
+        ],
         exports: [bookings_service_1.BookingsService],
     })
 ], BookingsModule);

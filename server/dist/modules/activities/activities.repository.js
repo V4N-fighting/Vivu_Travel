@@ -21,16 +21,35 @@ let ActivitiesRepository = class ActivitiesRepository {
         this.pool = pool;
     }
     async findAll() {
-        const query = `
-      SELECT a.id::text, a.name, COUNT(ta.tour_id)::int as "numberOfTrip"
-      FROM activities a
-      LEFT JOIN tour_activities ta ON a.id = ta.activity_id
-      LEFT JOIN tours t ON ta.tour_id = t.id AND t.is_active = true
-      GROUP BY a.id, a.name
-      ORDER BY a.name
-    `;
+        const query = 'SELECT * FROM activities ORDER BY created_at DESC';
         const result = await this.pool.query(query);
         return result.rows;
+    }
+    async create(data) {
+        const { name, description, icon } = data;
+        const query = `
+      INSERT INTO activities (name, description, icon, created_at)
+      VALUES ($1, $2, $3, CURRENT_TIMESTAMP)
+      RETURNING *
+    `;
+        const result = await this.pool.query(query, [name, description, icon]);
+        return result.rows[0];
+    }
+    async update(id, data) {
+        const { name, description, icon } = data;
+        const query = `
+      UPDATE activities 
+      SET name = $1, description = $2, icon = $3
+      WHERE id = $4
+      RETURNING *
+    `;
+        const result = await this.pool.query(query, [name, description, icon, id]);
+        return result.rows[0];
+    }
+    async delete(id) {
+        const query = 'DELETE FROM activities WHERE id = $1';
+        await this.pool.query(query, [id]);
+        return { message: 'Activity deleted successfully' };
     }
 };
 exports.ActivitiesRepository = ActivitiesRepository;

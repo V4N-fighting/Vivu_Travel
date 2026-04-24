@@ -20,22 +20,22 @@ let ToursRepository = class ToursRepository {
     constructor(pool) {
         this.pool = pool;
     }
-    async findAll(filters) {
+    async findAll(filters = {}) {
+        const { search, minPrice, maxPrice, minDuration, maxDuration, typeId, countryId, activityIds } = filters;
         let query = `
       SELECT t.*, c.name as country_name, tt.name as tour_type_name
       FROM tours t
       LEFT JOIN countries c ON t.country_id = c.id
       LEFT JOIN tour_types tt ON t.tour_type_id = tt.id
-      WHERE t.is_active = true
+      WHERE t.is_active = TRUE
     `;
         const params = [];
-        if (filters.search) {
-            params.push(`%${filters.search}%`);
+        if (search) {
+            params.push(`%${search}%`);
             query += ` AND t.name ILIKE $${params.length}`;
         }
-        if (filters.countryId) {
-            params.push(filters.countryId);
-            query += ` AND t.country_id = $${params.length}`;
+        if (minPrice) {
+            params.push(minPrice);
         }
         if (filters.minPrice) {
             params.push(filters.minPrice);
@@ -70,6 +70,46 @@ let ToursRepository = class ToursRepository {
             tour.hotel_star = tour.hotel_star;
         }
         return tours;
+    }
+    async findOne(id) {
+        const tourQuery = `
+      SELECT t.*, c.name as country_name, tt.name as tour_type_name
+      FROM tours t
+      LEFT JOIN countries c ON t.country_id = c.id
+      LEFT JOIN tour_types tt ON t.tour_type_id = tt.id
+      WHERE t.id = $1
+    `;
+        const tourResult = await this.pool.query(tourQuery, [id]);
+        const tour = tourResult.rows[0];
+        if (tour) {
+            const images = await this.pool.query('SELECT * FROM tour_images WHERE tour_id = $1', [id]);
+            tour.images = images.rows;
+            const itinerariesQuery = `
+        SELECT ti.*, 
+               COALESCE(
+                 (SELECT json_agg(id_inner.* ORDER BY id_inner.sort_order)
+                  FROM itinerary_details id_inner
+                  WHERE id_inner.itinerary_id = ti.id),
+                 '[]'
+               ) as details
+        FROM tour_itineraries ti
+        WHERE ti.tour_id = $1
+        ORDER BY ti.day_number ASC
+      `;
+            const itineraries = await this.pool.query(itinerariesQuery, [id]);
+            tour.itineraries = itineraries.rows;
+            const transportations = await this.pool.query('SELECT * FROM tour_transportations WHERE tour_id = $1', [id]);
+            tour.transportations = transportations.rows;
+            const dates = await this.pool.query('SELECT * FROM tour_departure_dates WHERE tour_id = $1', [id]);
+            tour.departure_dates = dates.rows;
+            const activities = await this.pool.query(`
+        SELECT a.* FROM activities a
+        JOIN tour_activities ta ON a.id = ta.activity_id
+        WHERE ta.tour_id = $1
+      `, [id]);
+            tour.activities = activities.rows;
+        }
+        return tour;
     }
     async findById(id) {
         const query = `

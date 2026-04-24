@@ -12,6 +12,10 @@ import { TourTypesModule } from './modules/tour-types/tour-types.module';
 import { UsersModule } from './modules/users/users.module';
 import { ContactsModule } from './modules/contacts/contacts.module';
 import { ReviewsModule } from './modules/reviews/reviews.module';
+import { BlogsModule } from './modules/blogs/blogs.module';
+import { AdminModule } from './modules/admin/admin.module';
+import { EmailModule } from './modules/email/email.module';
+import { CouponsModule } from './modules/coupons/coupons.module';
 
 @Module({
   imports: [
@@ -31,6 +35,10 @@ import { ReviewsModule } from './modules/reviews/reviews.module';
     TourTypesModule,
     ContactsModule,
     ReviewsModule,
+    BlogsModule,
+    AdminModule,
+    EmailModule,
+    CouponsModule,
   ],
   controllers: [],
   providers: [],

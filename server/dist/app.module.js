@@ -21,6 +21,10 @@ const tour_types_module_1 = require("./modules/tour-types/tour-types.module");
 const users_module_1 = require("./modules/users/users.module");
 const contacts_module_1 = require("./modules/contacts/contacts.module");
 const reviews_module_1 = require("./modules/reviews/reviews.module");
+const blogs_module_1 = require("./modules/blogs/blogs.module");
+const admin_module_1 = require("./modules/admin/admin.module");
+const email_module_1 = require("./modules/email/email.module");
+const coupons_module_1 = require("./modules/coupons/coupons.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -43,6 +47,10 @@ exports.AppModule = AppModule = __decorate([
             tour_types_module_1.TourTypesModule,
             contacts_module_1.ContactsModule,
             reviews_module_1.ReviewsModule,
+            blogs_module_1.BlogsModule,
+            admin_module_1.AdminModule,
+            email_module_1.EmailModule,
+            coupons_module_1.CouponsModule,
         ],
         controllers: [],
         providers: [],

@@ -1,20 +1,16 @@
-import { Controller, Get, Post, Body, Param, Query, ParseIntPipe, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Query, UseGuards, ParseIntPipe } from '@nestjs/common';
 import { ToursService } from './tours.service';
 import { AuthGuard } from '@nestjs/passport';
-import { Roles, RolesGuard } from '../../common/guards/roles.guard';
+import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../auth/roles.decorator';
 
 @Controller('tours')
 export class ToursController {
   constructor(private readonly toursService: ToursService) {}
 
   @Get()
-  async findAll(
-    @Query('search') search: string,
-    @Query('country_id') countryId: number,
-    @Query('min_price') minPrice: number,
-    @Query('max_price') maxPrice: number,
-  ) {
-    return this.toursService.findAll({ search, countryId, minPrice, maxPrice });
+  async findAll(@Query() query: any) {
+    return this.toursService.findAll(query);
   }
 
   @Get(':id')

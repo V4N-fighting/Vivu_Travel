@@ -7,16 +7,43 @@ export class CountriesRepository {
   constructor(@Inject(POSTGRES_POOL) private readonly pool: Pool) {}
   async findAll() {
     const query = `
-      SELECT c.id::text, c.name, 
-             array_remove(array_agg(DISTINCT cl.language), NULL) as language,
-             COUNT(DISTINCT t.id)::int as "numberOfTrip"
+      SELECT c.*, COUNT(t.id) as tour_count 
       FROM countries c
-      LEFT JOIN country_languages cl ON c.id = cl.country_id
-      LEFT JOIN tours t ON c.id = t.country_id AND t.is_active = true
-      GROUP BY c.id, c.name
-      ORDER BY c.name
+      LEFT JOIN tours t ON c.id = t.country_id
+      GROUP BY c.id
+      ORDER BY c.name ASC
     `;
     const result = await this.pool.query(query);
     return result.rows;
+  }
+
+  async findById(id: number) {
+    const query = 'SELECT * FROM countries WHERE id = $1';
+    const result = await this.pool.query(query, [id]);
+    return result.rows[0];
+  }
+
+  // Admin methods
+  async create(data: any) {
+    const query = 'INSERT INTO countries (name, description, image) VALUES ($1, $2, $3) RETURNING *';
+    const result = await this.pool.query(query, [data.name, data.description, data.image]);
+    return result.rows[0];
+  }
+
+  async update(id: number, data: any) {
+    const query = `
+      UPDATE countries 
+      SET name = COALESCE($1, name), 
+          description = COALESCE($2, description), 
+          image = COALESCE($3, image)
+      WHERE id = $4 RETURNING *
+    `;
+    const result = await this.pool.query(query, [data.name, data.description, data.image, id]);
+    return result.rows[0];
+  }
+
+  async delete(id: number) {
+    await this.pool.query('DELETE FROM countries WHERE id = $1', [id]);
+    return { success: true };
   }
 }

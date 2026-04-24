@@ -10,6 +10,6 @@ export class UsersService {
   }
 
   async update(id: number, userData: any) {
-    return this.usersRepository.update(id, userData);
+    return this.usersRepository.updateProfile(id, userData);
   }
 }

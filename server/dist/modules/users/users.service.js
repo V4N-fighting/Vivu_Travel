@@ -20,7 +20,7 @@ let UsersService = class UsersService {
         return this.usersRepository.findById(id);
     }
     async update(id, userData) {
-        return this.usersRepository.update(id, userData);
+        return this.usersRepository.updateProfile(id, userData);
     }
 };
 exports.UsersService = UsersService;

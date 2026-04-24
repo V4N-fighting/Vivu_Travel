@@ -16,5 +16,12 @@ exports.default = () => ({
     cors: {
         origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
     },
+    mail: {
+        host: process.env.MAIL_HOST || 'smtp.gmail.com',
+        port: parseInt(process.env.MAIL_PORT, 10) || 587,
+        user: process.env.MAIL_USER,
+        password: process.env.MAIL_PASSWORD,
+        from: process.env.MAIL_FROM || '"Vivu Travel" <no-reply@vivutravel.com>',
+    },
 });
 //# sourceMappingURL=configuration.js.map

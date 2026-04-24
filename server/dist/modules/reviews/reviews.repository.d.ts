@@ -4,5 +4,6 @@ export declare class ReviewsRepository {
     constructor(pool: Pool);
     findByTour(tourId: number): Promise<any[]>;
     findLatest(limit?: number): Promise<any[]>;
-    create(reviewData: any): Promise<any>;
+    create(data: any): Promise<any>;
+    updateAdminReply(id: number, reply: string): Promise<any>;
 }

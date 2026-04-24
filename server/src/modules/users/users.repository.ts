@@ -13,41 +13,46 @@ export class UsersRepository {
   }
 
   async findById(id: number) {
-    const query = `SELECT id, first_name as "firstName", last_name as "lastName", email, avatar, role FROM users WHERE id = $1`;
+    const query = `SELECT * FROM users WHERE id = $1`;
     const result = await this.pool.query(query, [id]);
     return result.rows[0];
   }
 
-  async create(userData: any) {
-    const { firstName, lastName, email, password, role } = userData;
+  async create(data: any) {
+    const { firstName, lastName, email, password, phone, role } = data;
     const query = `
-      INSERT INTO users (first_name, last_name, email, password, role)
-      VALUES ($1, $2, $3, $4, $5)
-      RETURNING id, first_name as "firstName", last_name as "lastName", email, role
+      INSERT INTO users (first_name, last_name, email, password, phone, role, is_active)
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      RETURNING *
     `;
     const result = await this.pool.query(query, [
       firstName,
       lastName,
       email,
       password,
+      phone,
       role || 'customer',
+      true
     ]);
     return result.rows[0];
   }
 
-  async update(id: number, userData: any) {
-    const { firstName, lastName, email, avatar } = userData;
+  async updateProfile(id: number, data: any) {
+    const { firstName, lastName, phone, address, avatar } = data;
     const query = `
       UPDATE users 
       SET first_name = COALESCE($1, first_name), 
           last_name = COALESCE($2, last_name), 
-          email = COALESCE($3, email),
-          avatar = COALESCE($4, avatar),
+          phone = COALESCE($3, phone), 
+          address = COALESCE($4, address), 
+          avatar = COALESCE($5, avatar), 
           updated_at = CURRENT_TIMESTAMP
-      WHERE id = $5
-      RETURNING id, first_name as "firstName", last_name as "lastName", email, avatar, role
+      WHERE id = $6
+      RETURNING *
     `;
-    const result = await this.pool.query(query, [firstName, lastName, email, avatar, id]);
+    const result = await this.pool.query(query, [
+      firstName, lastName, phone, address, avatar, id
+    ]);
     return result.rows[0];
   }
 

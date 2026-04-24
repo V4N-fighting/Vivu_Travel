@@ -87,6 +87,7 @@ CREATE TABLE tours (
     adventure_level VARCHAR(50),
     altitude VARCHAR(50),
     hotel_star INT,
+    meeting_point_id INT REFERENCES meeting_points(id) ON DELETE SET NULL,
     is_active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -254,3 +255,13 @@ CREATE TABLE contacts (
     is_read BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- 23. Meeting Points
+CREATE TABLE meeting_points (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Thêm dữ liệu mặc định cho Meeting Points
+INSERT INTO meeting_points (name) VALUES ('Thành Phố Hồ Chí Minh'), ('Đà Nẵng'), ('Hà Nội');

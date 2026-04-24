@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { ContactsService } from './contacts.service';
 
 @Controller('contacts')
@@ -13,5 +13,10 @@ export class ContactsController {
   @Get()
   async findAll() {
     return this.contactsService.findAll();
+  }
+
+  @Post(':id/reply')
+  async reply(@Param('id') id: string, @Body() replyData: { message: string }) {
+    return this.contactsService.reply(Number(id), replyData.message);
   }
 }

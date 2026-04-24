@@ -13,11 +13,23 @@ exports.BannersService = void 0;
 const common_1 = require("@nestjs/common");
 const banners_repository_1 = require("./banners.repository");
 let BannersService = class BannersService {
-    constructor(bannersRepository) {
-        this.bannersRepository = bannersRepository;
+    constructor(bannersRepo) {
+        this.bannersRepo = bannersRepo;
     }
     async findAll() {
-        return this.bannersRepository.findAll();
+        return this.bannersRepo.findAll();
+    }
+    async findActive() {
+        return this.bannersRepo.findActive();
+    }
+    async create(data) {
+        return this.bannersRepo.create(data);
+    }
+    async update(id, data) {
+        return this.bannersRepo.update(id, data);
+    }
+    async delete(id) {
+        return this.bannersRepo.delete(id);
     }
 };
 exports.BannersService = BannersService;

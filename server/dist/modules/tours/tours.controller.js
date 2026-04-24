@@ -16,13 +16,14 @@ exports.ToursController = void 0;
 const common_1 = require("@nestjs/common");
 const tours_service_1 = require("./tours.service");
 const passport_1 = require("@nestjs/passport");
-const roles_guard_1 = require("../../common/guards/roles.guard");
+const roles_guard_1 = require("../auth/roles.guard");
+const roles_decorator_1 = require("../auth/roles.decorator");
 let ToursController = class ToursController {
     constructor(toursService) {
         this.toursService = toursService;
     }
-    async findAll(search, countryId, minPrice, maxPrice) {
-        return this.toursService.findAll({ search, countryId, minPrice, maxPrice });
+    async findAll(query) {
+        return this.toursService.findAll(query);
     }
     async findOne(id) {
         return this.toursService.findOne(id);
@@ -34,12 +35,9 @@ let ToursController = class ToursController {
 exports.ToursController = ToursController;
 __decorate([
     (0, common_1.Get)(),
-    __param(0, (0, common_1.Query)('search')),
-    __param(1, (0, common_1.Query)('country_id')),
-    __param(2, (0, common_1.Query)('min_price')),
-    __param(3, (0, common_1.Query)('max_price')),
+    __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Number, Number, Number]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], ToursController.prototype, "findAll", null);
 __decorate([
@@ -51,7 +49,7 @@ __decorate([
 ], ToursController.prototype, "findOne", null);
 __decorate([
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt'), roles_guard_1.RolesGuard),
-    (0, roles_guard_1.Roles)('admin'),
+    (0, roles_decorator_1.Roles)('admin'),
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),

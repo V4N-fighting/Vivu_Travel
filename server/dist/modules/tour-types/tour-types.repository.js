@@ -22,11 +22,11 @@ let TourTypesRepository = class TourTypesRepository {
     }
     async findAll() {
         const query = `
-      SELECT tt.id::text, tt.name, COUNT(t.id)::int as "numberOfTrip"
+      SELECT tt.*, COUNT(t.id) as tour_count 
       FROM tour_types tt
-      LEFT JOIN tours t ON tt.id = t.tour_type_id AND t.is_active = true
-      GROUP BY tt.id, tt.name
-      ORDER BY tt.name
+      LEFT JOIN tours t ON tt.id = t.tour_type_id
+      GROUP BY tt.id
+      ORDER BY tt.name ASC
     `;
         const result = await this.pool.query(query);
         return result.rows;

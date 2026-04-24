@@ -21,65 +21,37 @@ let BookingsRepository = class BookingsRepository {
         this.pool = pool;
     }
     async create(bookingData) {
-        const { userId, tourId, departureDate, adultCount, childCount, totalPrice, note, travelers } = bookingData;
-        let { departureDateId } = bookingData;
+        const { userId, tourId, departureDateId, adultCount, childCount, totalPrice, note, travelers } = bookingData;
+        const totalPeople = (adultCount || 0) + (childCount || 0);
         const client = await this.pool.connect();
         try {
             await client.query('BEGIN');
-            if (!departureDateId && departureDate) {
-                const dateResult = await client.query('SELECT id FROM tour_departure_dates WHERE tour_id = $1 AND departure_date = $2 LIMIT 1', [tourId, departureDate]);
-                if (dateResult.rows.length > 0) {
-                    departureDateId = dateResult.rows[0].id;
-                }
-                else {
-                    const fallbackDate = await client.query('SELECT id FROM tour_departure_dates WHERE tour_id = $1 AND available_slots >= $2 LIMIT 1', [tourId, adultCount + childCount]);
-                    if (fallbackDate.rows.length > 0) {
-                        departureDateId = fallbackDate.rows[0].id;
-                    }
-                    else {
-                        throw new Error('Not enough slots available');
-                    }
-                }
+            const slotQuery = 'SELECT available_slots FROM tour_departure_dates WHERE id = $1 FOR UPDATE';
+            const slotRes = await client.query(slotQuery, [departureDateId]);
+            if (slotRes.rows.length === 0) {
+                throw new Error('Ngày khởi hành không tồn tại');
             }
-            else if (!departureDateId) {
-                const fallbackDate = await client.query('SELECT id FROM tour_departure_dates WHERE tour_id = $1 AND available_slots >= $2 LIMIT 1', [tourId, adultCount + childCount]);
-                if (fallbackDate.rows.length > 0) {
-                    departureDateId = fallbackDate.rows[0].id;
-                }
-                else {
-                    throw new Error('Not enough slots available');
-                }
+            const availableSlots = slotRes.rows[0].available_slots;
+            if (availableSlots < totalPeople) {
+                throw new Error(`Không đủ chỗ trống. Chỉ còn ${availableSlots} chỗ.`);
             }
             const bookingCode = `VV-${Math.floor(100000 + Math.random() * 900000)}`;
             const bookingQuery = `
-        INSERT INTO bookings (booking_code, user_id, tour_id, departure_date_id, adult_count, child_count, total_price, status, note)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, 'pending', $8)
+        INSERT INTO bookings (booking_code, user_id, tour_id, departure_date_id, adult_count, child_count, total_price, note, status)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'confirmed')
         RETURNING *
       `;
-            const bookingResult = await client.query(bookingQuery, [
+            const bookingRes = await client.query(bookingQuery, [
                 bookingCode, userId, tourId, departureDateId, adultCount, childCount, totalPrice, note
             ]);
-            const booking = bookingResult.rows[0];
-            const travelerQuery = `
-        INSERT INTO travelers (booking_id, full_name, email, phone, country, address, type)
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
-      `;
-            for (const traveler of travelers) {
-                await client.query(travelerQuery, [
-                    booking.id, traveler.fullName, traveler.email, traveler.phone,
-                    traveler.country, traveler.address, traveler.type
-                ]);
+            const booking = bookingRes.rows[0];
+            if (travelers && travelers.length > 0) {
+                for (const traveler of travelers) {
+                    await client.query(`INSERT INTO travelers (booking_id, full_name, email, phone, country, address, type) 
+             VALUES ($1, $2, $3, $4, $5, $6, $7)`, [booking.id, traveler.fullName, traveler.email, traveler.phone, traveler.country, traveler.address, traveler.type]);
+                }
             }
-            const updateSlotsQuery = `
-        UPDATE tour_departure_dates 
-        SET available_slots = available_slots - $1 
-        WHERE id = $2 AND available_slots >= $1
-      `;
-            const totalPeople = adultCount + childCount;
-            const updateResult = await client.query(updateSlotsQuery, [totalPeople, departureDateId]);
-            if (updateResult.rowCount === 0) {
-                throw new Error('Not enough slots available');
-            }
+            await client.query('UPDATE tour_departure_dates SET available_slots = available_slots - $1 WHERE id = $2', [totalPeople, departureDateId]);
             await client.query('COMMIT');
             return booking;
         }

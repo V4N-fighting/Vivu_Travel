@@ -14,5 +14,12 @@ declare const _default: () => {
     cors: {
         origin: string;
     };
+    mail: {
+        host: string;
+        port: number;
+        user: string;
+        password: string;
+        from: string;
+    };
 };
 export default _default;

@@ -16,6 +16,9 @@ exports.UsersController = void 0;
 const common_1 = require("@nestjs/common");
 const users_service_1 = require("./users.service");
 const passport_1 = require("@nestjs/passport");
+const platform_express_1 = require("@nestjs/platform-express");
+const multer_1 = require("multer");
+const path_1 = require("path");
 let UsersController = class UsersController {
     constructor(usersService) {
         this.usersService = usersService;
@@ -23,7 +26,10 @@ let UsersController = class UsersController {
     async findById(id) {
         return this.usersService.findById(Number(id));
     }
-    async update(id, userData) {
+    async update(id, userData, file) {
+        if (file) {
+            userData.avatar = file.filename;
+        }
         return this.usersService.update(Number(id), userData);
     }
 };
@@ -39,10 +45,22 @@ __decorate([
 __decorate([
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
     (0, common_1.Put)(':id'),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('avatar', {
+        storage: (0, multer_1.diskStorage)({
+            destination: './uploads/profile',
+            filename: (req, file, cb) => {
+                const uniqueSuffix = Math.floor(1000 + Math.random() * 9000);
+                const originalName = file.originalname.replace(/\s+/g, '-').split('.').slice(0, -1).join('.');
+                const extension = (0, path_1.extname)(file.originalname);
+                return cb(null, `profile-${uniqueSuffix}${extension}`);
+            }
+        })
+    })),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
+    __param(2, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:paramtypes", [String, Object, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "update", null);
 exports.UsersController = UsersController = __decorate([

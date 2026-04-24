@@ -12,9 +12,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ContactsService = void 0;
 const common_1 = require("@nestjs/common");
 const contacts_repository_1 = require("./contacts.repository");
+const email_service_1 = require("../email/email.service");
 let ContactsService = class ContactsService {
-    constructor(contactsRepository) {
+    constructor(contactsRepository, emailService) {
         this.contactsRepository = contactsRepository;
+        this.emailService = emailService;
     }
     async create(contactData) {
         return this.contactsRepository.create(contactData);
@@ -22,10 +24,21 @@ let ContactsService = class ContactsService {
     async findAll() {
         return this.contactsRepository.findAll();
     }
+    async reply(id, replyMessage) {
+        const contacts = await this.contactsRepository.findAll();
+        const contact = contacts.find(c => c.id === id);
+        if (!contact) {
+            throw new common_1.NotFoundException(`Contact with ID ${id} not found`);
+        }
+        await this.emailService.sendContactReply(contact.email, contact.subject, contact.message, replyMessage);
+        await this.contactsRepository.updateReadStatus(id, true);
+        return { success: true, message: 'Reply sent successfully' };
+    }
 };
 exports.ContactsService = ContactsService;
 exports.ContactsService = ContactsService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [contacts_repository_1.ContactsRepository])
+    __metadata("design:paramtypes", [contacts_repository_1.ContactsRepository,
+        email_service_1.EmailService])
 ], ContactsService);
 //# sourceMappingURL=contacts.service.js.map

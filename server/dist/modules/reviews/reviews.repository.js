@@ -22,14 +22,17 @@ let ReviewsRepository = class ReviewsRepository {
     }
     async findByTour(tourId) {
         const query = `
-      SELECT r.*, u.first_name as "firstName", u.last_name as "lastName", u.avatar
+      SELECT r.*, u.first_name, u.last_name, u.avatar as user_avatar
       FROM reviews r
-      JOIN users u ON r.user_id = u.id
+      LEFT JOIN users u ON r.user_id = u.id
       WHERE r.tour_id = $1
       ORDER BY r.created_at DESC
     `;
         const result = await this.pool.query(query, [tourId]);
-        return result.rows;
+        return result.rows.map(row => ({
+            ...row,
+            user_name: row.first_name ? `${row.first_name} ${row.last_name}` : "Khách hàng ẩn danh"
+        }));
     }
     async findLatest(limit = 5) {
         const query = `
@@ -44,14 +47,19 @@ let ReviewsRepository = class ReviewsRepository {
         const result = await this.pool.query(query, [limit]);
         return result.rows;
     }
-    async create(reviewData) {
-        const { userId, tourId, rating, comment } = reviewData;
+    async create(data) {
+        const { userId, tourId, bookingId, rating, comment } = data;
         const query = `
-      INSERT INTO reviews (user_id, tour_id, rating, comment)
-      VALUES ($1, $2, $3, $4)
+      INSERT INTO reviews (user_id, tour_id, booking_id, rating, comment)
+      VALUES ($1, $2, $3, $4, $5)
       RETURNING *
     `;
-        const result = await this.pool.query(query, [userId, tourId, rating, comment]);
+        const result = await this.pool.query(query, [userId, tourId, bookingId, rating, comment]);
+        return result.rows[0];
+    }
+    async updateAdminReply(id, reply) {
+        const query = 'UPDATE reviews SET admin_reply = $1, replied_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING *';
+        const result = await this.pool.query(query, [reply, id]);
         return result.rows[0];
     }
 };
