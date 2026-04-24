@@ -1,14 +1,17 @@
 import styled from "styled-components";
 import Banner from "../../Component/Banner";
 import ProgressBar from "./ProgressBar";
-import { FlexBox, Grid, GridCol, GridRow, Icon, Text, Title } from "../../styled";
+import { FlexBox, Grid, GridCol, GridRow, Text, Title } from "../../styled";
 import TourCard from "./TourCard";
+import CouponInput from "./CouponInput";
 import Button from "../../Component/BaseComponent/Button/Button";
 import { useEffect, useState } from "react";
 import Icons from "../../Component/BaseComponent/Icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { GET_BOOKING } from "../../api";
+import { GET_BOOKING, GET_COUPON } from "../../api";
+import { message } from "antd";
+import dayjs from "dayjs";
 
 type Traveler = {
   name: string;
@@ -40,7 +43,6 @@ function Checkout() {
     const bookingDraft = location.state?.bookingDraft;
 
     useEffect(() => {
-        // Chỉ cần myData (chứa thông tin tour và giá) là đủ để vào trang Checkout
         if (!myData) {
             navigate("/home");
         }
@@ -49,12 +51,15 @@ function Checkout() {
     const exampleTour = myData ? {
         image: myData.data.image,
         title: myData.data.name,
-        code: "STN084-2025-00276",
+        code: `TOUR-${myData.data.id}-${dayjs().format('YYYY')}`,
         startDate: myData.data.departureDate,
         counter: myData.adultCounter + myData.childCounter,
         duration: myData.data.duration,
         price: myData.total,
-    } : { image: "", title: "", code: "", startDate: "", counter: 0, duration: "", price: 0 };
+        originalTotal: myData.originalTotal,
+        discount: myData.discount,
+        couponCode: myData.couponCode
+    } : { image: "", title: "", code: "", startDate: "", counter: 0, duration: "", price: 0, originalTotal: 0, discount: 0, couponCode: "" };
 
     const [adultTravelers, setAdultTravelers] = useState<Traveler[]>(
         bookingDraft?.adultTravelers || []
@@ -64,8 +69,48 @@ function Checkout() {
         bookingDraft?.childTravelers || []
     );
 
-    const [curStep, setCurStep] = useState<number>(3);
+    const [curStep] = useState<number>(3);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [couponLoading, setCouponLoading] = useState(false);
+    const [appliedCoupon, setAppliedCoupon] = useState<any>(myData?.couponCode ? { code: myData.couponCode } : null);
+    const [currentTotal, setCurrentTotal] = useState(myData?.total || 0);
+
+    const handleApplyCoupon = async (code: string) => {
+        setCouponLoading(true);
+        try {
+            console.log("Đang kiểm tra mã:", code);
+            const res = await axios.get(`${GET_COUPON}/${code}`);
+            const coupon = res.data;
+            console.log("Dữ liệu mã giảm giá nhận được:", coupon);
+            
+            if (myData.total < coupon.min_order_value) {
+                message.error(`Đơn hàng tối thiểu ${new Intl.NumberFormat('vi-VN').format(coupon.min_order_value)}đ để sử dụng mã này`);
+                return;
+            }
+
+            let discount = 0;
+            const discountValue = Number(coupon.discount_value);
+            if (coupon.discount_type === 'percentage') {
+                discount = (myData.total * discountValue) / 100;
+                if (coupon.max_discount_amount && discount > Number(coupon.max_discount_amount)) {
+                    discount = Number(coupon.max_discount_amount);
+                }
+            } else {
+                discount = discountValue;
+            }
+
+            setAppliedCoupon(coupon);
+            const newTotal = myData.total - discount;
+            setCurrentTotal(newTotal > 0 ? newTotal : 0);
+            message.success(`Đã giảm ${new Intl.NumberFormat('vi-VN').format(discount)}đ`);
+        } catch (error: any) {
+            console.error("Lỗi áp dụng mã:", error);
+            const errorMsg = error.response?.data?.message || 'Mã giảm giá không hợp lệ hoặc đã hết hạn';
+            message.error(errorMsg);
+        } finally {
+            setCouponLoading(false);
+        }
+    };
 
     const handleAdultInputChange = <K extends keyof Traveler>(
         index: number,
@@ -119,9 +164,10 @@ function Checkout() {
                 departureDateId: myData.data.departureDateId || 1,
                 adultCount: myData.adultCounter,
                 childCount: myData.childCounter,
-                totalPrice: myData.total,
+                totalPrice: currentTotal,
                 note: bookingDraft?.specialRequests || '',
-                travelers: allTravelers
+                travelers: allTravelers,
+                couponCode: appliedCoupon?.code
             };
 
             await axios.post(GET_BOOKING, payload, {
@@ -130,11 +176,11 @@ function Checkout() {
                 }
             });
 
-            // Chuyển hướng thẳng sang trang thành công
+            message.success('Đặt tour thành công!');
             navigate('/booking_success');
         } catch (error: any) {
             console.error(error);
-            alert('Đặt tour thất bại: ' + (error.response?.data?.message || error.message));
+            message.error('Đặt tour thất bại: ' + (error.response?.data?.message || error.message));
         } finally {
             setIsSubmitting(false);
         }
@@ -232,7 +278,7 @@ function Checkout() {
                         }
                         </GridCol>
                         <GridCol col={5}>
-                            <TourCard tour={exampleTour} />
+                            <TourCard tour={{...exampleTour, price: currentTotal}} />
                         </GridCol>
                     </GridRow>
                 </Grid>

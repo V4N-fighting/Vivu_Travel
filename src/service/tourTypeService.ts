@@ -6,11 +6,12 @@ import TourTypeItemMap from "../types/tourType";
 export const useTourTypeFullData = () => {
     const {data, loading, error} = useFetch<TourTypeItemMap[]>(GET_TOUR_TYPE);
 
-    const dataMap: TourTypeItemMap[] | undefined = data?.map((item) => {
+    const dataMap: TourTypeItemMap[] | undefined = data?.map((item: any) => {
         return {
           id: String(item.id),
           name: item.name,
-          numberOfTrip: item.numberOfTrip ?? 0,
+          numberOfTrip: item.numberOfTrip ?? item.tour_count ?? 0,
+          image: item.image,
         };
     });
 

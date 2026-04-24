@@ -1,14 +1,17 @@
 import styled from "styled-components";
 import Button from "../../../Component/BaseComponent/Button/Button";
 import { RowBetween, Grid, GridCol, GridRow, Icon, Text } from "../../../styled";
-import CalendarComponent from "./Calendar";
 import { faCalendar } from "@fortawesome/free-regular-svg-icons";
 import { faTeletype } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
+import type { Dayjs } from 'dayjs';
 import Counter from "./Counter";
 import TourInfo from "./TourInfo";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { message, DatePicker, Input as AntInput } from "antd";
+import { GET_BOOKING, GET_CONTACT, GET_COUPON, GET_TOUR } from "../../../api";
+import axios from "axios";
 
 interface ModalProps {
     hideModal: () => void;
@@ -28,18 +31,48 @@ const Modal: React.FC<ModalProps> = ({ hideModal, data }) => {
     const [adultCost, setAdultCost] = useState<number>(0)
     const [childCost, setChildCost] = useState<number>(0)
     const [total, setTotal] = useState<number>(0);
+    const [originalTotal, setOriginalTotal] = useState<number>(0);
     const [selectedDateId, setSelectedDateId] = useState<number | null>(null);
+    const [couponCode, setCouponCode] = useState<string>('');
+    const [discount, setDiscount] = useState<number>(0);
+    const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
 
-    // Cố định ngày hiện tại là 18/04/2026 theo yêu cầu
-    const today = dayjs('2026-04-18').startOf('day');
+    // Dữ liệu hành trình
+    const [itineraries, setItineraries] = useState<any[]>([]);
+    const [transportations, setTransportations] = useState<any[]>([]);
 
-    // Chỉ lấy các ngày từ 18/04/2026 trở về sau
-    const validDepartureDates = data && Array.isArray(data.departure_dates)
-        ? data.departure_dates.filter((d: any) => {
-            const departureDate = dayjs(d.departure_date).startOf('day');
-            return departureDate.isAfter(today) || departureDate.isSame(today);
-        })
-        : [];
+    useEffect(() => {
+        if (data?.id) {
+            // Lấy thông tin chi tiết tour bao gồm hành trình và phương tiện
+            const fetchTourDetails = async () => {
+                try {
+                    const response = await axios.get(`${GET_TOUR}/${data.id}`);
+                    const tourData = response.data;
+                    setItineraries(tourData.itineraries || []);
+                    setTransportations(tourData.transportations || []);
+                } catch (error) {
+                    console.error("Lỗi khi tải chi tiết tour:", error);
+                }
+            };
+            fetchTourDetails();
+        }
+    }, [data?.id]);
+
+    // State cho tính năng yêu cầu ngày mới
+    const [requestDate, setRequestDate] = useState<Dayjs | null>(null);
+    const [requestNote, setRequestNote] = useState<string>('');
+    const [isSubmittingRequest, setIsSubmittingRequest] = useState(false);
+
+    // Lấy tất cả các ngày khởi hành từ backend
+    const rawDepartureDates = data && Array.isArray(data.departure_dates)
+        ? data.departure_dates
+        : (data && Array.isArray(data.departureDate) ? data.departureDate : []);
+
+    const validDepartureDates = [...rawDepartureDates]
+        .map(d => typeof d === 'string' ? { departure_date: d, available_slots: '?', id: Math.random() } : d)
+        .sort((a: any, b: any) => 
+            dayjs(a.departure_date).unix() - dayjs(b.departure_date).unix()
+        );
 
     const firstDate = validDepartureDates.length > 0 
         ? validDepartureDates[0].departure_date.toString() 
@@ -48,14 +81,29 @@ const Modal: React.FC<ModalProps> = ({ hideModal, data }) => {
         ? validDepartureDates[0].id 
         : null;
 
-    const [displayDate, setDisplayDate] = useState({y: '2026', m: '01', d: '01'});
+    // Khởi tạo displayDate dựa trên ngày khởi hành đầu tiên nếu có
+    const [displayDate, setDisplayDate] = useState(() => {
+        if (validDepartureDates.length > 0) {
+            const date = dayjs(validDepartureDates[0].departure_date);
+            return {
+                y: date.format('YYYY'),
+                m: date.format('MM'),
+                d: date.format('DD')
+            };
+        }
+        return { y: dayjs().format('YYYY'), m: dayjs().format('MM'), d: dayjs().format('DD') };
+    });
 
     useEffect(() => {
         if (firstDateId && !selectedDateId) {
             setSelectedDateId(firstDateId);
             if (firstDate) {
-                const [y, m, d] = firstDate.split("-");
-                setDisplayDate({y, m, d});
+                const date = dayjs(firstDate);
+                setDisplayDate({
+                    y: date.format('YYYY'),
+                    m: date.format('MM'),
+                    d: date.format('DD')
+                });
             }
         }
     }, [firstDateId, selectedDateId, firstDate]);
@@ -67,20 +115,73 @@ const Modal: React.FC<ModalProps> = ({ hideModal, data }) => {
     
 
     useEffect(() => {
-        setTotal(adultCost + childCost)
-    }, [adultCost, childCost]);
+        const newTotal = adultCost + childCost;
+        setOriginalTotal(newTotal);
+        setTotal(newTotal - discount);
+    }, [adultCost, childCost, discount]);
 
+    const handleApplyCoupon = async () => {
+        if (!couponCode.trim()) {
+            message.warning('Vui lòng nhập mã giảm giá');
+            return;
+        }
 
-    const handleDateChange = (date: Dayjs) => {
-        alert('Chỉ có 1 chuyến đi')
+        setIsApplyingCoupon(true);
+        try {
+            console.log("Đang kiểm tra mã tại Modal:", couponCode);
+            const res = await axios.get(`${GET_COUPON}/${couponCode.trim()}`);
+            const coupon = res.data;
+            console.log("Dữ liệu Coupon nhận được tại Modal:", coupon);
+
+            const currentOriginalTotal = adultCost + childCost;
+
+            if (currentOriginalTotal < Number(coupon.min_order_value)) {
+                message.error(`Đơn hàng tối thiểu ${new Intl.NumberFormat('vi-VN').format(coupon.min_order_value)}đ để sử dụng mã này`);
+                setDiscount(0);
+                return;
+            }
+
+            let discountAmount = 0;
+            const discountValue = Number(coupon.discount_value);
+            
+            if (coupon.discount_type === 'percentage') {
+                discountAmount = (currentOriginalTotal * discountValue) / 100;
+                if (coupon.max_discount_amount && discountAmount > Number(coupon.max_discount_amount)) {
+                    discountAmount = Number(coupon.max_discount_amount);
+                }
+            } else {
+                discountAmount = discountValue;
+            }
+
+            setDiscount(discountAmount);
+            message.success(`Áp dụng mã thành công! Đã giảm ${new Intl.NumberFormat('vi-VN').format(discountAmount)}đ`);
+        } catch (error: any) {
+            console.error("Lỗi áp dụng mã tại Modal:", error);
+            const errorMsg = error.response?.data?.message || 'Mã giảm giá không hợp lệ hoặc đã hết hạn';
+            message.error(errorMsg);
+            setDiscount(0);
+        } finally {
+            setIsApplyingCoupon(false);
+        }
     };
+
 
     const handleSubmit = () => {
         if (adultCounter > 0 || childCounter > 0) {
+            const userStr = localStorage.getItem('user');
+            if (!userStr) {
+                message.warning('Vui lòng đăng nhập để đặt tour!');
+                navigate('/login');
+                return;
+            }
+
             navigate(`/check_out`,  {
                 state: {
                     myData: {
                         total, 
+                        originalTotal,
+                        discount,
+                        couponCode,
                         adultCounter, 
                         childCounter, 
                         data: {
@@ -91,9 +192,49 @@ const Modal: React.FC<ModalProps> = ({ hideModal, data }) => {
                 }
             });
         } else {
-            alert("Vui lòng điền số lượng du khách")
+            message.error("Vui lòng chọn số lượng du khách");
         }
     }
+
+    const handleRequestNewDate = async () => {
+        if (!requestDate) {
+            message.warning('Vui lòng chọn ngày bạn muốn khởi hành');
+            return;
+        }
+
+        const userStr = localStorage.getItem('user');
+        if (!userStr) {
+            message.warning('Vui lòng đăng nhập để gửi yêu cầu');
+            navigate('/login');
+            return;
+        }
+
+        const user = JSON.parse(userStr);
+        setIsSubmittingRequest(true);
+
+        try {
+            // Sử dụng API Contact để gửi yêu cầu ngày mới
+            const payload = {
+                name: `${user.lastName} ${user.firstName}`.trim(),
+                email: user.email,
+                phone: user.phone || '',
+                subject: `Yêu cầu ngày khởi hành mới cho tour: ${data.name}`,
+                message: `Khách hàng yêu cầu ngày khởi hành mới: ${requestDate.format('DD/MM/YYYY')}. 
+                Ghi chú: ${requestNote || 'Không có ghi chú'}. 
+                Tour ID: ${data.id}`
+            };
+
+            await axios.post(GET_CONTACT, payload);
+            message.success('Yêu cầu của bạn đã được gửi thành công! Chúng tôi sẽ phản hồi sớm nhất.');
+            setRequestDate(null);
+            setRequestNote('');
+        } catch (error) {
+            console.error('Lỗi khi gửi yêu cầu:', error);
+            message.error('Không thể gửi yêu cầu lúc này. Vui lòng thử lại sau.');
+        } finally {
+            setIsSubmittingRequest(false);
+        }
+    };
 
     const getAdultValue = (value:number) => {
         setAdultCost(value*adultCostInit);
@@ -139,8 +280,12 @@ const Modal: React.FC<ModalProps> = ({ hideModal, data }) => {
                                                     isActive={selectedDateId === dateObj.id}
                                                     onClick={() => {
                                                         setSelectedDateId(dateObj.id);
-                                                        const [y, m, d] = dateObj.departure_date.split("-");
-                                                        setDisplayDate({y, m, d});
+                                                        const date = dayjs(dateObj.departure_date);
+                                                        setDisplayDate({
+                                                            y: date.format('YYYY'),
+                                                            m: date.format('MM'),
+                                                            d: date.format('DD')
+                                                        });
                                                     }}
                                                 >
                                                     {dayjs(dateObj.departure_date).format('DD/MM/YYYY')} 
@@ -150,7 +295,34 @@ const Modal: React.FC<ModalProps> = ({ hideModal, data }) => {
                                                 </DateItem>
                                             ))
                                         ) : (
-                                            <Text style={{color: 'red'}}>Hiện không có chuyến đi nào khả dụng trong tương lai.</Text>
+                                            <RequestSection>
+                                                <Text style={{color: '#666', marginBottom: '15px', display: 'block'}}>
+                                                    Hiện tour này chưa có lịch khởi hành phù hợp? Hãy cho chúng tôi biết ngày bạn mong muốn:
+                                                </Text>
+                                                <DatePicker 
+                                                    style={{ width: '100%', marginBottom: '15px' }} 
+                                                    placeholder="Chọn ngày bạn muốn đi"
+                                                    format="DD/MM/YYYY"
+                                                    disabledDate={(current) => current && current < dayjs().startOf('day')}
+                                                    onChange={(date) => setRequestDate(date)}
+                                                    value={requestDate}
+                                                />
+                                                <AntInput.TextArea 
+                                                    placeholder="Lời nhắn hoặc số lượng người dự kiến (không bắt buộc)"
+                                                    rows={3}
+                                                    value={requestNote}
+                                                    onChange={(e) => setRequestNote(e.target.value)}
+                                                    style={{ marginBottom: '15px' }}
+                                                />
+                                                <Button 
+                                                    orange 
+                                                    style={{ width: '100%', borderRadius: 0 }}
+                                                    onClick={handleRequestNewDate}
+                                                    disabled={isSubmittingRequest}
+                                                >
+                                                    {isSubmittingRequest ? 'Đang gửi yêu cầu...' : 'Gửi yêu cầu ngày mới'}
+                                                </Button>
+                                            </RequestSection>
                                         )}
                                     </DateList>
                                 </Setup>
@@ -180,6 +352,26 @@ const Modal: React.FC<ModalProps> = ({ hideModal, data }) => {
                                         </DefaultCost>
                                         <Counter value={childCounter} setValue={setChildCounter} onChangeValue={(newValue) => getChildValue(newValue)} />
                                     </RowBetween>
+                                    
+                                    <CouponSection>
+                                        <Topic>Mã giảm giá</Topic>
+                                        <CouponInputWrapper>
+                                            <CouponInput 
+                                                type="text" 
+                                                placeholder="Nhập mã giảm giá..." 
+                                                value={couponCode}
+                                                onChange={(e) => setCouponCode(e.target.value)}
+                                            />
+                                            <CouponButton onClick={handleApplyCoupon} disabled={isApplyingCoupon}>
+                                                {isApplyingCoupon ? 'Đang áp dụng...' : 'Áp dụng'}
+                                            </CouponButton>
+                                        </CouponInputWrapper>
+                                        {discount > 0 && (
+                                            <DiscountInfo>
+                                                Đã giảm: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(discount)}
+                                            </DiscountInfo>
+                                        )}
+                                    </CouponSection>
                                 </Setup>
                             )}
                             <Bottom>
@@ -201,7 +393,17 @@ const Modal: React.FC<ModalProps> = ({ hideModal, data }) => {
                             </Bottom>
                         </GridCol>
                         <GridCol col={4}>
-                            <TourInfo title={data && data.name} total={total} hideModal={hideModal} day={Number(displayDate.d)} month={Number(displayDate.m)} year={Number(displayDate.y)} />
+                            <TourInfo 
+                                title={data && data.name} 
+                                total={total} 
+                                hideModal={hideModal} 
+                                day={Number(displayDate.d)} 
+                                month={Number(displayDate.m)} 
+                                year={Number(displayDate.y)}
+                                itineraries={itineraries}
+                                meetingPoint={data?.meeting_point_name}
+                                transportations={transportations}
+                            />
                         </GridCol>
                     </GridRow>
                 </Grid>
@@ -315,5 +517,65 @@ const DefaultCost = styled.div`
     padding-right: 20px;
     white-space: nowrap;
 `
+
+const RequestSection = styled.div`
+    padding: 20px;
+    background: #fdfdfd;
+    border: 1px dashed #ff681a;
+    border-radius: 8px;
+    margin-top: 10px;
+`;
+
+const DiscountInfo = styled.div`
+    color: #4caf50;
+    font-size: 13px;
+    margin-top: 5px;
+    font-weight: 500;
+`;
+
+const CouponSection = styled.div`
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px dashed #ddd;
+`;
+
+const CouponInputWrapper = styled.div`
+    display: flex;
+    gap: 10px;
+    align-items: center;
+`;
+
+const CouponInput = styled.input`
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    
+    &:focus {
+        outline: none;
+        border-color: #ff5722;
+    }
+`;
+
+const CouponButton = styled.button`
+    padding: 10px 20px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+
+    &:hover {
+        background-color: #555;
+    }
+
+    &:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    }
+`;
 
 export default Modal;

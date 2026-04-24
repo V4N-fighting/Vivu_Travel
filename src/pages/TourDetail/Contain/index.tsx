@@ -1,12 +1,14 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import { Text, Title } from "../../../styled";
+import { GET_IMAGE_URL } from "../../../api";
+import { Title } from "../../../styled";
 import Button from "../../../Component/BaseComponent/Button/Button";
 import { Overview } from "./Overview";
 import { Expense } from "./Expense";
 import { Itinerary } from "./Itinerary";
 import { FAQs } from "./FAQs";
 import { Map } from "./Map";
+import { Reviews } from "./Reviews";
 
 interface ContainProps {
     formRef: React.RefObject<HTMLFormElement>;
@@ -19,9 +21,6 @@ interface ArrayNavContent {
     value: JSX.Element
 }
 
-
-
-
 const Contain: React.FC<ContainProps> = ({formRef, data}) => {
     
     const navContent: ArrayNavContent[] = [
@@ -30,7 +29,7 @@ const Contain: React.FC<ContainProps> = ({formRef, data}) => {
         tab: "Tổng quan"
     },
     {
-        id: 2, value: <Expense  content={data && data.price}/>,
+        id: 2, value: <Expense  data={data}/>,
         tab: "Chi phí"
     },
     {
@@ -44,6 +43,10 @@ const Contain: React.FC<ContainProps> = ({formRef, data}) => {
     {
         id: 5, value: <Map  content={data && data.price}/>, // thêm html của map
         tab: "Map"
+    },
+    {
+        id: 6, value: <Reviews tourId={data?.id?.toString()} />,
+        tab: "Đánh giá"
     },
 ]
 
@@ -110,7 +113,7 @@ const Contain: React.FC<ContainProps> = ({formRef, data}) => {
                     Ngày
                 </Time>
             </Header>
-            <Image src={data && data.image} />
+            <Image src={data?.image ? (data.image.startsWith('http') ? data.image : `${GET_IMAGE_URL}/tours/${data.image}`) : ''} />
             <Information>
                 <Nav ref={navRef} >
                     {navContent.map((item, index) => (
@@ -132,21 +135,6 @@ const Contain: React.FC<ContainProps> = ({formRef, data}) => {
                     {activeContent && <NavItem>{activeContent.value}</NavItem>}
                 </NavContent>
             </Information>
-            <Form ref={formRef}>
-                <Text style={{ gridColumn: 'span 2'}} >Bạn có thể gửi yêu cầu qua mẫu này</Text>
-                <Text style={{ gridColumn: 'span 2'}}  small>Tên chuyến đi: *
-                    <span style={{fontWeight: 'bold'}}> {data && data.name}</span>
-                </Text>
-                <Input type="text" placeholder="Nhập tên*" required style={{ gridColumn: 'span 2'}}/>
-                <Input type="email" placeholder="Nhập email *" required style={{ gridColumn: 'span 2'}}/>
-                <Input type="tel" placeholder="Chọn quốc gia *" required />
-                <Input type="tel" placeholder="Nhập số liên lạc *" required />
-                <Input type="tel" placeholder="Nhập số người *" required />
-                <Input type="tel" placeholder="Nhập số trẻ em *" required />
-                <Input type="email" placeholder="Nhập chủ đề yêu cầu *" required style={{ gridColumn: 'span 2'}}/>
-                <TextArea placeholder="Nhập nội dung..." required />
-                <Button orange style={{ gridColumn: 'span 2'}}>Gửi Email</Button>
-            </Form>
         </Wrapper>
     );
 };
@@ -235,43 +223,6 @@ const NavContent = styled.div`
 
 const NavItem = styled.div`
     padding: 10px 0;
-    color: red;
 `
-
-const Form = styled.form`
-  margin: 50px 0 30px;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 30px;
-  width: 100%;
-`;
-
-const Input = styled.input`
-  padding: 16px;
-  border: 1px solid #f76b006d;
-  border-radius: 5px;
-  font-size: 14px;
-  width: 100%;
-
-  &:focus {
-    outline: none;
-    border-color: #ff8c42;
-  }
-`;
-
-const TextArea = styled.textarea`
-  grid-column: span 2;
-  padding: 10px;
-  border: 1px solid #f76b006d;
-  border-radius: 5px;
-  font-size: 16px;
-  resize: none;
-  height: 100px;
-
-  &:focus {
-    outline: none;
-    border-color: #ff8c42;
-  }
-`;
 
 export default Contain;

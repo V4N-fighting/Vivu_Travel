@@ -5,6 +5,7 @@ import Button from "../../../Component/BaseComponent/Button/Button";
 import ScrollToShow from "../../../Component/ScrollToShow";
 import TourCardDetail from "../../../Component/TourCardDetail";
 import { useTour } from "../../../service/tourService";
+import { GET_IMAGE_URL } from "../../../api";
 
 
 interface ListCardProps {
@@ -24,11 +25,13 @@ const ListCard: React.FC<ListCardProps> = ({}) => {
   console.log(tours);
 
   const Sildes = tours.map((item, index) => {
+    const imageUrl = item.image ? (item.image.startsWith('http') ? item.image : `${GET_IMAGE_URL}/tours/${item.image}`) : "./images/best-city-1.jpg";
+    
     return (
       <TourCardDetail
         valueID={item.id}
         key={index}
-        url={item.image}
+        url={imageUrl}
         title={item.name}
         textLocation={item.countryName}
         textTime={item.duration}

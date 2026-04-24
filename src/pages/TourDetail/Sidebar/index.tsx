@@ -56,7 +56,19 @@ const Sidebar: React.FC<SidebarProps> = ({handleScrollToForm, showModel, data}) 
                     <Text small style={{textAlign: 'center'}}><Cost>{priceDisplay}</Cost>/Adult</Text>
                 </Top>
                 <Bottom>
-                    <Button orange style={{width: '100%', borderRadius: '0'}} onClick={() => showModel()}>Kiểm tra</Button>
+                    <Button 
+                        orange={data?.is_active !== false} 
+                        style={{
+                            width: '100%', 
+                            borderRadius: '0', 
+                            backgroundColor: data?.is_active === false ? '#d9d9d9' : undefined,
+                            cursor: data?.is_active === false ? 'not-allowed' : 'pointer'
+                        }} 
+                        onClick={() => data?.is_active !== false && showModel()}
+                        disabled={data?.is_active === false}
+                    >
+                        {data?.is_active === false ? 'Ngừng kinh doanh' : 'Kiểm tra'}
+                    </Button>
                     <Text small style={{textAlign: 'center'}}>
                         Cần trợ giúp về việc đặt chổ? 
                         <span 

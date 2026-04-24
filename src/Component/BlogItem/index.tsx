@@ -4,26 +4,33 @@ import Icons from "../BaseComponent/Icons";
 
 
 
+import { Link } from "react-router-dom";
+
 interface BlogItemProps {
     imgUrl: string,
     blogTitle: string,
-    timeText: string
+    timeText: string,
+    slug?: string,
 }
 
-const BlogItem: React.FC<BlogItemProps> = ({imgUrl, blogTitle, timeText}) => {
+const BlogItem: React.FC<BlogItemProps> = ({imgUrl, blogTitle, timeText, slug}) => {
+    const blogLink = slug ? `/blog/${slug}` : '#';
+    
     return ( 
-        <Wrapper>
-            <ImageWrapper>
-                <Image src={imgUrl}/>
-            </ImageWrapper>
-            <Content>
-                <TimeBox>
-                    <Icons.CalendarIcon />
-                    <Text>{timeText}</Text>
-                </TimeBox>
-                <Title medium>{blogTitle}</Title>
-            </Content>
-        </Wrapper>
+        <Link to={blogLink} style={{ textDecoration: 'none', color: 'inherit' }}>
+            <Wrapper>
+                <ImageWrapper>
+                    <Image src={imgUrl}/>
+                </ImageWrapper>
+                <Content>
+                    <TimeBox>
+                        <Icons.CalendarIcon />
+                        <Text>{timeText}</Text>
+                    </TimeBox>
+                    <Title medium style={{ fontSize: '14px', lineHeight: '1.4' }}>{blogTitle}</Title>
+                </Content>
+            </Wrapper>
+        </Link>
      );
 }
 

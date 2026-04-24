@@ -3,42 +3,34 @@ import { Grid, GridCol, GridRow, SupTitle, Text, Title } from "../../../styled";
 import ScrollToShow from "../../../Component/ScrollToShow";
 import TourCard from "../../../Component/TourCard";
 import Carousel from "../../../Component/Carousel";
+import { useActivityFullData } from "../../../service/activitiesService";
+import { GET_IMAGE_URL } from "../../../api";
+import { PARAM } from "../../../api/param";
 
 
 interface BeautiCityProps {
   
 }
 
-// Dữ liệu mẫu
-const activities = [
-  { id: 1, url: "./images/destinations-1-1.jpg", label: "(2 Trips)", name: "Boating" },
-  { id: 2, url: "./images/destinations-1-1.jpg", label: "(5 Trips)", name: "City Tour" },
-  { id: 3, url: "./images/destinations-1-1.jpg", label: "(3 Trips)", name: "Cycling" },
-  { id: 4, url: "./images/destinations-1-1.jpg", label: "(4 Trips)", name: "Hiking" },
-  { id: 5, url: "./images/destinations-1-1.jpg", label: "(1 Trip)", name: "Jungle Safari" },
-  { id: 6, url: "./images/destinations-1-1.jpg", label: "(6 Trips)", name: "Peak Climbing" },
-  { id: 7, url: "./images/destinations-1-1.jpg", label: "(2 Trips)", name: "Rafting" },
-  { id: 8, url: "./images/destinations-1-1.jpg", label: "(4 Trips)", name: "Skiing" },
-  { id: 9, url: "./images/destinations-1-1.jpg", label: "(2 Trips)", name: "Trekking" },
-  { id: 10, url: "./images/destinations-1-1.jpg", label: "(2 Trips)", name: "Trekking" },
-];
-
 
 
 const BeautiCity: React.FC<BeautiCityProps> = ({}) => {
+  const { activities, isLoading, isError } = useActivityFullData();
 
   
-  const listContent = activities.map((activity, index) => (
+  const listContent = activities.map((activity, index) => {
+    const iconUrl = activity.icon ? (activity.icon.startsWith('http') ? activity.icon : `${GET_IMAGE_URL}/activities/${activity.icon}`) : "./images/destinations-1-1.jpg";
     
+    return (
       <TourCard
-        key={index}
-        url={activity.url}
-        label={activity.label}
+        key={activity.id}
+        url={iconUrl}
+        label={`(${activity.numberOfTrip} Trips)`}
         name={activity.name}
-        current={['activity', String(activity.id), activity.name]}
+        current={[PARAM.ACTIVITY, String(activity.id), activity.name]}
       />
-    
-  ))
+    );
+  });
 
 
   return (

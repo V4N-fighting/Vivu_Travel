@@ -3,7 +3,7 @@ import Banner from "../../Component/Banner";
 import { Grid, GridRow, GridCol} from "../../styled";
 import Contain from "./Contain";
 import Sidebar from "./Sidebar";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import MOdel from "./Modal";
 import { useLocation, useParams } from "react-router-dom";
 import { useTour } from "../../service/tourService";
@@ -20,6 +20,14 @@ const TourDetail: React.FC<TourDetailProps> = () => {
     const tourId = searchParams.get('tourId');
 
     const { tours, isLoading, isError } = useTour({id: tourId});
+    
+    const [tourData, setTourData] = useState<any>(null);
+
+    useEffect(() => {
+        if (tours && tours.length > 0) {
+            setTourData(tours[0]);
+        }
+    }, [tours]);
    
     const formRef = useRef<HTMLFormElement | null>(null);
 
@@ -51,15 +59,15 @@ const TourDetail: React.FC<TourDetailProps> = () => {
                 <Grid>
                     <GridRow>
                         <GridCol col={8}>
-                            <Contain data={tours?.[0]} formRef={formRef} />
+                            <Contain data={tourData} formRef={formRef} />
                         </GridCol>
                         <GridCol col={4}>
-                            <Sidebar data={tours?.[0]} handleScrollToForm={handleScrollToForm} showModel={handleShowModal} />
+                            <Sidebar data={tourData} handleScrollToForm={handleScrollToForm} showModel={handleShowModal} />
                         </GridCol>
                     </GridRow>
                 </Grid>
                             
-                {showModal && <MOdel data={tours?.[0]} hideModal={handleHideModal}/>}
+                {showModal && <MOdel data={tourData} hideModal={handleHideModal}/>}
             </TourPage>
             <ListCard />
         </>

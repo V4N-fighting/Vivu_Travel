@@ -10,6 +10,9 @@ export interface User {
   avatar?: string;
   role?: string;
   access_token?: string;
+  phone?: string;
+  address?: string;
+  avatarFile?: File;
 }
 
 export const register = async (user: User): Promise<void> => {

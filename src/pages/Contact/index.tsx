@@ -1,10 +1,11 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Banner from "../../Component/Banner";
 import { SupTitle, Text, Title } from "../../styled";
 import Button from "../../Component/BaseComponent/Button/Button";
 import axios from "axios";
 import { GET_CONTACT } from "../../api";
+import { message } from "antd";
 
 function Contact() {
     const [form, setForm] = useState({
@@ -15,7 +16,6 @@ function Contact() {
         message: "",
     });
     const [submitting, setSubmitting] = useState(false);
-    const [success, setSuccess] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -24,16 +24,31 @@ function Contact() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!form.firstName || !form.lastName || !form.email || !form.phone || !form.message) {
-            alert("Vui lòng điền đầy đủ thông tin!");
+            message.warning("Vui lòng điền đầy đủ thông tin!");
             return;
         }
         setSubmitting(true);
         try {
-            await axios.post(GET_CONTACT, form);
-            setSuccess(true);
-            setForm({ firstName: "", lastName: "", email: "", phone: "", message: "" });
+            // Gộp firstName và lastName thành name để khớp với database backend
+            const payload = {
+                name: `${form.lastName} ${form.firstName}`.trim(),
+                email: form.email,
+                phone: form.phone,
+                subject: 'Liên hệ từ khách hàng',
+                message: form.message
+            };
+
+            await axios.post(GET_CONTACT, payload);
+            message.success('Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi sớm nhất.');
+            setForm({
+                firstName: '',
+                lastName: '',
+                email: '',
+                phone: '',
+                message: ''
+            });
         } catch (error: any) {
-            alert("Gửi thất bại: " + (error.response?.data?.message || error.message));
+            message.error("Gửi thất bại: " + (error.response?.data?.message || error.message));
         } finally {
             setSubmitting(false);
         }
@@ -52,24 +67,58 @@ function Contact() {
                 <TextContact>
                     Chúng tôi luôn sẵn lòng lắng nghe ý kiến, câu hỏi và đề xuất từ bạn. Trên trang liên hệ, bạn sẽ tìm thấy một biểu mẫu đơn giản mà bạn có thể điền thông tin cần thiết.
                 </TextContact>
-                {success ? (
-                    <SuccessMessage>
-                        ✅ Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi sớm nhất có thể.
-                    </SuccessMessage>
-                ) : (
-                    <>
-                        <Form onSubmit={handleSubmit}>
-                            <Input type="text" name="lastName" placeholder="Họ *" value={form.lastName} onChange={handleChange} required />
-                            <Input type="text" name="firstName" placeholder="Tên *" value={form.firstName} onChange={handleChange} required />
-                            <Input type="email" name="email" placeholder="Email *" value={form.email} onChange={handleChange} required />
-                            <Input type="tel" name="phone" placeholder="Số điện thoại *" value={form.phone} onChange={handleChange} required />
-                            <TextArea name="message" placeholder="Nhập nội dung..." value={form.message} onChange={handleChange} required />
-                        </Form>
-                        <Button orange onClick={handleSubmit} disabled={submitting}>
-                            {submitting ? "Đang gửi..." : "GỬI"}
+                
+                <Form onSubmit={handleSubmit}>
+                    <Input 
+                        type="text" 
+                        name="firstName"
+                        placeholder="Tên*" 
+                        value={form.firstName}
+                        onChange={handleChange}
+                        required 
+                    />
+                    <Input 
+                        type="text" 
+                        name="lastName"
+                        placeholder="Họ*" 
+                        value={form.lastName}
+                        onChange={handleChange}
+                        required 
+                    />
+                    <Input 
+                        type="email" 
+                        name="email"
+                        placeholder="Email*" 
+                        value={form.email}
+                        onChange={handleChange}
+                        required 
+                    />
+                    <Input 
+                        type="tel" 
+                        name="phone"
+                        placeholder="Số điện thoại*" 
+                        value={form.phone}
+                        onChange={handleChange}
+                        required 
+                    />
+                    <TextArea 
+                        name="message"
+                        placeholder="Lời nhắn*" 
+                        value={form.message}
+                        onChange={handleChange}
+                        required 
+                    />
+                    <div style={{ gridColumn: 'span 2', textAlign: 'center' }}>
+                        <Button orange disabled={submitting} onClick={(e) => {
+                            const form = e.currentTarget.closest('form');
+                            if (form) {
+                                form.requestSubmit();
+                            }
+                        }}>
+                            {submitting ? 'ĐANG GỬI...' : 'GỬI'}
                         </Button>
-                    </>
-                )}
+                    </div>
+                </Form>
             </Container>
         </ContactPage>
     );
@@ -91,6 +140,7 @@ const TextContact = styled(Text)`
   font-size: 16px;
   max-width: 800px;
   text-align: center;
+  margin-bottom: 50px;
 `
 
 const Form = styled.form`
@@ -127,18 +177,6 @@ const TextArea = styled.textarea`
     outline: none;
     border-color: #ff8c42;
   }
-`;
-
-const SuccessMessage = styled.div`
-  margin-top: 40px;
-  padding: 24px 32px;
-  background: #f0fdf4;
-  border: 1px solid #86efac;
-  border-radius: 12px;
-  color: #166534;
-  font-size: 18px;
-  font-weight: 500;
-  text-align: center;
 `;
 
 export default Contact;

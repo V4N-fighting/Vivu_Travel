@@ -15,6 +15,7 @@ export const useActivityFullData = (): {
           id: String(item.id),
           name: item.name,
           numberOfTrip: item.numberOfTrip ?? 0,
+          icon: item.icon,
         };
     }) ?? [];
 

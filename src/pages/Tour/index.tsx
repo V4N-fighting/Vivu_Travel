@@ -5,6 +5,7 @@ import TourCard from "../../Component/TourCard";
 import Pagination from "../../Component/Pagination";
 import { usePagination } from "../../Hooks/usePagination";
 import { useTourTypeFullData } from "../../service/tourTypeService";
+import { GET_IMAGE_URL } from "../../api";
 import { PARAM } from "../../api/param";
 
 
@@ -43,7 +44,7 @@ function Tour() {
             {listContent?.map((item, index) => {
               return <GridCol col={4} key={index}>
                         <TourCard
-                          url={"./images/destinations-1-1.jpg"}
+                          url={item.image ? `${GET_IMAGE_URL}/tour-types/${item.image}` : "./images/destinations-1-1.jpg"}
                           label={String(item.numberOfTrip) + " trips"}
                           name={item.name}
                           current={[PARAM.TOUR_TYPE, item.id, item.name]}

@@ -1,66 +1,66 @@
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled from "styled-components";
+import React, { useState } from 'react';
 import BlogItem from "../../../Component/BlogItem";
-import { Icon, Title } from "../../../styled";
+import { Title } from "../../../styled";
 import Icons from "../../../Component/BaseComponent/Icons";
-
+import { useBlogs } from "../../../service/blogService";
+import { GET_IMAGE_URL } from "../../../api";
+import dayjs from "dayjs";
 
 
 interface SidebarProps {
+    onSearch?: (value: string) => void;
 }
 
-const types = ['Vũ trụ', 'Xàm xí', 'Tào lao'];
+const Sidebar: React.FC<SidebarProps> = ({ onSearch }) => {
+    const { blogs, isLoading } = useBlogs();
+    const [search, setSearch] = useState('');
 
-const blogs = [
-    {
-        img: "./images/insta6.jpg",
-        time: "12 Tháng Mười Hai 2024",
-        title: "10 Sun Hats For Beach Days, Long"
-    },
-    {
-        img: "./images/insta5.jpg",
-        time: "12 Tháng Mười Hai 2024",
-        title: "10 Sun Hats For Beach Days, Long"
-    },
-    {
-        img: "./images/insta4.jpg",
-        time: "12 Tháng Mười Hai 2024",
-        title: "10 Sun Hats For Beach Days, Long"
-    },
-    {
-        img: "./images/insta3.jpg",
-        time: "12 Tháng Mười Hai 2024",
-        title: "10 Sun Hats For Beach Days, Long"
-    },
-]
+    if (isLoading) return <div>Đang tải...</div>;
 
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setSearch(value);
+        if (onSearch) {
+            onSearch(value);
+        }
+    };
 
-const Sidebar: React.FC<SidebarProps> = () => {
+    const recentBlogs = blogs?.slice(0, 5) || [];
+    const categories = Array.from(new Set(blogs?.map(b => b.category).filter(Boolean))) as string[];
+
     return ( 
         <SideBar>
             <SearchBox>
                 <Icons.SearchIcon />
-                <SearchInput placeholder="Tìm kiếm bài viết" />
+                <SearchInput 
+                    placeholder="Tìm kiếm bài viết" 
+                    value={search}
+                    onChange={handleSearchChange}
+                />
             </SearchBox>
-            <TypeBox>
-                <Title small>Chọn loại bài viết</Title>
-                {types.map((type, index) => {
-                    return <TypeItem key={index}>
-                                <input type="checkbox" />
-                                <span>{type}</span>
-                            </TypeItem>
-                })}
-            </TypeBox>
+            {categories.length > 0 && (
+                <TypeBox>
+                    <Title small>Chọn loại bài viết</Title>
+                    {categories.map((type, index) => {
+                        return <TypeItem key={index}>
+                                    <input type="checkbox" />
+                                    <span>{type}</span>
+                                </TypeItem>
+                    })}
+                </TypeBox>
+            )}
             <OrtherBlog>
                 <Title small>Các bài viết khác</Title>
                 <ListBlog>
-                    {blogs.map((blog, index) => {
+                    {recentBlogs.map((blog) => {
+                        const imageUrl = blog.thumbnail ? (blog.thumbnail.startsWith('http') ? blog.thumbnail : `${GET_IMAGE_URL}/blogs/${blog.thumbnail}`) : "./images/insta6.jpg";
                         return <BlogItem
-                                    key={index}
-                                    imgUrl={blog.img}
-                                    timeText={blog.time}
+                                    key={blog.id}
+                                    imgUrl={imageUrl}
+                                    timeText={dayjs(blog.published_at).format('DD/MM/YYYY')}
                                     blogTitle={blog.title}
+                                    slug={blog.slug}
                                 />
                     })}
                 </ListBlog>
@@ -77,12 +77,19 @@ const SideBar = styled.div`
 `;
 
 const SearchBox = styled.div`
-    padding: 20px 30px;
+    padding: 15px 25px;
     display: flex;
     align-items: center;
-    border-radius: 20px;
-    border: 1px solid red;
+    border-radius: 15px;
+    border: 1px solid #eee;
     margin: 0 0 30px;
+    background: #fff;
+    transition: all 0.3s ease;
+
+    &:focus-within {
+        border-color: #ff681a;
+        box-shadow: rgba(255, 104, 26, 0.1) 0px 4px 12px;
+    }
 `
 const SearchInput = styled.input`
     width: 100%;
@@ -99,10 +106,11 @@ const SearchInput = styled.input`
 `
 
 const TypeBox = styled.div`
-    padding: 20px 30px;
-    border-radius: 20px;
-    border: 1px solid red;
+    padding: 25px;
+    border-radius: 15px;
+    border: 1px solid #eee;
     margin: 0 0 30px;
+    background: #fff;
 `
 const TypeItem = styled.div`
     padding: 10px 0 10px 10px;
@@ -119,10 +127,11 @@ const TypeItem = styled.div`
 `
 
 const OrtherBlog = styled.div`
-    padding: 20px 30px;
-    border-radius: 20px;
-    border: 1px solid red;
+    padding: 25px;
+    border-radius: 15px;
+    border: 1px solid #eee;
     margin: 0 0 15px;
+    background: #fff;
 `
 const ListBlog = styled.div`
     margin-top: 23px;

@@ -28,15 +28,15 @@ const FilterSection: React.FC<FilterSectionProps> = ({ label, data, onChange, sh
   }, [shouldReset]);
 
   useEffect(() => {
-    setCheckedIds(prev => {
-      const newSet = new Set(prev);
-      if (selected) {
-        selected.filter((val) => {
+    if (selected) {
+      setCheckedIds(prev => {
+        const newSet = new Set(prev);
+        selected.forEach((val) => {
           newSet.add(val);
-        })
-      } 
-      return newSet;
-    })
+        });
+        return newSet;
+      });
+    }
   }, [selected]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,23 +69,25 @@ const FilterSection: React.FC<FilterSectionProps> = ({ label, data, onChange, sh
 
   const filteredData = useMemo(() => {
     if (!data) return [];
-    return data
+    const items = data as any[];
+    return items
       .slice()
       .sort((a, b) => a.name.localeCompare(b.name))
       .filter(item => item.name.toLowerCase().includes(searchTerm.toLowerCase()));
-  }, [searchTerm]);
+  }, [data, searchTerm]);
 
   const visibleData = useMemo(() => {
     if (showAll) {
       return filteredData;
     }
     return filteredData.slice(0, 5);
-  }, [showAll]);
+  }, [showAll, filteredData]);
 
   const checkedItems = useMemo(() => {
     if (!data) return [];
-    return data.filter(item => checkedIds.has(item.id));
-  }, [checkedIds]);
+    const items = data as any[];
+    return items.filter(item => checkedIds.has(item.id));
+  }, [data, checkedIds]);
 
   return (
     <SidebarItem>
@@ -99,7 +101,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({ label, data, onChange, sh
 
         {checkedItems.length > 0 && (
           <CheckedListWrapper>
-            {checkedItems.map(item => (
+            {checkedItems.map((item: any) => (
               <CheckedItem key={item.id}>
                 <input
                   type="checkbox"
@@ -112,7 +114,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({ label, data, onChange, sh
           </CheckedListWrapper>
         )}
 
-        {visibleData.map((val, index) => (
+        {visibleData.map((val: any, index: number) => (
           <TypeItem key={index}>
             <input
               type="checkbox"

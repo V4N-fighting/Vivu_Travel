@@ -88,8 +88,9 @@ export const Itinerary:React.FC<ItineraryProps> = ({content}) => {
                 </Button>
             </RowBetween>
             {content.map((item,index) => {
+                const description = item.description || "";
                 return (
-                    <Item key={index} plan={item.title} detail={item.activities.join(' ')} showAll={showAll} index={index}/>
+                    <Item key={index} plan={item.title} detail={description} showAll={showAll} index={index}/>
                 )
             })}
         </Wrap>

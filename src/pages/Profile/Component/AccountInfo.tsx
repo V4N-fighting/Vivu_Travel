@@ -15,6 +15,7 @@ const AccountInfo = ({user} : {user: User | null}) => {
   const [isChangePassword, setIsChangePassword] = useState(false);
 
   const [avatar, setAvatar] = useState<string | undefined>(user?.avatar); 
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
 
   const [userInfo, setUserInfo] = useState<User>(user ?? {} as User)
 
@@ -28,6 +29,8 @@ const AccountInfo = ({user} : {user: User | null}) => {
         lastName: user.lastName,
         email: user.email,
         password: user.password,
+        phone: user.phone,
+        address: user.address,
       });
       setAvatar(user.avatar);
     }
@@ -37,25 +40,20 @@ const AccountInfo = ({user} : {user: User | null}) => {
     fileInputRef.current?.click(); 
   };
 
-  const convertToBase64 = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = (error) => reject(error);
-    });
-  };
-
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const base64Image = await convertToBase64(file);
-      setAvatar(base64Image); 
+      setAvatarFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAvatar(reader.result as string);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
   const handleSaveChange = () => {
-    const updatedUser = { ...userInfo, avatar };
+    const updatedUser = { ...userInfo, avatarFile: avatarFile || undefined, avatar: avatar };
     dispatch(updateUser(updatedUser));
   }
 

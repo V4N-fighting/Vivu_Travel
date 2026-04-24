@@ -1,7 +1,8 @@
 export interface ItineraryActivity {
-  day: number;
+  day_number: number;
   title: string;
-  activities: string[];
+  description: string;
+  activities?: string[];
 }
 
 export default interface TourItem {

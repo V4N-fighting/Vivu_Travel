@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useMemo } from "react";
 import styled from "styled-components";
 import { SupTitle, Title, Text, Wrapper } from "../../../styled";
 import Button from "../../../Component/BaseComponent/Button/Button";
@@ -6,6 +6,7 @@ import Purify from "./Purify";
 import { Link } from "react-router-dom";
 import { useBanner } from "../../../service/bannerService";
 import config from "../../../config";
+import { GET_IMAGE_URL } from "../../../api";
 
 
 const TIME_CHANGE = 4000;
@@ -17,18 +18,23 @@ const Banner: React.FC = () => {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const { banner, isLoading, isError } = useBanner()
 
+  // Banners đầu trang - lấy 2 banner active đầu tiên
+  const activeBanners = useMemo(() => 
+    banner?.filter((b: any) => b.isActive).slice(0, 2) || [],
+    [banner]
+  );
 
   useEffect(() => {
-    if (!banner || banner.length === 0) return;
+    if (activeBanners.length === 0) return;
 
     intervalRef.current = setInterval(() => {
-      setActiveIndex((prevIndex) => (prevIndex + 1) % banner.length);
+      setActiveIndex((prevIndex) => (prevIndex + 1) % activeBanners.length);
     }, TIME_CHANGE);
 
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [banner]); 
+  }, [activeBanners]); 
 
   const handleClick = (index: number) => {
     setActiveIndex(index); // Cập nhật active index
@@ -38,9 +44,14 @@ const Banner: React.FC = () => {
   // Xử lý trạng thái tải hoặc lỗi
   if (isLoading) return <p>Đang tải dữ liệu...</p>;
   if (isError) return <p>Lỗi: {isError}</p>;
-  if (!banner || banner.length === 0) return <p>Không có dữ liệu.</p>;
+  if (activeBanners.length === 0) return null;
 
-  const activeContent = banner[activeIndex];
+  const activeContent = activeBanners[activeIndex];
+
+  const getImageUrl = (url: string) => {
+    if (!url) return '';
+    return url.startsWith('http') ? url : `${GET_IMAGE_URL}/banners/${url}`;
+  };
 
   return (
     <BannerWrapper>
@@ -56,18 +67,18 @@ const Banner: React.FC = () => {
           </Content>
           <Content>
             <ImgWrapper1>
-              <AnimatedImg src={activeContent?.firstImage} alt="Banner Image 1" />
+              <AnimatedImg src={getImageUrl(activeContent?.firstImage)} alt="Banner Image 1" />
             </ImgWrapper1>
             <ImgWrapper2>
-              <AnimatedImg src={activeContent?.secondImage} alt="Banner Image 2" />
+              <AnimatedImg src={getImageUrl(activeContent?.secondImage)} alt="Banner Image 2" />
             </ImgWrapper2>
           </Content>
         </Container>
         <WrapperPavigation>
           <BannerPavigation>
-            {banner.map((item, index) => (
+            {activeBanners.map((item, index) => (
               <PavigationBtn key={item.id} onClick={() => handleClick(index)} style={{ backgroundColor: activeIndex === index ? '#FF681A' : '#ffffff', color:  activeIndex === index ? '#fff' : '#FF681A'}}>
-                {item.id}
+                {index + 1}
               </PavigationBtn>
             ))}
           </BannerPavigation>

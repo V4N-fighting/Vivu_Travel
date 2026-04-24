@@ -25,7 +25,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({src, name, star, auth, descr}) =
                 </Title>
                 <StarRating star={star} />
                 <Descr>{descr}</Descr>
-                <Name>{auth}</Name>
+                <AuthDate>{auth}</AuthDate>
             </Content>
         </Wrapper>
     );
@@ -33,58 +33,60 @@ const ReviewCard: React.FC<ReviewCardProps> = ({src, name, star, auth, descr}) =
 
 const Wrapper = styled.div`
     width: 100%;
-    padding: 40px;
-    margin: 25px 0;
+    padding: 20px 30px;
+    margin: 15px 0;
     background-color: #fff;
     display: flex;
-    box-shadow: 0 0 45.92px 0.08px rgb(0 0 0 / 7%);
-    border-radius: 6px;
-    justify-content: space-between;
-    cursor: grab;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border-radius: 12px;
+    border: 1px solid #f0f0f0;
+    align-items: center;
 `
 const Avatar = styled.div`
     margin-right: 20px;
-    width: 100px;
+    width: 60px;
 `
 const AvatarImg = styled.img<{src: string}>`
-    width: 100px;
-    height: 100px;  
+    width: 60px;
+    height: 60px;  
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #FF681A;
 `
 const Content = styled.div`
     flex: 1;
-    max-width: calc(100% - 100px);
+    max-width: calc(100% - 80px);
 `
 
 const Title = styled.div`
-    margin: 0 0 15px;
+    margin: 0 0 5px;
 `
 const TitleLink = styled(Link)`
     text-decoration: none;
-    font-size: 24px;
+    font-size: 18px;
     color: #212121;
     font-weight: 600;
     transition: color 0.3s ease;
     display: block;
-    width: 80%;
-    overflow: hidden; /* Ẩn phần vượt quá */
-    white-space: nowrap; /* Ngăn không cho xuống dòng */
-    text-overflow: ellipsis; /* Thêm dấu ba chấm khi nội dung vượt giới hạn */
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 `
 const Descr = styled.p`
-    margin: 12px 0 0;
-    font-size: 1.4rem;
-    line-height: 2.3rem;
-    color: #505050;
-    font-size: 1.4rem;
-    width: 80%;
-    overflow: hidden; /* Ẩn phần vượt quá */
-    white-space: nowrap; /* Ngăn không cho xuống dòng */
-    text-overflow: ellipsis; /* Thêm dấu ba chấm khi nội dung vượt giới hạn */
+    margin: 8px 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #4a4a4a;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 `
-const Name = styled.h6`
-    font-size: 1.3rem;
-    color: #212121;
-    margin: 15px 0 0;
+const AuthDate = styled.span`
+    font-size: 12px;
+    color: #999;
+    display: block;
+    margin-top: 5px;
 `
 
 

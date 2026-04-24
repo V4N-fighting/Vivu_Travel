@@ -1,9 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FlexBox, Icon, Text, Title } from '../../styled';
 import Button from '../BaseComponent/Button/Button';
 import { faEye } from '@fortawesome/free-regular-svg-icons';
 import Icons from '../BaseComponent/Icons';
+import { Link } from 'react-router-dom';
+import * as S from '../../styled';
 
 interface NewsCardProps {
     url: string,  
@@ -12,26 +13,33 @@ interface NewsCardProps {
     textTime: string,
     label: string,
     view: string,
+    slug?: string,
 }
 
+const NewsCard: React.FC<NewsCardProps> = ({url, textDescr, title, textTime, label, view, slug}) => {
+  const blogLink = slug ? `/blog/${slug}` : '#';
 
-
-const NewsCard: React.FC<NewsCardProps> = ({url, textDescr, title, textTime, label, view}) => {
   return (
         <WrapperNewsCard>
             <Label >{label}</Label>
-            <WrapperImage><Image src={url}></Image></WrapperImage>
+            <Link to={blogLink}>
+              <WrapperImage><Image src={url}></Image></WrapperImage>
+            </Link>
             <Content>
-                <NewsCardTitle>{title}</NewsCardTitle>
+                <Link to={blogLink} style={{ textDecoration: 'none', color: 'inherit' }}>
+                  <NewsCardTitle>{title}</NewsCardTitle>
+                </Link>
                 <Descr>
-                    <Local><Text>{textDescr}</Text></Local>
-                    <FlexBox>
-                      <Text bold><Icons.CalendarIcon/>{textTime}</Text>
-                      <Text style={{width: '20%', display: 'flex'}}><Icon icon={faEye}/>{view}</Text>
-                    </FlexBox>
+                    <Local><S.Text>{textDescr}</S.Text></Local>
+                    <S.FlexBox>
+                      <S.Text bold><Icons.CalendarIcon/>{textTime}</S.Text>
+                      <S.Text style={{width: '20%', display: 'flex'}}><S.Icon icon={faEye}/>{view}</S.Text>
+                    </S.FlexBox>
                 </Descr>
                 
-                <Button orange>Đọc thêm</Button>
+                <Link to={blogLink}>
+                  <Button orange>Đọc thêm</Button>
+                </Link>
 
             </Content>
         </WrapperNewsCard>
@@ -42,54 +50,51 @@ const NewsCard: React.FC<NewsCardProps> = ({url, textDescr, title, textTime, lab
 
 const WrapperNewsCard = styled.div`
   width: 100%;
-  max-width: 100%;
   background-color: #ffffff;
   border-radius: 25px;
-  padding: 20px;
-  border: 1px solid red;
+  padding: 25px;
+  border: 1px solid #eee;
   position: relative;
+  transition: all 0.3s ease;
+  display: flex;
+  gap: 30px;
+
+  &:hover {
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    border-color: #ff681a;
+  }
 `
 const Label = styled.div`
   position: absolute;
-  top: 10%;
-  right: -10px;
+  top: 20px;
+  left: 20px;
   background-color: #37d4d9;
   color: #ffffff;
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 600;
-  padding: 10px;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  border-bottom-left-radius: 10px;
-  z-index: 99;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-
-  &::after {
-    position: absolute;
-    content: "";
-    top: 100%;
-    right: 0;
-    border-top: 10px solid #37d4d9;
-    border-right: 10px solid transparent;
-    filter: brightness(70%);
-  }
+  padding: 6px 15px;
+  border-radius: 8px;
+  z-index: 10;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 4px;
 `
 
 const WrapperImage = styled.div`
-    width: 100%;
-    aspect-ratio: 900 / 700;
+    width: 40%;
+    min-width: 250px;
+    aspect-ratio: 16 / 10;
     overflow: hidden;
     cursor: pointer;
     border-radius: 15px;
+    position: relative;
 `
 
 
 
 const Image = styled.img<{src: string}>`
   width: 100%;
-  aspect-ratio: 900 / 700;
+  height: 100%;
   object-fit: cover;
-  transition: all 3s linear;
+  transition: all 0.5s ease;
 
 
   &:hover {
@@ -99,33 +104,44 @@ const Image = styled.img<{src: string}>`
 
 
 const Content = styled.div`
-  width: 100%;
-  max-width: 100%;
-  padding: 20px 15px 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `
-const NewsCardTitle = styled(Title)`
+const NewsCardTitle = styled(S.Title)`
   width: 100%;
-  max-width: 100%;
-  margin: 0 0 10px;
-  padding: 0;
-  font-size: 20px;
-  align-items: center;
+  margin: 0 0 15px;
+  font-size: 24px;
+  line-height: 1.3;
+  color: #000;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+
   &:hover {
     cursor: pointer;
-    text-decoration: underline;
+    color: #ff681a;
   }
 `
 const Descr = styled.div`
   width: 100%;
-  max-width: 100%;
-  margin: 0 0 30px;
+  margin: 0 0 20px;
 `
 const Local = styled.div`
   width: 100%;
+  margin-bottom: 15px;
+  
+  & p {
+    color: #666;
+    font-size: 15px;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
 `
-const Time = styled.div`
-  width: 80%;
-`
-
 
 export default NewsCard;

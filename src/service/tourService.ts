@@ -70,22 +70,28 @@ export const useTour = ({
   const isError = error || countryError || typesError || activitiesError;
 
   // Xử lý data trả về: luôn đưa về dạng mảng để .map an toàn
-  const rawData = data ? (Array.isArray(data) ? data : [data]) : [];
+    const rawData = data ? (Array.isArray(data) ? data : [data]) : [];
 
-  const normalizedData = rawData.map(item => ({
-    ...item,
-    image: toImageUrl(item.image),
-    tourTypeID: item.type_id || item.tour_type_id,
-    departureDate: item.departure_dates?.map((d: any) => d.departure_date) || item.departure_date || [],
-    maxPeople: item.max_people || item.maxPeople,
-    adventureLevel: item.adventure_level || item.adventureLevel,
-    hotelStar: item.hotel_star || item.hotelStar,
-    price: {
-        adult: String(item.price_adult || (item.price && item.price.adult) || "0"),
-        child: String(item.price_child || (item.price && item.price.child) || "0")
-    },
-    activityIDs: item.activityIDs || []
-  }));
+    const normalizedData = rawData.map((item: any) => {
+      // Ưu tiên lấy departure_dates từ item gốc nếu có
+      const departureDates = item.departure_dates || item.departure_date || [];
+      
+      return {
+        ...item,
+        image: toImageUrl(item.image),
+        tourTypeID: item.type_id || item.tour_type_id,
+        departure_dates: departureDates, // Giữ nguyên mảng object để Modal xử lý
+        departureDate: Array.isArray(departureDates) ? departureDates.map((d: any) => d.departure_date) : [],
+        maxPeople: item.max_people || item.maxPeople,
+        adventureLevel: item.adventure_level || item.adventureLevel,
+        hotelStar: item.hotel_star || item.hotelStar,
+        price: {
+            adult: String(item.price_adult || (item.price && item.price.adult) || "0"),
+            child: String(item.price_child || (item.price && item.price.child) || "0")
+        },
+        activityIDs: item.activityIDs || []
+      };
+    });
 
   // Lọc theo ID
   const filteredDataID = normalizedData?.filter((item) => {
@@ -103,7 +109,7 @@ export const useTour = ({
   // Lọc theo activity
   const filteredDataActivity = filteredDataDestination?.filter((item) => {
     if (!activityIDs || activityIDs.length === 0) return true;
-    const hasActivity = item.activityIDs.some((activityID) =>
+    const hasActivity = item.activityIDs.some((activityID: any) =>
       activityIDs.includes(String(activityID))
     );
 
@@ -152,7 +158,7 @@ export const useTour = ({
   const tours = dataSlice?.map((item) => {
     const country = countries?.find((c: { id: string }) => String(c.id) === String(item.countryID));
     const type = types?.find((c: { id: string }) => String(c.id) === String(item.tourTypeID));
-    const activityNames = item.activityIDs.map((activityID) => {
+    const activityNames = item.activityIDs.map((activityID: any) => {
       const found = activities?.find((a) => String(a.id) === String(activityID));
       return found ? found.name : 'unknown';
     });
@@ -191,7 +197,8 @@ export const useTour = ({
       altitude: item.altitude,
       hotelStar: String(item.hotelStar || ""),
       itinerary: item.itinerary || item.itineraries || [],
-      language: country?.language || 'unknown'
+      language: country?.language || 'unknown',
+      departure_dates: item.departure_dates // Đảm bảo trường này được truyền xuống
     };
   });
 

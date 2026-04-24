@@ -1,48 +1,42 @@
+import React, { useState } from 'react';
 import styled from "styled-components";
 import Banner from "../../Component/Banner";
 import NewsCard from "../../Component/NewsCard";
 import Sidebar from "./Sidebar";
 import { usePagination } from "../../Hooks/usePagination";
 import Pagination from "../../Component/Pagination";
+import { useBlogs } from "../../service/blogService";
+import { GET_IMAGE_URL } from "../../api";
+import dayjs from "dayjs";
 
-interface NewsData {
-    id: number;
-    url: string;
-    title: string;
-    textDescr: string;
-    textTime: string;
-    label: string;
-    view: string;
-}
-
-const newsData: NewsData[] = [
-    { id: 1, url: "./images/4-900x490.jpg", title: "Maldives: The Travel and Experience of the Lifetime", textDescr: "a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg ", textTime: "12 tháng Năm, 2024", label: "Universe", view: "12323" },
-    { id: 2, url: "./images/5-1-900x490.jpg", title: "Maldives: The Travel and Experience of the Lifetime", textDescr: "a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg ", textTime: "2 tháng Năm, 2024", label: "Universe", view: "12323" },
-    { id: 3, url: "./images/6-1-900x490.jpg", title: "Maldives: The Travel and Experience of the Lifetime", textDescr: "a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg ", textTime: "2 tháng Năm, 2024", label: "Universe", view: "12323" },
-    { id: 4, url: "./images/4-900x490.jpg", title: "Maldives: The Travel and Experience of the Lifetime", textDescr: "a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg ", textTime: "12 tháng Năm, 2024", label: "Universe", view: "12323" },
-    { id: 5, url: "./images/5-1-900x490.jpg", title: "Maldives: The Travel and Experience of the Lifetime", textDescr: "a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg ", textTime: "2 tháng Năm, 2024", label: "Universe", view: "12323" },
-    { id: 6, url: "./images/6-1-900x490.jpg", title: "Maldives: The Travel and Experience of the Lifetime", textDescr: "a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg ", textTime: "2 tháng Năm, 2024", label: "Universe", view: "12323" },
-
-    { id: 7, url: "./images/4-900x490.jpg", title: "Maldives: The Travel and Experience of the Lifetime", textDescr: "a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg ", textTime: "12 tháng Năm, 2024", label: "Universe", view: "12323" },
-    { id: 8, url: "./images/5-1-900x490.jpg", title: "Maldives: The Travel and Experience of the Lifetime", textDescr: "a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg ", textTime: "2 tháng Năm, 2024", label: "Universe", view: "12323" },
-    { id: 9, url: "./images/6-1-900x490.jpg", title: "Maldives: The Travel and Experience of the Lifetime", textDescr: "a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg ", textTime: "2 tháng Năm, 2024", label: "Universe", view: "12323" },
-    { id: 10, url: "./images/4-900x490.jpg", title: "Maldives: The Travel and Experience of the Lifetime", textDescr: "a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg ", textTime: "12 tháng Năm, 2024", label: "Universe", view: "12323" },
-    { id: 11, url: "./images/5-1-900x490.jpg", title: "Maldives: The Travel and Experience of the Lifetime", textDescr: "a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg ", textTime: "2 tháng Năm, 2024", label: "Universe", view: "12323" },
-    { id: 12, url: "./images/6-1-900x490.jpg", title: "Maldives: The Travel and Experience of the Lifetime", textDescr: "a ad ad asasdsaad f sa fas fa fas g à sa á fsa f sà sa fa sf à á f ag asg a ga sg ", textTime: "2 tháng Năm, 2024", label: "Universe", view: "12323" },
-
-];
 
 const ITEM_PER_PAGE = 4;
 
 function Blog() {
+    const { blogs, isLoading, isError } = useBlogs();
+    const [search, setSearch] = useState('');
+
     const {
         indexOfFirstItem,
         indexOfLastItem,
         totalPages,
         getCurrentPage
-      } =  usePagination(ITEM_PER_PAGE,newsData.length)
+      } =  usePagination(ITEM_PER_PAGE, blogs?.length || 0)
     
-      const listContent = newsData.slice(indexOfFirstItem,indexOfLastItem)
+      if (isLoading) return <div style={{ padding: '100px', textAlign: 'center' }}>Đang tải bài viết...</div>;
+      if (isError) return <div style={{ padding: '100px', textAlign: 'center' }}>Có lỗi xảy ra khi tải bài viết</div>;
+
+      const filteredBlogs = blogs?.filter(b => 
+        b.title.toLowerCase().includes(search.toLowerCase())
+      ) || [];
+
+      const listContent = filteredBlogs.slice(indexOfFirstItem, indexOfLastItem);
+
+    const categoriesMap: { [key: string]: string } = {
+        'travel': 'Cẩm nang du lịch',
+        'news': 'Tin tức sự kiện',
+        'review': 'Review trải nghiệm'
+    };
 
     return (
         <>
@@ -55,15 +49,21 @@ function Blog() {
                 <Contain>
                     
                     <Content>
-                        {listContent.map((item, index) => {
-                            return <Col key={index}>
+                        {listContent.map((item) => {
+                            const imageUrl = item.thumbnail ? (item.thumbnail.startsWith('http') ? item.thumbnail : `${GET_IMAGE_URL}/blogs/${item.thumbnail}`) : "./images/4-900x490.jpg";
+                            // Lấy plain text từ content (strip html) và giới hạn độ dài cho mô tả
+                            const plainText = item.content.replace(/<[^>]*>?/gm, '').substring(0, 150) + '...';
+                            const categoryLabel = categoriesMap[item.category] || item.category || "Tin tức";
+                            
+                            return <Col key={item.id}>
                                         <NewsCard
-                                            url={item.url}
+                                            url={imageUrl}
                                             title={item.title}
-                                            textDescr={item.textDescr}
-                                            textTime={item.textTime}
-                                            label={item.label}
-                                            view={item.view}
+                                            textDescr={plainText}
+                                            textTime={dayjs(item.published_at).format('DD [tháng] MM, YYYY')}
+                                            label={categoryLabel}
+                                            view={"0"}
+                                            slug={item.slug}
                                         />
                             </Col>
                         })}
@@ -74,7 +74,7 @@ function Blog() {
                         />
                     </Content>
                 </Contain>
-                <Sidebar />
+                <Sidebar onSearch={setSearch} />
             </BlogPage>
             
         </>
@@ -101,11 +101,13 @@ const Contain = styled.div`
 const Content = styled.div`
     display: flex;
     flex-wrap: wrap;
+    width: 100%;
+    gap: 30px;
 `;
 
 const Col = styled.div`
-    width: 50%;
-    padding: 0 15px 30px;
+    width: calc(100% - 30px);
+    margin-bottom: 20px;
 `;
 
 

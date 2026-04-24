@@ -1,30 +1,38 @@
-
+import React from "react";
 import Button from "../../../Component/BaseComponent/Button/Button";
 import { RowBetween, SupTitle, Title, Wrapper, Text } from "../../../styled";
-import { styled } from 'styled-components';
-
+import styled from 'styled-components';
+import { useBanner } from "../../../service/bannerService";
+import { GET_IMAGE_URL } from "../../../api";
 
 interface SpecialOfferProps {
   
 }
 
+const SpecialOffer: React.FC<SpecialOfferProps> = () => {
+  const { banner } = useBanner();
+  
+  // Lấy banner ở index 1 chẳng hạn (sau banner chính ở index 0)
+  const offerBanner = banner?.[1];
+  
+  const imageUrl = offerBanner?.firstImage 
+    ? (offerBanner.firstImage.startsWith('http') ? offerBanner.firstImage : `${GET_IMAGE_URL}/banners/${offerBanner.firstImage}`)
+    : "./images/offer-1-1.png";
 
-
-const SpecialOffer: React.FC<SpecialOfferProps> = ({}) => {
   return (
     <Wrap>
       <Wrapper>
         <RowBetween>
         <Content>
             <SupTitle white small>Go & Discover</SupTitle>
-            <Title white big>Ưu đãi đặt biệt</Title>
+            <Title white big>{offerBanner?.textContent || "Ưu đãi đặt biệt"}</Title>
             <Text white small>Khám phá những ưu đãi đặc biệt độc đáo và tiết kiệm hấp dẫn chỉ dành riêng cho bạn.</Text>
             <Button white >Đặt vé ngay</Button>
           </Content>
           <Content>
             <ImageBox>
               <Box1>
-                <Image src="./images/offer-1-1.png"></Image>
+                <Image src={imageUrl}></Image>
               </Box1>
               <Box2>
                 <Image src="./images/bag.png"></Image>

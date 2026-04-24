@@ -46,8 +46,12 @@ const Login: React.FC = () => {
   
       // cập nhật vào Redux Store trực tiếp (không cần fetch lại)
       dispatch(setUser(user));
-  
-      navigate(config.routes.home);
+
+      if (user?.role === 'admin') {
+        window.location.href = '/admin/dashboard'; // Dùng location.href để reset lại toàn bộ state và chặn truy cập home
+      } else {
+        navigate(config.routes.home);
+      }
     } catch (err: any) {
       alert(err.message);
     }
@@ -100,7 +104,7 @@ const Login: React.FC = () => {
             <label htmlFor='login-check'>Remember Me</label>
           </div>
           <div className='two'>
-            <a href='#'>Forgot password?</a>
+            <button type='button'>Forgot password?</button>
           </div>
         </TwoCol>
       </form>
@@ -214,9 +218,13 @@ const TwoCol = styled.div`
     gap: 5px;
   }
 
-  .two a {
+  .two button {
+    background: transparent;
+    border: none;
+    padding: 0;
     text-decoration: none;
     color: #fff;
+    cursor: pointer;
 
     &:hover {
       text-decoration: underline;

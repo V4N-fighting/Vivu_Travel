@@ -1,107 +1,117 @@
 import styled from "styled-components";
 import Banner from "../../Component/Banner";
 import Sidebar from "../Blog/Sidebar";
-import VideoPlayer from "../../Component/VideoPlayer";
-import { Title, Text, GridRow, Grid, Icon } from "../../styled";
-import { faCalendarDays } from "@fortawesome/free-regular-svg-icons";
-import { GridCol } from './../../styled/index';
+import * as S from "../../styled";
 import Button from "../../Component/BaseComponent/Button/Button";
-import { faFacebookF, faInstagram, faPinterestP, faTwitter } from "@fortawesome/free-brands-svg-icons";
-import { Calendar } from 'antd';
 import Icons from "../../Component/BaseComponent/Icons";
+import { useParams } from "react-router-dom";
+import { useBlogs } from "../../service/blogService";
+import { GET_IMAGE_URL } from "../../api";
+import dayjs from "dayjs";
+import React from 'react';
 
-interface BlogDetailProps {
-    url: string,
-    title: string,
-    timeText: string,
-    img1: string,
-    img2: string,
-    img3: string,
+interface BlogDetailProps {}
 
-}
+const BlogDetail: React.FC<BlogDetailProps> = () => {
+    const { slug } = useParams<{ slug: string }>();
+    const { blogs, isLoading, isError } = useBlogs();
+    
+    const currentBlog = blogs?.find(b => b.slug === slug);
 
-const TextContent1 = `
-    Nulla porttitor accumsan tincidunt. Curabitur aliquet quam id dui posuere blandit. Vestibulum ac diam sit amet for a quam vehicula elementum sed sit amet dui. Donec sollicitudin molestie malesuada. Donec sollicitudin molestie malesuada. Proin eget tortor risus. Quisque velit nisi, pretium ut lacinia in, elementum id enim. Pellentesque in ipsum id orci porta dapibus. Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque velit nisi, pretium ut lacinia in, elementum id enim. Pellentesque in ipsum id orci porta dapibus. Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Lorem ipsum dolor sit amet, consectetur adipiscing ipsum dolor sit amet, consectetur elit.
+    if (isLoading) return <div style={{ padding: "100px", textAlign: "center" }}>Đang tải nội dung...</div>;
+    if (isError || !currentBlog) return <div style={{ padding: "100px", textAlign: "center" }}>Không tìm thấy bài viết</div>;
 
-Vestibulum ac diam sit amet for a quam vehicula elementum sed sit amet dui. Donec sollicitudin molestie malesuada. Donec sollicitudin molestie malesuada. Proin eget tortor risus. Quisque velit nisi, pretium ut lacinia in, elementum id enim. Pellentesque in ipsum id orci porta dapibus. Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque velit nisi, pretium ut lacinia in, elementum id enim. Quisque velit nisi, pretium ut lacinia in, elementum id enim.
-`
+    const imageUrl = currentBlog.thumbnail 
+        ? (currentBlog.thumbnail.startsWith("http") ? currentBlog.thumbnail : `${GET_IMAGE_URL}/blogs/${currentBlog.thumbnail}`)
+        : "https://media-cdn-v2.laodong.vn/storage/newsportal/2023/8/26/1233821/Giai-Nhi-1--Nang-Tre.jpg";
 
-const TextContent2 = `
-    Nulla porttitor accumsan tincidunt. Curabitur aliquet quam id dui posuere blandit. Vestibulum ac diam sit amet for a quam vehicula elementum sed sit amet dui. Donec sollicitudin molestie malesuada. Donec sollicitudin molestie malesuada. Proin eget tortor risus. Quisque velit nisi, pretium ut lacinia in, elementum id enim. Pellentesque in ipsum id orci porta dapibus. Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque velit nisi, pretium ut lacinia in, elementum id enim. Pellentesque in ipsum id orci porta dapibus. Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Lorem ipsum dolor sit amet, consectetur adipiscing ipsum dolor sit amet, consectetur elit.
-
-Vestibulum ac diam sit amet for a quam vehicula elementum sed sit amet dui. Donec sollicitudin molestie malesuada. Donec sollicitudin molestie malesuada. Proin eget tortor risus. Quisque velit nisi, pretium ut lacinia in, elementum id enim. Pellentesque in ipsum id orci porta dapibus. Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque velit nisi, pretium ut lacinia in, elementum id enim. Quisque velit nisi, pretium ut lacinia in, elementum id enim.
-`
-
-
-const BlogDetail:React.FC<BlogDetailProps> = ({
-    url, 
-    title='Sao cứ phải khó chịu với Lương Ngọc Văn', 
-    timeText='14 thg10 2004', 
-    img1='https://media-cdn-v2.laodong.vn/storage/newsportal/2023/8/26/1233821/Giai-Nhi-1--Nang-Tre.jpg', 
-    img2='https://media-cdn-v2.laodong.vn/storage/newsportal/2023/8/26/1233821/Giai-Nhi-1--Nang-Tre.jpg', 
-    img3='https://media-cdn-v2.laodong.vn/storage/newsportal/2023/8/26/1233821/Giai-Nhi-1--Nang-Tre.jpg'
-}
-) => {
     return (
         <>
             <Banner
                 background={"https://travel-spark.monamedia.net/wp-content/uploads/2023/10/breadcumb-bg.jpg"}
-                pageName={"Blog_detail"}
-                thisPage={"/Blog_detail"}
+                pageName={"Chi tiết bài viết"}
+                thisPage={`/Blog / ${currentBlog.title}`}
             />
             <BlogPage>
                 <Contain>
-                    <VideoPlayer
-                        src="https://www.w3schools.com/html/mov_bbb.mp4"
-                        controls
-                        autoPlay={false}
-                        loop={false}
-                        muted={false}
-                    />
-                    <Title medium>{title}</Title>
-                    <TimeBox>
+                    <S.Title big style={{ textAlign: "left", width: "100%", marginBottom: "20px" }}>{currentBlog.title}</S.Title>
+                    <TimeBox style={{ width: "100%", marginBottom: "30px" }}>
                         <Icons.CalendarIcon />
-                        <TimeText>{timeText}</TimeText>
+                        <S.Text style={{ marginLeft: "10px", fontSize: "14px", fontWeight: "500", color: "#505050" }}>
+                            {dayjs(currentBlog.published_at).format("DD [tháng] MM, YYYY")} | Tác giả: {currentBlog.author_name || "Vivu Travel"}
+                        </S.Text>
                     </TimeBox>
-                    <Text>{TextContent1}</Text>
-                    <Grid>
-                        <GridRow margin="20px">
-                            <GridCol col={4}><Image src={img1}/></GridCol>
-                            <GridCol col={4}><Image src={img2}/></GridCol>
-                            <GridCol col={4}><Image src={img3}/></GridCol>
-                        </GridRow>
-                    </Grid>
-                    <Text>{TextContent2}</Text>
+
+                    <MainThumbnail src={imageUrl} />
+
+                    <ContentHTML 
+                        dangerouslySetInnerHTML={{ __html: currentBlog.content }} 
+                    />
+
                     <ShareBox>
                         Chia sẻ: 
-                        <Button blue circle style={{margin: '0 10px 0 20px'}}><Icons.FacebookIcon /></Button>
-                        <Button blue circle style={{margin: '0 10px'}}><Icons.InstagramIcon /></Button>
-                        <Button blue circle style={{margin: '0 10px'}}><Icons.TwitterIcon /></Button>
-                        <Button blue circle style={{margin: '0 10px'}}><Icons.TwitterIcon /></Button>
+                        <Button blue circle style={{margin: "0 10px 0 20px"}}><Icons.FacebookIcon /></Button>
+                        <Button blue circle style={{margin: "0 10px"}}><Icons.InstagramIcon /></Button>
+                        <Button blue circle style={{margin: "0 10px"}}><Icons.TwitterIcon /></Button>
                     </ShareBox>
                     <CommentBox>
-                        <Title medium>Để lại bình luận</Title>
-                        <Text>Your email address will not be published. Required fields are marked *</Text>
+                        <S.Title medium>Để lại bình luận</S.Title>
+                        <S.Text>Email của bạn sẽ không được hiển thị công khai. Các trường bắt buộc được đánh dấu *</S.Text>
                         <Form>
                             <TextArea placeholder="Viết bình luận *" required />
-                            <Input type="text" placeholder="Enter your name *" required />
-                            <Input type="text" placeholder="Enter your E-mail address *" required />
+                            <Input type="text" placeholder="Nhập tên của bạn *" required />
+                            <Input type="text" placeholder="Nhập email của bạn *" required />
                             <TwoCol>
                                 <div className="one">
                                     <input type="checkbox" id="register-check" />
-                                    <label htmlFor="register-check">Remember Me</label>
+                                    <label htmlFor="register-check">Ghi nhớ thông tin</label>
                                 </div>
                             </TwoCol>
                         </Form>
                     </CommentBox>
-                    <Button  blue style={{alignSelf: 'flex-start'}}>Đăng bình luận</Button>
+                    <Button blue style={{alignSelf: "flex-start"}}>Đăng bình luận</Button>
                 </Contain>
                 <Sidebar />
             </BlogPage>
-            
         </>
     );
-}
+};
+
+const MainThumbnail = styled.img`
+    width: 100%;
+    max-height: 500px;
+    object-fit: cover;
+    border-radius: 20px;
+    margin-bottom: 40px;
+`;
+
+const ContentHTML = styled.div`
+    width: 100%;
+    font-size: 16px;
+    line-height: 1.8;
+    color: #333;
+    
+    h1, h2, h3, h4, h5, h6 {
+        margin: 25px 0 15px;
+        color: #000;
+    }
+    
+    p {
+        margin-bottom: 20px;
+    }
+    
+    img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+        margin: 20px 0;
+    }
+
+    ul, ol {
+        margin-bottom: 20px;
+        padding-left: 20px;
+    }
+`;
 
 const BlogPage = styled.div`
     display: flex;
@@ -117,27 +127,13 @@ const Contain = styled.div`
     align-items: center;
     width: 70%;
     padding: 0 10px;
-    
-`
+`;
 
 const TimeBox = styled.div`
     margin-bottom: 2px;
     display: flex;
-`
+`;
 
-const TimeText = styled.p`
-    font-size: 14px;
-    font-weight: 500;
-    color: #505050;
-`
-const Image = styled.div<{src: string}>`
-    height: 200px;
-    width: 100%;
-    background-image: url(${props => "'" + props.src +  "'"});
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-`
 const ShareBox = styled.div`
     width: 100%;
     margin: 10px 0;
@@ -145,13 +141,13 @@ const ShareBox = styled.div`
     border-top: 1px solid var(--primary-color);
     border-bottom: 1px solid var(--primary-color);
     text-align: end;
-`
+`;
 
 const CommentBox = styled.div`
     width: 100%;
     margin: 10px 0;
     padding: 30px 0;
-`
+`;
 
 const Form = styled.form`
   margin: 50px 0 30px;
@@ -204,9 +200,6 @@ const TwoCol = styled.div`
       margin-right: 5px;
     }
   }
-
-  
 `;
-
 
 export default BlogDetail;

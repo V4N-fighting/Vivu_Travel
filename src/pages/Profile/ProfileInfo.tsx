@@ -73,7 +73,18 @@ const ProfileInfo = ({ user }: ProfileInfoProps) => {
       <HeaderCard>
         <HeaderTop>
           <Left>
-            <Avatar>{user?.avatar ? <img src={user.avatar} alt="avatar" /> : <Icons.UserIcon />}</Avatar>
+            <Avatar>
+              {user?.avatar ? (
+                <img 
+                  src={user.avatar.startsWith('http') || user.avatar.startsWith('data:') 
+                    ? user.avatar 
+                    : `http://localhost:5000/uploads/profile/${user.avatar}`} 
+                  alt="avatar" 
+                />
+              ) : (
+                <Icons.UserIcon />
+              )}
+            </Avatar>
             <div>
               <Welcome>Xin chào, {displayName}</Welcome>
               <MetaText>{user?.email || "Chưa có email"}</MetaText>

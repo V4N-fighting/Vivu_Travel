@@ -7,6 +7,7 @@ import { usePagination } from "../../Hooks/usePagination";
 import { useDestination } from "../../service/destinationSerive";
 import { useNavigate } from "react-router-dom";
 import { PARAM } from "../../api/param";
+import { GET_IMAGE_URL } from "../../api";
 
 const ITEM_PER_PAGE = 6
 
@@ -49,9 +50,10 @@ function Destination() {
         <Grid>
           <GridRow margin="20px">
             {listContent?.map((item, index) => {
+              const imageUrl = item.image ? (item.image.startsWith('http') ? item.image : `${GET_IMAGE_URL}/countries/${item.image}`) : './images/destinations-1-1.jpg';
               return <GridCol col={4} key={index}>
                         <TourCard
-                          url="./images/destinations-1-1.jpg"
+                          url={imageUrl}
                           label={item.numberOfTrip + ' trips'}
                           name={item.name}
                           current={[PARAM.DESTINATION, item.id, item.name]}

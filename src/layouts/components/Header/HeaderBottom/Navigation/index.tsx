@@ -58,11 +58,6 @@ const navigation: NavigationArrayProps[] = [
     value: 'Liên hệ',
     to: config.routes.contact
   },
-  {
-    id: 6,
-    value: 'Booking',
-    to: config.routes.booking
-  },
 ];
 
 

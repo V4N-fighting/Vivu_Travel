@@ -14,7 +14,6 @@ import Tour from '../pages/Tour';
 import Trip from '../pages/Trip';
 import Checkout from '../pages/Checkout';
 import TourDetail from '../pages/TourDetail';
-import BookingForm from '../pages/BookingForm';
 import SuccessPage from '../pages/Success';
 
 interface Route {
@@ -40,7 +39,6 @@ const publicRoutes: Route[] = [
     { path: config.routes.blog_detail, component: BlogDetail, layout: 'default' },
     { path: config.routes.tour_detail, component: TourDetail, layout: 'default' },
     { path: config.routes.check_out, component: Checkout, layout: 'default' },
-    { path: config.routes.booking, component: BookingForm, layout: 'default' },
     { path: config.routes.booking_success, component: SuccessPage, layout: 'default' },
 ];
 

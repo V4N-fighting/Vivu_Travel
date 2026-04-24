@@ -1,8 +1,8 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
-import TipItem from './TipItem';
-import { CenterBox, SupTitle, Title } from '../../../styled';
-import ScrollToShow from '../../../Component/ScrollToShow';
+import TipItem from './Tip/TipItem';
+import { CenterBox, SupTitle, Title } from '../../styled';
+import ScrollToShow from '../../Component/ScrollToShow';
 
 interface TipProps {
   

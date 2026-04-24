@@ -6,6 +6,7 @@ import Pagination from "../../Component/Pagination";
 import { usePagination } from "../../Hooks/usePagination";
 import { useActivityFullData } from "../../service/activitiesService";
 import { PARAM } from "../../api/param";
+import { GET_IMAGE_URL } from "../../api";
 
 
 const ITEM_PER_PAGE = 6;
@@ -42,9 +43,10 @@ function Activity() {
         <Grid>
           <GridRow margin="20px">
             {listContent?.map((item, index) => {
+              const iconUrl = item.icon ? (item.icon.startsWith('http') ? item.icon : `${GET_IMAGE_URL}/activities/${item.icon}`) : "./images/destinations-1-1.jpg";
               return <GridCol col={4} key={index}>
                         <TourCard
-                          url={ "./images/destinations-1-1.jpg"}
+                          url={iconUrl}
                           label={String(item.numberOfTrip) + " trips"}
                           name={item.name}
                           current={[PARAM.ACTIVITY, item.id, item.name]}

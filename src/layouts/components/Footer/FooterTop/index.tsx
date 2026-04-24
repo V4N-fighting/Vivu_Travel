@@ -2,10 +2,15 @@
 import { RowBetween, Title, Wrapper } from '../../../../styled';
 import Button from '../../../../Component/BaseComponent/Button/Button';
 import styled from 'styled-components';
-
+import { Link } from 'react-router-dom';
+import config from '../../../../config';
 
 
 const FooterTop: React.FC = () => {
+    const user = JSON.parse(localStorage.getItem('user') || 'null');
+
+    if (user) return null;
+
     return (
         <FooterTopWrapper>
             <ContentWrapper>
@@ -13,8 +18,10 @@ const FooterTop: React.FC = () => {
                         <RowBetween>
                             <FlexContent>
                                 <ContentTitle white>Bạn đã sẵn sàng</ContentTitle>
-                                <ContentDescr small white>Chỉ mất vài phút để đăng ký tài khoản VIvu MIỄN PHÍ.</ContentDescr>
-                                <Button white uppercase>Đăng ký tài khoản</Button>
+                                <ContentDescr small white>Chỉ mất vài phút để đăng ký tài khoản Vivu MIỄN PHÍ.</ContentDescr>
+                                <Link to={config.routes.register}>
+                                    <Button white uppercase>Đăng ký tài khoản</Button>
+                                </Link>
                             </FlexContent>
                             <FlexImage>
                                 <BoxImage>
