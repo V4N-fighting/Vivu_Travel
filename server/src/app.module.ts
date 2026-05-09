@@ -16,6 +16,7 @@ import { BlogsModule } from './modules/blogs/blogs.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { EmailModule } from './modules/email/email.module';
 import { CouponsModule } from './modules/coupons/coupons.module';
+import { ChatbotModule } from './modules/chatbot/chatbot.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { CouponsModule } from './modules/coupons/coupons.module';
     AdminModule,
     EmailModule,
     CouponsModule,
+    ChatbotModule,
   ],
   controllers: [],
   providers: [],

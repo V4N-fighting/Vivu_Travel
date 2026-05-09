@@ -5,6 +5,7 @@ import ScrollToTop from "../components/ScrollToTop";
 import styled from "styled-components";
 import { useAutoLogoutOnLeave } from "../../Hooks/useAutoLogoutOnLeave";
 import { logout, User } from "../../service/authService";
+import ChatBoxAI from "../../Component/ChatBoxAI";
 
 
 
@@ -30,6 +31,7 @@ function DefaultLayout({ children }: DefaultLayoutProps): JSX.Element {
             <div className="contain">{children}</div>
             <Footer />
             <ScrollToTop />
+            <ChatBoxAI />
         </Wrapper>
     );
 }
