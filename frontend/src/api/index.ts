@@ -12,6 +12,7 @@ export const GET_USER = `${BASE_URL}/users`;
 export const GET_BLOG = `${BASE_URL}/blogs`;
 export const GET_COUPON = `${BASE_URL}/coupons`;
 export const CHATBOT_URL = `${BASE_URL}/chatbot/ask`;
+export const CHATBOT_STREAM_URL = `${BASE_URL}/chatbot/stream`;
 
 export const AUTH_URL = `${BASE_URL}/auth`;
 export const API_URL = BASE_URL;

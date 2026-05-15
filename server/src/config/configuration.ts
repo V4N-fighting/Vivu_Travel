@@ -21,4 +21,11 @@ export default () => ({
     password: process.env.MAIL_PASSWORD,
     from: process.env.MAIL_FROM || '"Vivu Travel" <no-reply@vivutravel.com>',
   },
+  ai: {
+    provider: 'gemini',
+    geminiApiKey: process.env.GEMINI_API_KEY,
+    geminiModel: process.env.GEMINI_MODEL || 'gemini-1.5-flash',
+    maxContextDocuments: parseInt(process.env.AI_MAX_CONTEXT_DOCUMENTS, 10) || 8,
+    requestLimitPerMinute: parseInt(process.env.AI_RATE_LIMIT_PER_MINUTE, 10) || 20,
+  },
 });
