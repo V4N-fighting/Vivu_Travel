@@ -30,15 +30,16 @@ let BookingsService = class BookingsService {
             if (bookingData.couponCode) {
                 const coupon = await this.couponsRepository.findByCode(bookingData.couponCode);
                 if (!coupon) {
-                    throw new common_1.BadRequestException('Mã giảm giá không hợp lệ hoặc đã hết hạn');
+                    throw new common_1.BadRequestException("Mã giảm giá không hợp lệ hoặc đã hết hạn");
                 }
                 if (bookingData.totalPrice < coupon.min_order_value) {
                     throw new common_1.BadRequestException(`Đơn hàng tối thiểu ${coupon.min_order_value} để áp dụng mã này`);
                 }
                 let discount = 0;
-                if (coupon.discount_type === 'percentage') {
+                if (coupon.discount_type === "percentage") {
                     discount = (bookingData.totalPrice * coupon.discount_value) / 100;
-                    if (coupon.max_discount_amount && discount > coupon.max_discount_amount) {
+                    if (coupon.max_discount_amount &&
+                        discount > coupon.max_discount_amount) {
                         discount = coupon.max_discount_amount;
                     }
                 }
@@ -49,16 +50,19 @@ let BookingsService = class BookingsService {
                 await this.couponsRepository.incrementUsedCount(coupon.id);
                 bookingData.couponId = coupon.id;
             }
-            const booking = await this.bookingsRepository.create({ ...bookingData, totalPrice: finalPrice });
+            const booking = await this.bookingsRepository.create({
+                ...bookingData,
+                totalPrice: finalPrice,
+            });
             this.sendEmailSafely(booking, bookingData.userId);
             return {
-                message: 'Booking created successfully',
+                message: "Booking created successfully",
                 booking,
             };
         }
         catch (error) {
-            if (error.message === 'Not enough slots available') {
-                throw new common_1.BadRequestException('The selected tour has no slots left for this date.');
+            if (error.message === "Not enough slots available") {
+                throw new common_1.BadRequestException("The selected tour has no slots left for this date.");
             }
             throw error;
         }
@@ -67,19 +71,19 @@ let BookingsService = class BookingsService {
         try {
             const [tour, user] = await Promise.all([
                 this.toursRepository.findById(booking.tour_id),
-                this.usersRepository.findById(userId)
+                this.usersRepository.findById(userId),
             ]);
             if (tour && user) {
                 await this.emailService.sendBookingConfirmation(booking, tour, {
                     firstName: user.first_name,
                     lastName: user.last_name,
-                    email: user.email
+                    email: user.email,
                 });
                 console.log(`Email xác nhận đã gửi đến: ${user.email}`);
             }
         }
         catch (emailError) {
-            console.error('Lỗi khi gửi email xác nhận:', emailError);
+            console.error("Lỗi khi gửi email xác nhận:", emailError);
         }
     }
     async findByUser(userId) {

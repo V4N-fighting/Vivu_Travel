@@ -41,7 +41,7 @@ const FooterBottom: React.FC = () => {
                                 <GridCol col={2}>
                                     <TitleColumn>Điều hướng</TitleColumn>
                                     <MenuList>
-                                        <MenuItem><LinkElement to="/home" onClick={handleScroll}>Trang chủ</LinkElement></MenuItem>
+                                        <MenuItem><LinkElement to="/" onClick={handleScroll}>Trang chủ</LinkElement></MenuItem>
                                         <MenuItem><LinkElement to="/tours" onClick={handleScroll}>Tours</LinkElement></MenuItem>
                                         <MenuItem><LinkElement to="/about" onClick={handleScroll}>Về chúng tôi</LinkElement></MenuItem>
                                         <MenuItem><LinkElement to="/blog" onClick={handleScroll}>Blog</LinkElement></MenuItem>

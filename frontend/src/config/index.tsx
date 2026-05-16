@@ -9,7 +9,7 @@ import Activity from "../pages/Activity";
 
 const config = {
     routes: {
-        home: '/home',
+        home: '/',
         admin: '/admin',
         admin_dashboard: '/admin/dashboard',
         admin_tours: '/admin/tours',

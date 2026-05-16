@@ -26,7 +26,6 @@ interface Route {
 const publicRoutes: Route[] = [
     { path: config.routes.register, component: Register, layout: '' },
     { path: config.routes.login, component: Login, layout: '' },
-    { path: '/', component: Home, layout: 'default' },
     { path: config.routes.home, component: Home, layout: 'default' },
     { path: config.routes.profile, component: Profile, layout: 'default' },
     { path: config.routes.about, component: About, layout: 'default' },

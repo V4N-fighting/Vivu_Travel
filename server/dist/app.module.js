@@ -25,6 +25,7 @@ const blogs_module_1 = require("./modules/blogs/blogs.module");
 const admin_module_1 = require("./modules/admin/admin.module");
 const email_module_1 = require("./modules/email/email.module");
 const coupons_module_1 = require("./modules/coupons/coupons.module");
+const chatbot_module_1 = require("./modules/chatbot/chatbot.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -51,6 +52,7 @@ exports.AppModule = AppModule = __decorate([
             admin_module_1.AdminModule,
             email_module_1.EmailModule,
             coupons_module_1.CouponsModule,
+            chatbot_module_1.ChatbotModule,
         ],
         controllers: [],
         providers: [],

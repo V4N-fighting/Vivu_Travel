@@ -44,7 +44,7 @@ function Checkout() {
 
     useEffect(() => {
         if (!myData) {
-            navigate("/home");
+            navigate("/");
         }
     }, [myData, navigate]);
 
@@ -273,7 +273,7 @@ function Checkout() {
                         : <ConfirmBox>
                             <FlexBox><Text><Icons.CircleCheckIcon fontSize={40} color="green" />&nbsp;Congratulation</Text></FlexBox>
                             <Title>Chuyến đi của bạn sẽ sớm được duyệt <br/>Theo dõi thường xuyên tại đây nhé!</Title>
-                            <Button blue  onClick={()=>navigate("/home")}>Trở lại trang chủ</Button>
+                            <Button blue  onClick={()=>navigate("/")}>Trở lại trang chủ</Button>
                         </ConfirmBox>
                         }
                         </GridCol>
