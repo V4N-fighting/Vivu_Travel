@@ -12,6 +12,7 @@ import Countries from './Countries/index';
 import Reviews from './Reviews/index';
 import Contacts from './Contacts/index';
 import Activities from './Activities/index';
+import Payments from './Payments/index';
 
 const AdminApp: React.FC = () => {
   return (
@@ -28,6 +29,7 @@ const AdminApp: React.FC = () => {
       <Route path="reviews" element={<Reviews />} />
       <Route path="contacts" element={<Contacts />} />
       <Route path="activities" element={<Activities />} />
+      <Route path="payments" element={<Payments />} />
     </Routes>
   );
 };

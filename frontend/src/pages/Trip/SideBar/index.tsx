@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback, ChangeEvent } from 'react';
 import styled from 'styled-components';
-import CollapseComponent from '../Collapse';
 import { Title } from '../../../styled';
 import { useDestination } from '../../../service/destinationSerive';
 import { useActivityFullData } from '../../../service/activitiesService';
@@ -18,21 +17,21 @@ type SideBarProps = {
     destinationID: string[];
     activityID: string[];
     typeID: string[];
-    price?: [number, number];
-    day?: [number, number];
+    price?: [number | undefined, number | undefined];
+    day?: [number | undefined, number | undefined];
+    searchText?: string;
   };
-  onFilterByPrice: (val: [number, number]) => void;
-  onFilterByTime: (val: [number, number]) => void;
+  onFilterByPrice: (val: [number | undefined, number | undefined]) => void;
+  onFilterByTime: (val: [number | undefined, number | undefined]) => void;
   onCheckDestination: (isChecked: boolean, val: string) => void;
   onCheckActivity: (isChecked: boolean, val: string) => void;
   onCheckType: (isChecked: boolean, val: string) => void;
   onDeleteAll: () => void;
   resetFilters: boolean;
   onResetDone: () => void;
+  onSearchChange: (text: string) => void;
 };
 
-const isValidRange = (range: [number, number]) =>
-  range[0] !== undefined && range[1] !== undefined && !isNaN(range[0]) && !isNaN(range[1]);
 
 const SideBar: React.FC<SideBarProps> = ({
   data,
@@ -44,61 +43,42 @@ const SideBar: React.FC<SideBarProps> = ({
   onDeleteAll,
   resetFilters,
   onResetDone,
+  onSearchChange,
 }) => {
   const { destinations, isLoading: isDesLoading, isError: isDesError } = useDestination();
   const { activities, isLoading: isActLoading, isError: isActError } = useActivityFullData();
   const { types, isLoading: isTypeLoading, isError: isTypeError } = useTourTypeFullData();
 
-  // State chỉ dùng cho reset, còn lại controlled từ props cha
-  const [localPriceRange, setLocalPriceRange] = useState<[number, number]>(data.price || [0, 0]);
-  const [localTimeRange, setLocalTimeRange] = useState<[number, number]>(data.day || [0, 0]);
+  const [searchText, setSearchText] = useState(data.searchText || "");
 
   // Khi resetFilters, set lại state local
   useEffect(() => {
     if (resetFilters) {
-      setLocalPriceRange([0, 0]);
-      setLocalTimeRange([0, 0]);
+      setSearchText("");
       onResetDone();
     }
   }, [resetFilters, onResetDone]);
 
-  // Khi props data thay đổi, đồng bộ local state (chỉ khi giá trị khác)
   useEffect(() => {
-    if (
-      (data.price && (data.price[0] !== localPriceRange[0] || data.price[1] !== localPriceRange[1])) ||
-      (!data.price && (localPriceRange[0] !== 0 || localPriceRange[1] !== 0))
-    ) {
-      setLocalPriceRange(data.price || [0, 0]);
-    }
-  }, [data.price]);
+    setSearchText(data.searchText || "");
+  }, [data.searchText]);
 
-  useEffect(() => {
-    if (
-      (data.day && (data.day[0] !== localTimeRange[0] || data.day[1] !== localTimeRange[1])) ||
-      (!data.day && (localTimeRange[0] !== 0 || localTimeRange[1] !== 0))
-    ) {
-      setLocalTimeRange(data.day || [0, 0]);
-    }
-  }, [data.day]);
+  const handleSearchSubmit = () => {
+    onSearchChange(searchText);
+  };
 
   // Handler apply
-  const handleApplyPrice = useCallback(() => {
-    if (isValidRange(localPriceRange)) {
-      onFilterByPrice([
-        Number(localPriceRange[0]) * 1_000_000,
-        Number(localPriceRange[1]) * 1_000_000,
-      ]);
-    }
-  }, [localPriceRange, onFilterByPrice]);
+  const handleApplyPrice = useCallback((minStr: string, maxStr: string) => {
+    const min = minStr.trim() !== "" ? Number(minStr) * 1_000_000 : undefined;
+    const max = maxStr.trim() !== "" ? Number(maxStr) * 1_000_000 : undefined;
+    onFilterByPrice([min, max]);
+  }, [onFilterByPrice]);
 
-  const handleApplyTime = useCallback(() => {
-    if (isValidRange(localTimeRange)) {
-      onFilterByTime([
-        Number(localTimeRange[0]),
-        Number(localTimeRange[1]),
-      ]);
-    }
-  }, [localTimeRange, onFilterByTime]);
+  const handleApplyTime = useCallback((minStr: string, maxStr: string) => {
+    const min = minStr.trim() !== "" ? Number(minStr) : undefined;
+    const max = maxStr.trim() !== "" ? Number(maxStr) : undefined;
+    onFilterByTime([min, max]);
+  }, [onFilterByTime]);
 
   // Gom handler checkbox
   const handleCheckbox = useCallback(
@@ -149,23 +129,46 @@ const SideBar: React.FC<SideBarProps> = ({
         <DeleteAll onClick={onDeleteAll}>Xóa tất cả</DeleteAll>
       </SidebarItem>
 
+      <SidebarSearchWrapper>
+        <SearchBox>
+          <SearchInput
+            type="text"
+            placeholder="Tìm tên tour, điểm đến..."
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleSearchSubmit();
+              }
+            }}
+          />
+          {searchText && (
+            <ClearIcon onClick={() => {
+              setSearchText("");
+              onSearchChange("");
+            }}>
+              ✕
+            </ClearIcon>
+          )}
+          <SearchBtn onClick={handleSearchSubmit}>
+            🔍
+          </SearchBtn>
+        </SearchBox>
+      </SidebarSearchWrapper>
+
       <RangeInputFilter
         label="Giá"
         unit={TypeInput.Price}
-        setMin={(val) => setLocalPriceRange((prev) => [Number(val), prev[1]])}
-        setMax={(val) => setLocalPriceRange((prev) => [prev[0], Number(val)])}
         onApply={handleApplyPrice}
         resetFilters={resetFilters}
-        selected={localPriceRange}/>
+        selected={data.price}/>
 
       <RangeInputFilter
         label="Thời gian"
         unit={TypeInput.Time}
-        setMin={(val) => setLocalTimeRange((prev) => [Number(val), prev[1]])}
-        setMax={(val) => setLocalTimeRange((prev) => [prev[0], Number(val)])}
         onApply={handleApplyTime}
         resetFilters={resetFilters}
-        selected={localTimeRange}/>
+        selected={data.day}/>
 
       {filterConfigs.map((config) => (
         <FilterSection
@@ -208,6 +211,73 @@ const SidebarLoading = styled.div`
   padding: 32px 0;
   text-align: center;
   color: #888;
+`;
+
+const SidebarSearchWrapper = styled.div`
+  width: 100%;
+  padding: 15px 0;
+  border-bottom: 1px solid #d1d1d1;
+`;
+
+const SearchBox = styled.div`
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  background-color: #f9f9f9;
+  padding: 4px 10px 4px 16px;
+  transition: all 0.3s ease;
+
+  &:focus-within {
+    border-color: #ff5722;
+    background-color: #fff;
+    box-shadow: 0 0 8px rgba(255, 87, 34, 0.2);
+  }
+`;
+
+const SearchInput = styled.input`
+  border: none;
+  background: none;
+  outline: none;
+  width: 100%;
+  font-size: 14px;
+  color: #333;
+  padding: 6px 0;
+  
+  &::placeholder {
+    color: #999;
+  }
+`;
+
+const ClearIcon = styled.span`
+  cursor: pointer;
+  color: #999;
+  font-size: 14px;
+  margin-right: 8px;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #ff5722;
+  }
+`;
+
+const SearchBtn = styled.button`
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #ff5722;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.15);
+  }
 `;
 
 export default SideBar;

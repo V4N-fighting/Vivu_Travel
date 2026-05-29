@@ -17,6 +17,7 @@ import { ActivitiesRepository } from '../activities/activities.repository';
 import { ContactsRepository } from '../contacts/contacts.repository';
 import { BlogsRepository } from '../blogs/blogs.repository';
 import { BannersRepository } from '../banners/banners.repository';
+import { AdminPaymentsRepository } from './payments.admin.repository';
 import { Response } from 'express';
 
 @Controller('admin')
@@ -36,6 +37,7 @@ export class AdminController {
     private readonly contactsRepo: ContactsRepository,
     private readonly blogsRepo: BlogsRepository,
     private readonly bannersRepo: BannersRepository,
+    private readonly paymentsRepo: AdminPaymentsRepository,
   ) {}
 
   // 1. Dashboard Statistics
@@ -591,5 +593,49 @@ export class AdminController {
   @Delete('banners/:id')
   async deleteBanner(@Param('id', ParseIntPipe) id: number) {
     return this.bannersRepo.delete(id);
+  }
+
+  // 13. Quản lý Payments
+  @Get('payments')
+  async getAllPayments() {
+    return this.paymentsRepo.findAll();
+  }
+
+  @Get('payments/stats')
+  async getPaymentStats() {
+    return this.paymentsRepo.getStats();
+  }
+
+  @Get('payments/booking/:bookingId')
+  async getPaymentsByBooking(@Param('bookingId', ParseIntPipe) bookingId: number) {
+    return this.paymentsRepo.findByBookingId(bookingId);
+  }
+
+  @Post('payments')
+  async createPayment(@Body() data: any) {
+    return this.paymentsRepo.create({
+      bookingId: data.bookingId,
+      amount: data.amount,
+      method: data.method,
+      status: data.status || 'pending',
+      transactionId: data.transactionId,
+    });
+  }
+
+  @Put('payments/:id/status')
+  async updatePaymentStatus(
+    @Param('id', ParseIntPipe) id: number,
+    @Body('status') status: string,
+    @Body('transactionId') transactionId?: string,
+  ) {
+    return this.paymentsRepo.updateStatus(id, status, transactionId);
+  }
+
+  @Put('payments/:id/method')
+  async updatePaymentMethod(
+    @Param('id', ParseIntPipe) id: number,
+    @Body('method') method: string,
+  ) {
+    return this.paymentsRepo.updateMethod(id, method);
   }
 }

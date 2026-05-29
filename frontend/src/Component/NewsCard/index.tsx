@@ -20,7 +20,7 @@ const NewsCard: React.FC<NewsCardProps> = ({url, textDescr, title, textTime, lab
   const blogLink = slug ? `/blog/${slug}` : '#';
 
   return (
-        <WrapperNewsCard>
+        <S.UnifiedCardWrapper>
             <Label >{label}</Label>
             <Link to={blogLink}>
               <WrapperImage><Image src={url}></Image></WrapperImage>
@@ -42,41 +42,28 @@ const NewsCard: React.FC<NewsCardProps> = ({url, textDescr, title, textTime, lab
                 </Link>
 
             </Content>
-        </WrapperNewsCard>
+        </S.UnifiedCardWrapper>
   );
 };
 
 
 
-const WrapperNewsCard = styled.div`
-  width: 100%;
-  background-color: #ffffff;
-  border-radius: 25px;
-  padding: 25px;
-  border: 1px solid #eee;
-  position: relative;
-  transition: all 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-
-  &:hover {
-    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-    border-color: #ff681a;
-  }
-`
 const Label = styled.div`
   position: absolute;
-  top: 20px;
-  left: 20px;
-  background-color: #37d4d9;
+  top: 40px;
+  left: 40px;
+  background: rgba(55, 212, 217, 0.9);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   color: #ffffff;
-  font-size: 1rem;
-  font-weight: 600;
-  padding: 6px 15px;
-  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 16px;
+  border-radius: 50px;
   z-index: 10;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 4px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 `
 
 const WrapperImage = styled.div`
@@ -95,11 +82,6 @@ const Image = styled.img<{src: string}>`
   height: 100%;
   object-fit: cover;
   transition: all 0.5s ease;
-
-
-  &:hover {
-    transform: scale(1.1);
-  }
 `
 
 
@@ -118,6 +100,8 @@ const NewsCardTitle = styled(S.Title)`
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  font-weight: 600;
+  transition: color 0.3s ease;
 
   &:hover {
     cursor: pointer;

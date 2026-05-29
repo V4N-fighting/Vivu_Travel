@@ -12,6 +12,7 @@ import { ActivitiesRepository } from '../activities/activities.repository';
 import { ContactsRepository } from '../contacts/contacts.repository';
 import { BlogsRepository } from '../blogs/blogs.repository';
 import { BannersRepository } from '../banners/banners.repository';
+import { AdminPaymentsRepository } from './payments.admin.repository';
 
 @Module({
   controllers: [AdminController],
@@ -27,8 +28,9 @@ import { BannersRepository } from '../banners/banners.repository';
     ActivitiesRepository,
     ContactsRepository,
     BlogsRepository,
-    BannersRepository
+    BannersRepository,
+    AdminPaymentsRepository
   ],
-  exports: [AdminRepository, AdminToursRepository, AdminBookingsRepository, AdminUsersRepository]
+  exports: [AdminRepository, AdminToursRepository, AdminBookingsRepository, AdminUsersRepository, AdminPaymentsRepository]
 })
 export class AdminModule {}

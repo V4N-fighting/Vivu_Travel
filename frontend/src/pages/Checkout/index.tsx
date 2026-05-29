@@ -48,19 +48,6 @@ function Checkout() {
         }
     }, [myData, navigate]);
 
-    const exampleTour = myData ? {
-        image: myData.data.image,
-        title: myData.data.name,
-        code: `TOUR-${myData.data.id}-${dayjs().format('YYYY')}`,
-        startDate: myData.data.departureDate,
-        counter: myData.adultCounter + myData.childCounter,
-        duration: myData.data.duration,
-        price: myData.total,
-        originalTotal: myData.originalTotal,
-        discount: myData.discount,
-        couponCode: myData.couponCode
-    } : { image: "", title: "", code: "", startDate: "", counter: 0, duration: "", price: 0, originalTotal: 0, discount: 0, couponCode: "" };
-
     const [adultTravelers, setAdultTravelers] = useState<Traveler[]>(
         bookingDraft?.adultTravelers || []
     );
@@ -74,6 +61,21 @@ function Checkout() {
     const [couponLoading, setCouponLoading] = useState(false);
     const [appliedCoupon, setAppliedCoupon] = useState<any>(myData?.couponCode ? { code: myData.couponCode } : null);
     const [currentTotal, setCurrentTotal] = useState(myData?.total || 0);
+    const [paymentMethod, setPaymentMethod] = useState<string>('cash');
+
+    const currentDiscount = myData ? (myData.originalTotal - currentTotal) : 0;
+    const exampleTour = myData ? {
+        image: myData.data.image,
+        title: myData.data.name,
+        code: `TOUR-${myData.data.id}-${dayjs().format('YYYY')}`,
+        startDate: myData.data.departureDate,
+        counter: myData.adultCounter + myData.childCounter,
+        duration: myData.data.duration,
+        price: currentTotal,
+        originalTotal: myData.originalTotal,
+        discount: currentDiscount,
+        couponCode: appliedCoupon?.code
+    } : { image: "", title: "", code: "", startDate: "", counter: 0, duration: "", price: 0, originalTotal: 0, discount: 0, couponCode: "" };
 
     const handleApplyCoupon = async (code: string) => {
         setCouponLoading(true);
@@ -164,10 +166,11 @@ function Checkout() {
                 departureDateId: myData.data.departureDateId || 1,
                 adultCount: myData.adultCounter,
                 childCount: myData.childCounter,
-                totalPrice: currentTotal,
+                totalPrice: myData.originalTotal,
                 note: bookingDraft?.specialRequests || '',
                 travelers: allTravelers,
-                couponCode: appliedCoupon?.code
+                couponCode: appliedCoupon?.code,
+                paymentMethod: paymentMethod,
             };
 
             await axios.post(GET_BOOKING, payload, {
@@ -268,6 +271,46 @@ function Checkout() {
                                     </Form>
                                 ))}
                                 
+                                {/* === COUPON === */}
+                                <CouponSection>
+                                    <CouponTitle>🎟️ Mã giảm giá</CouponTitle>
+                                    <CouponInput 
+                                        onApply={handleApplyCoupon} 
+                                        loading={couponLoading} 
+                                    />
+                                    {appliedCoupon && (
+                                        <AppliedCoupon>✅ Đã áp dụng: <strong>{appliedCoupon.code}</strong></AppliedCoupon>
+                                    )}
+                                </CouponSection>
+
+                                {/* === PHẦN THANH TOÁN === */}
+                                <PaymentSection>
+                                    <PaymentTitle>
+                                        <span style={{ fontSize: 18, marginRight: 8 }}>💳</span>
+                                        Chọn phương thức thanh toán
+                                    </PaymentTitle>
+                                    <PaymentGrid>
+                                        {[
+                                            { value: 'cash', label: 'Tiền mặt', icon: '💵', desc: 'Thanh toán trực tiếp' },
+                                            { value: 'bank_transfer', label: 'Chuyển khoản', icon: '🏦', desc: 'Internet Banking' },
+                                            { value: 'momo', label: 'Ví MoMo', icon: '📱', desc: 'Thanh toán qua MoMo' },
+                                            { value: 'vnpay', label: 'VNPay', icon: '🆚', desc: 'Cổng thanh toán VNPay' },
+                                            { value: 'credit_card', label: 'Thẻ', icon: '💳', desc: 'Visa / Mastercard' },
+                                        ].map(pm => (
+                                            <PaymentCard
+                                                key={pm.value}
+                                                selected={paymentMethod === pm.value}
+                                                onClick={() => setPaymentMethod(pm.value)}
+                                            >
+                                                <PaymentIcon>{pm.icon}</PaymentIcon>
+                                                <PaymentLabel selected={paymentMethod === pm.value}>{pm.label}</PaymentLabel>
+                                                <PaymentDesc>{pm.desc}</PaymentDesc>
+                                                {paymentMethod === pm.value && <SelectedMark>✓</SelectedMark>}
+                                            </PaymentCard>
+                                        ))}
+                                    </PaymentGrid>
+                                </PaymentSection>
+
                                 <Button orange disabled={isSubmitting} onClick={handleSubmit}>{isSubmitting ? 'Đang xử lý...' : 'Tiếp theo'}</Button>
                             </CheckoutDetailBox>
                         : <ConfirmBox>
@@ -278,7 +321,7 @@ function Checkout() {
                         }
                         </GridCol>
                         <GridCol col={5}>
-                            <TourCard tour={{...exampleTour, price: currentTotal}} />
+                            <TourCard tour={exampleTour} />
                         </GridCol>
                     </GridRow>
                 </Grid>
@@ -340,5 +383,110 @@ const Input = styled.input`
 const ConfirmBox = styled.div`
     padding: 20px;
 `
+
+// === COUPON SECTION ===
+const CouponSection = styled.div`
+    margin: 24px 0 0;
+    padding: 20px;
+    background: #fffbf5;
+    border: 1px dashed #f76b0060;
+    border-radius: 10px;
+`;
+
+const CouponTitle = styled.h4`
+    font-size: 14px;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 12px;
+`;
+
+const AppliedCoupon = styled.div`
+    margin-top: 10px;
+    font-size: 13px;
+    color: #52c41a;
+    padding: 6px 10px;
+    background: #f6ffed;
+    border: 1px solid #b7eb8f;
+    border-radius: 4px;
+`;
+
+// === PAYMENT STYLED COMPONENTS ===
+const PaymentSection = styled.div`
+    margin: 30px 0 20px;
+    padding: 24px;
+    border: 2px solid #f0f0f0;
+    border-radius: 12px;
+    background: #fafafa;
+`;
+
+const PaymentTitle = styled.h3`
+    font-size: 16px;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+`;
+
+const PaymentGrid = styled.div`
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 14px;
+`;
+
+const PaymentCard = styled.div<{ selected?: boolean }>`
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 10px;
+    border: 2px solid ${({ selected }) => selected ? '#f76b00' : '#e8e8e8'};
+    border-radius: 10px;
+    background: ${({ selected }) => selected ? '#fff5ee' : '#fff'};
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: ${({ selected }) => selected ? '0 0 0 3px rgba(247,107,0,0.15)' : 'none'};
+
+    &:hover {
+        border-color: #f76b00;
+        background: #fff5ee;
+        transform: translateY(-2px);
+    }
+`;
+
+const PaymentIcon = styled.div`
+    font-size: 28px;
+    margin-bottom: 8px;
+`;
+
+const PaymentLabel = styled.div<{ selected?: boolean }>`
+    font-size: 13px;
+    font-weight: ${({ selected }) => selected ? '700' : '500'};
+    color: ${({ selected }) => selected ? '#f76b00' : '#333'};
+    text-align: center;
+    margin-bottom: 4px;
+`;
+
+const PaymentDesc = styled.div`
+    font-size: 11px;
+    color: #999;
+    text-align: center;
+`;
+
+const SelectedMark = styled.div`
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    width: 20px;
+    height: 20px;
+    background: #f76b00;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: bold;
+`;
 
 export default Checkout;

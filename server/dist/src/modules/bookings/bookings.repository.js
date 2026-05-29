@@ -26,12 +26,21 @@ let BookingsRepository = class BookingsRepository {
         const client = await this.pool.connect();
         try {
             await client.query('BEGIN');
-            const slotQuery = 'SELECT available_slots FROM tour_departure_dates WHERE id = $1 FOR UPDATE';
+            const slotQuery = 'SELECT available_slots, departure_date FROM tour_departure_dates WHERE id = $1 FOR UPDATE';
             const slotRes = await client.query(slotQuery, [departureDateId]);
             if (slotRes.rows.length === 0) {
                 throw new Error('Ngày khởi hành không tồn tại');
             }
-            const availableSlots = slotRes.rows[0].available_slots;
+            const { available_slots: availableSlots, departure_date: departureDate } = slotRes.rows[0];
+            if (departureDate) {
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const depDate = new Date(departureDate);
+                depDate.setHours(0, 0, 0, 0);
+                if (depDate < today) {
+                    throw new Error('Ngày khởi hành đã qua, không thể đặt tour này nữa');
+                }
+            }
             if (availableSlots < totalPeople) {
                 throw new Error(`Không đủ chỗ trống. Chỉ còn ${availableSlots} chỗ.`);
             }
@@ -52,6 +61,8 @@ let BookingsRepository = class BookingsRepository {
                 }
             }
             await client.query('UPDATE tour_departure_dates SET available_slots = available_slots - $1 WHERE id = $2', [totalPeople, departureDateId]);
+            const paymentMethod = bookingData.paymentMethod || 'cash';
+            await client.query(`INSERT INTO payments (booking_id, amount, method, status) VALUES ($1, $2, $3, 'pending')`, [booking.id, totalPrice, paymentMethod]);
             await client.query('COMMIT');
             return booking;
         }

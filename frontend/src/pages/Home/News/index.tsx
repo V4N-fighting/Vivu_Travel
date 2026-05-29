@@ -102,13 +102,15 @@ const turnAround = keyframes`
 const Content = styled.div`
   width: 100%;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 0 -15px;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 30px;
   padding: 40px 0;
 `
 const Col = styled.div`
-  padding: 0 15px 30px;
+  width: calc((100% - 60px) / 3);
+  flex-shrink: 0;
+  padding-bottom: 30px;
 `
 
 export default News;

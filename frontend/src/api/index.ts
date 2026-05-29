@@ -11,6 +11,7 @@ export const GET_REVIEW = `${BASE_URL}/reviews`;
 export const GET_USER = `${BASE_URL}/users`;
 export const GET_BLOG = `${BASE_URL}/blogs`;
 export const GET_COUPON = `${BASE_URL}/coupons`;
+export const GET_PAYMENT = `${BASE_URL}/admin/payments`;
 export const CHATBOT_URL = `${BASE_URL}/chatbot/ask`;
 export const CHATBOT_STREAM_URL = `${BASE_URL}/chatbot/stream`;
 

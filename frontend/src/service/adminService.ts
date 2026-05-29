@@ -425,4 +425,22 @@ export const adminService = {
     const res = await axios.delete(`${ADMIN_URL}/tours/itineraries/${id}`, getAuthConfig());
     return res.data;
   },
+
+  // Payments
+  getPayments: async () => {
+    const res = await axios.get(`${ADMIN_URL}/payments`, getAuthConfig());
+    return res.data;
+  },
+  getPaymentStats: async () => {
+    const res = await axios.get(`${ADMIN_URL}/payments/stats`, getAuthConfig());
+    return res.data;
+  },
+  updatePaymentStatus: async (id: string | number, status: string, transactionId?: string) => {
+    const res = await axios.put(`${ADMIN_URL}/payments/${id}/status`, { status, transactionId }, getAuthConfig());
+    return res.data;
+  },
+  updatePaymentMethod: async (id: string | number, method: string) => {
+    const res = await axios.put(`${ADMIN_URL}/payments/${id}/method`, { method }, getAuthConfig());
+    return res.data;
+  },
 };

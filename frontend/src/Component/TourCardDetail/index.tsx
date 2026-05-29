@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import styled, { keyframes } from 'styled-components';
-import { Title, Text, Icon, FlexBox } from '../../styled';
+import styled from 'styled-components';
+import { Title, Text, UnifiedCardWrapper } from '../../styled';
 import Button from '../BaseComponent/Button/Button';
 import Icons from '../BaseComponent/Icons';
 import { useNavigate } from 'react-router-dom';
@@ -32,7 +32,7 @@ const TourCardDetail: React.FC<TourCardDetailProps> =
   textTime, 
   textDensity, 
   textLevel, 
-  horizontal, 
+  horizontal = false, 
   textDescr, 
   isDensity = true, 
   type,
@@ -54,7 +54,7 @@ const TourCardDetail: React.FC<TourCardDetailProps> =
   })();
 
   const handleViewDetail = () => {
-      navigate(config.routes.tour_detail + '?tourId=' + valueID, { state: { valueID } }); // Gửi state nếu cần
+      navigate(config.routes.tour_detail + '?tourId=' + valueID, { state: { valueID } });
       window.scrollTo({ top: 200, behavior: 'smooth' });
   };
   
@@ -65,42 +65,55 @@ const TourCardDetail: React.FC<TourCardDetailProps> =
     { icon: <Icons.ChartSimpleIcon orange/>, text: textLevel },
   ];
 
-  // const next_tour = ['Th1 04', 'Th1 05', 'Th1 06' ];
-
   const months = ['Th1', 'Th2', 'Th3', 'Th4', 'Th5', 'Th6', 'Th7', 'Th8', 'Th9', 'Th10', 'Th11', 'Th12' ];
 
   const availableMonth = months.join(' ');
 
   useEffect(() => {
-    months.length == 12 ? setIsFullYear(true): setIsFullYear(false);
+    months.length === 12 ? setIsFullYear(true): setIsFullYear(false);
   }, [])
 
   const priceDisplay = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(Number(price));
 
   return (
-        <WrapperCard horizontal={horizontal}>
-            <Label style={{top: '20px'}}>{type}</Label>
-            <WrapperImage><Image src={imageUrl}></Image></WrapperImage>
+        <UnifiedCardWrapper $horizontal={horizontal}>
+            <Label>{type}</Label>
+            <WrapperImage onClick={handleViewDetail}><Image src={imageUrl} alt={title}></Image></WrapperImage>
             <Content>
-                <CardTitle>{title}</CardTitle>
-                <Descr>
-                    <Left>
-                      {details.map((detail, index) => (
-                        <ItemBox key={index}>
-                          <WrapperIcon>{detail.icon}</WrapperIcon>
-                          <TextDescr style={{margin: 0}}>{detail.text}</TextDescr>
-                        </ItemBox>
-                      ))}
-                      <TextDescr style={{margin: '20px 0'}}>{textDescr}</TextDescr>
+                <CardTitle onClick={handleViewDetail}>{title}</CardTitle>
+                <Descr $horizontal={horizontal}>
+                    <Left $horizontal={horizontal}>
+                      <DetailsGrid $horizontal={horizontal}>
+                        {details.map((detail, index) => (
+                          <ItemBox key={index}>
+                            <WrapperIcon>{detail.icon}</WrapperIcon>
+                            <TextDescr style={{margin: 0}}>{detail.text}</TextDescr>
+                          </ItemBox>
+                        ))}
+                      </DetailsGrid>
+                      <TextDescr style={{margin: horizontal ? '20px 0' : '12px 0 0'}}>{textDescr}</TextDescr>
                     </Left>
-                    <Right>
-                        <Text small>Từ</Text>
-                        <Price>{priceDisplay}</Price>
-                        <Text small>/người</Text>
-                        <TextDescr>Chuyến khởi hành tiếp theo</TextDescr>
-                        {nextTour?.map((day, index) => {
-                          return <TextDescr key={index}><Icons.CheckIcon />{day}</TextDescr>
-                        })}
+                    <Right $horizontal={horizontal}>
+                        <PriceGroup $horizontal={horizontal}>
+                            <PriceLabel>Từ</PriceLabel>
+                            <PriceValue>{priceDisplay}</PriceValue>
+                            <PriceUnit>/khách</PriceUnit>
+                        </PriceGroup>
+                        {nextTour && nextTour.length > 0 && (
+                          <DepartureGroup $horizontal={horizontal}>
+                            <DepartureLabel>Khởi hành gần nhất</DepartureLabel>
+                            <DepartureBadges $horizontal={horizontal}>
+                              {nextTour.slice(0, 3).map((day, index) => {
+                                return (
+                                  <DepartureBadge key={index} $horizontal={horizontal}>
+                                    {horizontal && <Icons.CheckIcon style={{marginRight: '6px', fontSize: '12px', color: '#ff681a'}} />}
+                                    {day}
+                                  </DepartureBadge>
+                                );
+                              })}
+                            </DepartureBadges>
+                          </DepartureGroup>
+                        )}
                     </Right>
                 </Descr>
                 <CardButton orange onClick={handleViewDetail}>Xem chi tiết</CardButton>
@@ -109,47 +122,29 @@ const TourCardDetail: React.FC<TourCardDetailProps> =
                   <TextDescr style={{fontSize: '12px'}}><Icons.CalendarIcon orange/>{availableMonth}</TextDescr>
                 </>}
             </Content>
-        </WrapperCard>
+        </UnifiedCardWrapper>
   );
 };
 
 
 
-const WrapperCard = styled.div<{horizontal?: boolean}>`
-  display: ${props => props.horizontal ? 'flex' : 'block'};
-  width: 100%;
-  max-width: 100%;
-  background-color: var(--white-color);
-  border-radius: 5px;
-  /* overflow: hidden; */
-  box-shadow: var(--box-shadow);
-  position: relative;
-  margin: 0 0 20px;
-  `
+
 const Label = styled.div`
   position: absolute;
-  top: 10%;
-  right: -10px;
-  background-color: #37d4d9;
+  top: 40px;
+  left: 40px;
+  background: rgba(55, 212, 217, 0.9);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   color: #ffffff;
-  font-size: 1.2rem;
-  font-weight: 600;
-  padding: 10px;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  border-bottom-left-radius: 10px;
-  z-index: 99;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-
-  &::after {
-    position: absolute;
-    content: "";
-    top: 100%;
-    right: 0;
-    border-top: 10px solid #37d4d9;
-    border-right: 10px solid transparent;
-    filter: brightness(70%);
-  }
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 16px;
+  border-radius: 50px;
+  z-index: 10;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 `
 
 const WrapperImage = styled.div`
@@ -157,95 +152,175 @@ const WrapperImage = styled.div`
     aspect-ratio: 900 / 700;
     overflow: hidden;
     cursor: pointer;
+    border-radius: 15px;
 `
 
-
-
-const Image = styled.img<{src: string}>`
+const Image = styled.img`
   width: 100%;
   aspect-ratio: 900 / 700;
   object-fit: cover;
-  transition: all 3s linear;
-
-
-  &:hover {
-    transform: scale(1.1);
-  }
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 `
-
 
 const Content = styled.div`
   width: 100%;
   max-width: 100%;
-  padding: 20px 15px;
+  padding: 20px 0 0;
+  display: flex;
+  flex-direction: column;
 `
 const CardTitle = styled(Title)`
   display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 20px;
+  line-height: 1.4;
+  color: #000;
+  margin: 0 0 10px;
+  transition: color 0.3s ease;
+
   &:hover {
     cursor: pointer;
-    text-decoration: underline;
+    color: #ff681a;
   }
 `
-const Descr = styled.div`
+const Descr = styled.div<{ $horizontal?: boolean }>`
   width: 100%;
   max-width: 100%;
   display: flex;
-  margin: 20px 0;
-  padding: 10px 0;
-  border-bottom: var(--border);
-
-
+  margin: 15px 0;
+  padding: 5px 0;
+  flex-direction: ${props => props.$horizontal ? 'row' : 'column'};
+  gap: ${props => props.$horizontal ? '0' : '20px'};
 `
+
+const Left = styled.div<{ $horizontal?: boolean }>`
+  width: ${props => props.$horizontal ? 'calc(50% - 1px)' : '100%'};
+  border-right: ${props => props.$horizontal ? 'var(--border)' : 'none'};
+  padding-right: ${props => props.$horizontal ? '15px' : '0'};
+`
+
+const DetailsGrid = styled.div<{ $horizontal?: boolean }>`
+  width: 100%;
+  display: ${props => props.$horizontal ? 'block' : 'grid'};
+  grid-template-columns: ${props => props.$horizontal ? 'initial' : 'repeat(2, 1fr)'};
+  gap: ${props => props.$horizontal ? 'initial' : '10px 15px'};
+`
+
 const ItemBox = styled.div`
   display: flex;
-  padding: 5px 0;
+  padding: 4px 0;
   align-items: center;
+  gap: 8px;
 `
 
 const WrapperIcon = styled.div`
-  width: 70px;
-`
-
-
-const Left = styled.div`
-  width: calc(50% - 1px);
-  margin-bottom: -18px;
-  border-right: var(--border);
-  padding-right: 15px;
-`
-const Right = styled.div`
-  width: 50%;
-  padding: 0 10px;
+  width: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+  color: #ff681a;
+  
+  svg {
+    font-size: 15px;
+    width: 15px;
+    height: 15px;
+  }
+`
+
+const Right = styled.div<{ $horizontal?: boolean }>`
+  width: ${props => props.$horizontal ? '50%' : '100%'};
+  padding: ${props => props.$horizontal ? '0 10px' : '15px 0 0'};
+  border-top: ${props => props.$horizontal ? 'none' : '1px dashed #eee'};
+  display: flex;
+  flex-direction: ${props => props.$horizontal ? 'column' : 'row'};
+  justify-content: ${props => props.$horizontal ? 'center' : 'space-between'};
+  align-items: ${props => props.$horizontal ? 'center' : 'center'};
+  gap: 15px;
+`
+
+const PriceGroup = styled.div<{ $horizontal?: boolean }>`
+  display: flex;
   flex-direction: column;
+  align-items: ${props => props.$horizontal ? 'center' : 'flex-start'};
+  justify-content: center;
+  gap: 2px;
 `
 
-const Price = styled(Text)`
-    font-size: 20px;
-    color: #222222;
-    font-weight: 400;
+const PriceLabel = styled.span`
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #888;
+  font-weight: 600;
+  letter-spacing: 0.5px;
 `
 
+const PriceValue = styled.span`
+  font-size: 22px;
+  font-weight: 700;
+  color: #ff681a;
+  line-height: 1.2;
+`
+
+const PriceUnit = styled.span`
+  font-size: 12px;
+  color: #666;
+`
+
+const DepartureGroup = styled.div<{ $horizontal?: boolean }>`
+  display: flex;
+  flex-direction: column;
+  align-items: ${props => props.$horizontal ? 'center' : 'flex-end'};
+  gap: 6px;
+`
+
+const DepartureLabel = styled.span`
+  font-size: 11px;
+  color: #888;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+`
+
+const DepartureBadges = styled.div<{ $horizontal?: boolean }>`
+  display: flex;
+  flex-direction: ${props => props.$horizontal ? 'column' : 'row'};
+  gap: ${props => props.$horizontal ? '6px' : '8px'};
+  align-items: ${props => props.$horizontal ? 'center' : 'center'};
+  justify-content: ${props => props.$horizontal ? 'center' : 'flex-end'};
+  flex-wrap: wrap;
+`
+
+const DepartureBadge = styled.span<{ $horizontal?: boolean }>`
+  font-size: ${props => props.$horizontal ? '14px' : '11px'};
+  font-weight: ${props => props.$horizontal ? '400' : '600'};
+  color: ${props => props.$horizontal ? '#666' : '#ff681a'};
+  background: ${props => props.$horizontal ? 'transparent' : '#fff3ec'};
+  border: ${props => props.$horizontal ? 'none' : '1px solid #ffe2d1'};
+  border-radius: ${props => props.$horizontal ? '0' : '6px'};
+  padding: ${props => props.$horizontal ? '0' : '4px 8px'};
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+`
 
 const TextDescr = styled(Text)`
-    font-size: 14px;
+  font-size: 14px;
   display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
 `
 
 const CardButton = styled(Button)`
   width: 100%;
   margin: 10px 0;
 `
-
 
 export default TourCardDetail;

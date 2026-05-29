@@ -6,6 +6,8 @@ import ScrollToShow from "../../../Component/ScrollToShow";
 import TourCardDetail from "../../../Component/TourCardDetail";
 import { useTour } from "../../../service/tourService";
 import { GET_IMAGE_URL } from "../../../api";
+import { Link } from "react-router-dom";
+import config from "../../../config";
 
 
 interface ListCardProps {
@@ -55,7 +57,11 @@ const ListCard: React.FC<ListCardProps> = ({}) => {
         <ScrollToShow bottomToTop><ListCardText small>Gói du lịch tốt nhất của chúng tôi đã được thiết kế đặc biệt để mang đến cho bạn trải nghiệm tuyệt vời nhất.</ListCardText></ScrollToShow>
       </Header>
       <ScrollToShow scale><Carousel slides={Sildes} autoSlide autoSlideInterval={3000}></Carousel></ScrollToShow>
-      <ScrollToShow topToBottom><Button orange>Xem thêm</Button></ScrollToShow>
+      <ScrollToShow topToBottom>
+        <Link to={config.routes.trip}>
+          <Button orange>Xem thêm</Button>
+        </Link>
+      </ScrollToShow>
     </Wrapper>
   );
 };

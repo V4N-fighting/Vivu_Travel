@@ -70,6 +70,7 @@ const Modal: React.FC<ModalProps> = ({ hideModal, data }) => {
 
     const validDepartureDates = [...rawDepartureDates]
         .map(d => typeof d === 'string' ? { departure_date: d, available_slots: '?', id: Math.random() } : d)
+        .filter(d => dayjs(d.departure_date).unix() >= dayjs().startOf('day').unix())
         .sort((a: any, b: any) => 
             dayjs(a.departure_date).unix() - dayjs(b.departure_date).unix()
         );

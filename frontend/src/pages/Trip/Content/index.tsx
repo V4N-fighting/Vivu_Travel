@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import DropdownMenu from '../DropdownMenu';
 import { Grid, GridCol, GridRow } from '../../../styled';
@@ -17,12 +17,13 @@ interface ContentProps {
   destinationIDs: string[] | undefined;
   activityIDs: string[] | undefined;
   typeIDs: string[];
-  price: [number, number] | undefined;
-  time: [number, number] | undefined;
+  price: [number | undefined, number | undefined] | undefined;
+  time: [number | undefined, number | undefined] | undefined;
+  searchText?: string;
 }
 
 
-const Content: React.FC<ContentProps> = ({destinationIDs, activityIDs, typeIDs, price, time, }) => {
+const Content: React.FC<ContentProps> = ({destinationIDs, activityIDs, typeIDs, price, time, searchText}) => {
   const [modeShow, setModeShow] =  useState(ModeShow.List)
 
 
@@ -31,7 +32,8 @@ const Content: React.FC<ContentProps> = ({destinationIDs, activityIDs, typeIDs, 
     activityIDs: activityIDs,
     typeIDs: typeIDs,
     priceRange: price,
-    durationRange: time
+    durationRange: time,
+    searchText: searchText
   } );
 
   const itemsPerPage = modeShow === ModeShow.List ? 4 : 2;

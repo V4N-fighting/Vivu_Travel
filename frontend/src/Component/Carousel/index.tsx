@@ -78,13 +78,14 @@ const SliderWrapper = styled.div`
 
 const SliderContainer = styled.div`
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-start;
   transition: all 0.5s ease; 
-  gap: 20px;
+  gap: 30px;
 `;
 
 const Slide = styled.div<{ slidesToShow: number }>`
-  width: calc(100% / ${props => props.slidesToShow} - 40px);
+  width: calc((100% - ${props => (props.slidesToShow - 1) * 30}px) / ${props => props.slidesToShow});
+  flex-shrink: 0;
 `;
 
 const DotsContainer = styled.div`

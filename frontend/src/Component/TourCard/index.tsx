@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Icon } from '../../styled';
+import { Icon, UnifiedCardWrapper } from '../../styled';
 import {  faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 
@@ -32,26 +32,24 @@ const TourCard: React.FC<TourCardProps> = ({url, label, name, current}) => {
 };
   
   return (
-    <Wrapper>
+    <UnifiedCardWrapper>
         <Wrap onClick={handleViewDetail}>
-          <Image url={url} />
+          <Image url={url} className="zoom-hover" />
           <Label>{label}</Label>
         </Wrap>
         <Name>{name}<Icon icon={faArrowRight}/></Name>
-    </Wrapper>
+    </UnifiedCardWrapper>
   );
 };
 
 
-const Wrapper = styled.div`
-  width: 100%;
-`
+
 const Wrap = styled.div`
   width: 100%;
-  border-radius: 20px;
+  border-radius: 15px;
   overflow: hidden;
   position: relative;
-
+  cursor: pointer;
 `
 const Image = styled.div<{url: string}>`
   padding-top: 100%;
@@ -59,40 +57,42 @@ const Image = styled.div<{url: string}>`
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  cursor: pointer;
-  border-radius: 20px;
-
-  transition: all 0.5s linear;
-
-  &:hover {
-    transform: scale(1.1);
-  }
+  transition: all 0.5s ease;
 `
 const Label = styled.span`
-  background-color: var(--secondary-color);
-  padding: 5px 8px;
-  position: absolute;
-  top: 5%;
-  left: 5%;
-  color: var(--white-color);
+  background: rgba(55, 212, 217, 0.9);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
   font-size: 12px;
-  font-weight: 600;
-  border-radius: 10px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 50px;
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  z-index: 10;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
 `
 
 const Name = styled.div`
-  font-size: 22px;
-  font-weight: 500;
+  font-size: 20px;
+  font-weight: 600;
   color: #111111;
   text-transform: capitalize;
-  margin: 20px 0 40px; 
+  margin: 15px 0 0; 
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: color 0.3s ease;
+
   &:hover {
-    color: orange;
+    color: #ff681a;
 
     ${Icon} {
       transform: translateX(5px);
-      transition: transform 0.5s linear;
+      transition: transform 0.3s ease;
     }
   }
 `

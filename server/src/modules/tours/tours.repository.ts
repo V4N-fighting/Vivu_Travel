@@ -29,17 +29,13 @@ export class ToursRepository {
       query += ` AND t.name ILIKE $${params.length}`;
     }
 
-    if (minPrice) {
-      params.push(minPrice);
-    }
-
-    if (filters.minPrice) {
-      params.push(filters.minPrice);
+    if (filters.minPrice !== undefined && filters.minPrice !== null && filters.minPrice !== '') {
+      params.push(Number(filters.minPrice));
       query += ` AND t.price_adult >= $${params.length}`;
     }
 
-    if (filters.maxPrice) {
-      params.push(filters.maxPrice);
+    if (filters.maxPrice !== undefined && filters.maxPrice !== null && filters.maxPrice !== '') {
+      params.push(Number(filters.maxPrice));
       query += ` AND t.price_adult <= $${params.length}`;
     }
 

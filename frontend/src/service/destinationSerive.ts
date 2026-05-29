@@ -1,6 +1,6 @@
+import { useMemo } from "react";
 import { GET_COUNTRY } from "../api";
 import { useFetch } from "../Hooks/useFetch";
-import DestinationItemMap from "../types/destination";
 
 interface CountryWithTrips {
   id: string;
@@ -13,13 +13,15 @@ interface CountryWithTrips {
 export const useDestination = () => {
   const { data, loading, error } = useFetch<CountryWithTrips[]>(GET_COUNTRY);
 
-  const dataMap: DestinationItemMap[] | undefined = data?.map((item: any) => ({
-    id: String(item.id),
-    name: item.name,
-    language: item.language,
-    numberOfTrip: item.numberOfTrip ?? item.tour_count ?? 0,
-    image: item.image,
-  }));
+  const dataMap = useMemo(() => {
+    return data?.map((item: any) => ({
+      id: String(item.id),
+      name: item.name,
+      language: item.language,
+      numberOfTrip: item.numberOfTrip ?? item.tour_count ?? 0,
+      image: item.image,
+    }));
+  }, [data]);
 
   return {
     destinations: dataMap,
@@ -27,3 +29,4 @@ export const useDestination = () => {
     isError: error,
   };
 };
+

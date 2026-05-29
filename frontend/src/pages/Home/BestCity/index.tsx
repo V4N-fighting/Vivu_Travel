@@ -1,8 +1,7 @@
 import styled from "styled-components";
 import { FlexBox, SupTitle, Text, Title, Wrapper } from "../../../styled";
 import ScrollToShow from "../../../Component/ScrollToShow";
-import Icons from "../../../Component/BaseComponent/Icons";
-import CircleIcon from "../../../Component/BaseComponent/Icons/CircleIcon";
+
 
 interface BestCityProps {
 
@@ -32,10 +31,6 @@ const BestCity: React.FC<BestCityProps> = ({}) => {
                 <FlexBox_50_P_0_15>
                     <ScrollToShow rightToLeft>
                         <Image src='./images/gallery-1-3.jpg'></Image>
-                        <GallaryBtn>
-                            <Span small>Xem video</Span>
-                            <CircleIcon style={{margin: 0}}><Icons.CirclePlayIcon /></CircleIcon>
-                        </GallaryBtn>
                     </ScrollToShow>
                 </FlexBox_50_P_0_15>
             
@@ -62,26 +57,6 @@ const Image = styled.img`
 `
 
 
-const GallaryBtn = styled.div`
-    padding: 10px 12px;
-    border-radius: 50px;
-    box-shadow: 0px 0px 15px 0px rgba(255, 104, 26, 0.15);
-    border: 1px solid var(--primary-color);
-    background-color: #ffffff;
-    position: absolute;
-    top: 10%;
-    left: -55px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-`
-
-const Span = styled(SupTitle)`
-    color: #333333;
-    font-weight: 600;
-    padding-bottom: 2px;
-    margin: 0 15px 0 10px;
-`
 
 
 export default BestCity;

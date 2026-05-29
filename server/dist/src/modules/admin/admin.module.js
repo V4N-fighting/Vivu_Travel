@@ -21,6 +21,7 @@ const activities_repository_1 = require("../activities/activities.repository");
 const contacts_repository_1 = require("../contacts/contacts.repository");
 const blogs_repository_1 = require("../blogs/blogs.repository");
 const banners_repository_1 = require("../banners/banners.repository");
+const payments_admin_repository_1 = require("./payments.admin.repository");
 let AdminModule = class AdminModule {
 };
 exports.AdminModule = AdminModule;
@@ -39,9 +40,10 @@ exports.AdminModule = AdminModule = __decorate([
             activities_repository_1.ActivitiesRepository,
             contacts_repository_1.ContactsRepository,
             blogs_repository_1.BlogsRepository,
-            banners_repository_1.BannersRepository
+            banners_repository_1.BannersRepository,
+            payments_admin_repository_1.AdminPaymentsRepository
         ],
-        exports: [admin_repository_1.AdminRepository, tours_admin_repository_1.AdminToursRepository, bookings_admin_repository_1.AdminBookingsRepository, users_admin_repository_1.AdminUsersRepository]
+        exports: [admin_repository_1.AdminRepository, tours_admin_repository_1.AdminToursRepository, bookings_admin_repository_1.AdminBookingsRepository, users_admin_repository_1.AdminUsersRepository, payments_admin_repository_1.AdminPaymentsRepository]
     })
 ], AdminModule);
 //# sourceMappingURL=admin.module.js.map

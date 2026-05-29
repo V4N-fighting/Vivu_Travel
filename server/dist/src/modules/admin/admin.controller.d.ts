@@ -10,6 +10,7 @@ import { ActivitiesRepository } from '../activities/activities.repository';
 import { ContactsRepository } from '../contacts/contacts.repository';
 import { BlogsRepository } from '../blogs/blogs.repository';
 import { BannersRepository } from '../banners/banners.repository';
+import { AdminPaymentsRepository } from './payments.admin.repository';
 import { Response } from 'express';
 export declare class AdminController {
     private readonly adminRepo;
@@ -24,7 +25,8 @@ export declare class AdminController {
     private readonly contactsRepo;
     private readonly blogsRepo;
     private readonly bannersRepo;
-    constructor(adminRepo: AdminRepository, toursRepo: AdminToursRepository, bookingsRepo: AdminBookingsRepository, usersRepo: AdminUsersRepository, couponsRepo: CouponsRepository, exportService: ExportService, reviewsRepo: ReviewsRepository, countriesRepo: CountriesRepository, activitiesRepo: ActivitiesRepository, contactsRepo: ContactsRepository, blogsRepo: BlogsRepository, bannersRepo: BannersRepository);
+    private readonly paymentsRepo;
+    constructor(adminRepo: AdminRepository, toursRepo: AdminToursRepository, bookingsRepo: AdminBookingsRepository, usersRepo: AdminUsersRepository, couponsRepo: CouponsRepository, exportService: ExportService, reviewsRepo: ReviewsRepository, countriesRepo: CountriesRepository, activitiesRepo: ActivitiesRepository, contactsRepo: ContactsRepository, blogsRepo: BlogsRepository, bannersRepo: BannersRepository, paymentsRepo: AdminPaymentsRepository);
     getStats(): Promise<{
         revenue: number;
         bookings: number;
@@ -108,4 +110,10 @@ export declare class AdminController {
     deleteBanner(id: number): Promise<{
         message: string;
     }>;
+    getAllPayments(): Promise<any[]>;
+    getPaymentStats(): Promise<any>;
+    getPaymentsByBooking(bookingId: number): Promise<any[]>;
+    createPayment(data: any): Promise<any>;
+    updatePaymentStatus(id: number, status: string, transactionId?: string): Promise<any>;
+    updatePaymentMethod(id: number, method: string): Promise<any>;
 }

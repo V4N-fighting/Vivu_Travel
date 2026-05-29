@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import CollapseComponent from "../Collapse";
 import { TypeInput } from ".";
@@ -24,18 +24,14 @@ function formatToVietnameseCurrency(input: string): string {
 type RangeInputFilterProps = {
   label: string;
   unit: number;
-  setMin: (val: string ) => void;
-  setMax: (val: string ) => void;
-  onApply?: () => void;
+  onApply?: (min: string, max: string) => void;
   resetFilters: boolean;
-  selected: [number, number] | undefined
+  selected: [number | undefined, number | undefined] | undefined
 };
 
 const RangeInputFilter: React.FC<RangeInputFilterProps> = ({
   label,
   unit,
-  setMin,
-  setMax,
   onApply,
   resetFilters,
   selected
@@ -48,30 +44,32 @@ const RangeInputFilter: React.FC<RangeInputFilterProps> = ({
 
 
   useEffect(() => {
-     if (selected) {
+     if (selected && (selected[0] !== undefined || selected[1] !== undefined)) {
       if (unit === TypeInput.Price) {
-        setInputLabelMin(JSON.stringify(selected[0] / 1_000_000) + ' triệu đồng')
-        setInputLabelMax(JSON.stringify(selected[1] / 1_000_000) + ' triệu đồng')
+        setInputLabelMin(selected[0] !== undefined ? JSON.stringify(selected[0] / 1_000_000) + ' triệu đồng' : '')
+        setInputLabelMax(selected[1] !== undefined ? JSON.stringify(selected[1] / 1_000_000) + ' triệu đồng' : '')
+        setMinVal(selected[0] !== undefined ? JSON.stringify(selected[0] / 1_000_000) : '')
+        setMaxVal(selected[1] !== undefined ? JSON.stringify(selected[1] / 1_000_000) : '')
       } else if (unit === TypeInput.Time) {
-        setInputLabelMin(JSON.stringify(selected[0]) + ' ngày')
-        setInputLabelMax(JSON.stringify(selected[1]) + ' ngày')
+        setInputLabelMin(selected[0] !== undefined ? JSON.stringify(selected[0]) + ' ngày' : '')
+        setInputLabelMax(selected[1] !== undefined ? JSON.stringify(selected[1]) + ' ngày' : '')
+        setMinVal(selected[0] !== undefined ? JSON.stringify(selected[0]) : '')
+        setMaxVal(selected[1] !== undefined ? JSON.stringify(selected[1]) : '')
       } else {
         setInputLabelMin('')
         setInputLabelMax('')
+        setMinVal('')
+        setMaxVal('')
       }
-      setMinVal(JSON.stringify(selected[0]))
-      setMaxVal(JSON.stringify(selected[1]))
+     } else {
+       setMinVal('');
+       setMaxVal('');
+       setInputLabelMin('');
+       setInputLabelMax('');
      }
-  }, [selected]);
+  }, [selected, unit]);
 
-  useEffect(() => {
-    
-    setMin(minVal);
-  }, [minVal]);
-
-  useEffect(() => {
-    setMax(maxVal);
-  }, [maxVal]);
+  // Reset hooks removed to avoid continuous keypress updates.
 
 
   //resetFilter
@@ -118,7 +116,7 @@ const RangeInputFilter: React.FC<RangeInputFilterProps> = ({
     
     const isNumber = /^[0-9]$/.test(e.key);
 
-    if (!isNumber && !allowedKeys.includes(e.key) || e.key === "." && value.includes(".")) {
+    if ((!isNumber && !allowedKeys.includes(e.key)) || (e.key === "." && value.includes("."))) {
       setLabel('Vui lòng nhập số')
       e.preventDefault();
     }
@@ -126,10 +124,19 @@ const RangeInputFilter: React.FC<RangeInputFilterProps> = ({
 
   const handleApplyButton = () => {
     setErrorMessage('Vui lòng nhập giá trị hợp lí')
-    if (Number(minVal) < Number(maxVal)) {
-      onApply && onApply() 
-      setErrorMessage('')
+    const minNum = minVal.trim() !== '' ? Number(minVal) : undefined;
+    const maxNum = maxVal.trim() !== '' ? Number(maxVal) : undefined;
+
+    if (minNum === undefined && maxNum === undefined) {
+      return;
     }
+
+    if (minNum !== undefined && maxNum !== undefined && minNum >= maxNum) {
+      return;
+    }
+
+    onApply && onApply(minVal, maxVal) 
+    setErrorMessage('')
   }
 
   return (

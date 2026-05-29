@@ -32,8 +32,9 @@ const activities_repository_1 = require("../activities/activities.repository");
 const contacts_repository_1 = require("../contacts/contacts.repository");
 const blogs_repository_1 = require("../blogs/blogs.repository");
 const banners_repository_1 = require("../banners/banners.repository");
+const payments_admin_repository_1 = require("./payments.admin.repository");
 let AdminController = class AdminController {
-    constructor(adminRepo, toursRepo, bookingsRepo, usersRepo, couponsRepo, exportService, reviewsRepo, countriesRepo, activitiesRepo, contactsRepo, blogsRepo, bannersRepo) {
+    constructor(adminRepo, toursRepo, bookingsRepo, usersRepo, couponsRepo, exportService, reviewsRepo, countriesRepo, activitiesRepo, contactsRepo, blogsRepo, bannersRepo, paymentsRepo) {
         this.adminRepo = adminRepo;
         this.toursRepo = toursRepo;
         this.bookingsRepo = bookingsRepo;
@@ -46,6 +47,7 @@ let AdminController = class AdminController {
         this.contactsRepo = contactsRepo;
         this.blogsRepo = blogsRepo;
         this.bannersRepo = bannersRepo;
+        this.paymentsRepo = paymentsRepo;
     }
     async getStats() {
         return this.adminRepo.getDashboardStats();
@@ -305,6 +307,30 @@ let AdminController = class AdminController {
     }
     async deleteBanner(id) {
         return this.bannersRepo.delete(id);
+    }
+    async getAllPayments() {
+        return this.paymentsRepo.findAll();
+    }
+    async getPaymentStats() {
+        return this.paymentsRepo.getStats();
+    }
+    async getPaymentsByBooking(bookingId) {
+        return this.paymentsRepo.findByBookingId(bookingId);
+    }
+    async createPayment(data) {
+        return this.paymentsRepo.create({
+            bookingId: data.bookingId,
+            amount: data.amount,
+            method: data.method,
+            status: data.status || 'pending',
+            transactionId: data.transactionId,
+        });
+    }
+    async updatePaymentStatus(id, status, transactionId) {
+        return this.paymentsRepo.updateStatus(id, status, transactionId);
+    }
+    async updatePaymentMethod(id, method) {
+        return this.paymentsRepo.updateMethod(id, method);
     }
 };
 exports.AdminController = AdminController;
@@ -810,6 +836,49 @@ __decorate([
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
 ], AdminController.prototype, "deleteBanner", null);
+__decorate([
+    (0, common_1.Get)('payments'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], AdminController.prototype, "getAllPayments", null);
+__decorate([
+    (0, common_1.Get)('payments/stats'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], AdminController.prototype, "getPaymentStats", null);
+__decorate([
+    (0, common_1.Get)('payments/booking/:bookingId'),
+    __param(0, (0, common_1.Param)('bookingId', common_1.ParseIntPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], AdminController.prototype, "getPaymentsByBooking", null);
+__decorate([
+    (0, common_1.Post)('payments'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], AdminController.prototype, "createPayment", null);
+__decorate([
+    (0, common_1.Put)('payments/:id/status'),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __param(1, (0, common_1.Body)('status')),
+    __param(2, (0, common_1.Body)('transactionId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, String, String]),
+    __metadata("design:returntype", Promise)
+], AdminController.prototype, "updatePaymentStatus", null);
+__decorate([
+    (0, common_1.Put)('payments/:id/method'),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __param(1, (0, common_1.Body)('method')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, String]),
+    __metadata("design:returntype", Promise)
+], AdminController.prototype, "updatePaymentMethod", null);
 exports.AdminController = AdminController = __decorate([
     (0, common_1.Controller)('admin'),
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt'), roles_guard_1.RolesGuard),
@@ -825,6 +894,7 @@ exports.AdminController = AdminController = __decorate([
         activities_repository_1.ActivitiesRepository,
         contacts_repository_1.ContactsRepository,
         blogs_repository_1.BlogsRepository,
-        banners_repository_1.BannersRepository])
+        banners_repository_1.BannersRepository,
+        payments_admin_repository_1.AdminPaymentsRepository])
 ], AdminController);
 //# sourceMappingURL=admin.controller.js.map

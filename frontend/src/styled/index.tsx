@@ -147,3 +147,27 @@ export const GridCol = styled.div<{ col: number; md?: number; sm?: number }>`
   }
 `;
 
+export const UnifiedCardWrapper = styled.div<{ $horizontal?: boolean }>`
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 25px;
+  padding: 25px;
+  border: 1px solid #eee;
+  position: relative;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.02);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: ${props => props.$horizontal ? 'row' : 'column'};
+  gap: 20px;
+
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: 0px 15px 35px rgba(0, 0, 0, 0.08);
+    border-color: #ff681a;
+
+    img, .zoom-hover {
+      transform: scale(1.08);
+    }
+  }
+`;
+

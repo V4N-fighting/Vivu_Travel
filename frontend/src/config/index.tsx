@@ -22,6 +22,7 @@ const config = {
         admin_reviews: '/admin/reviews',
         admin_contacts: '/admin/contacts',
         admin_activities: '/admin/activities',
+        admin_payments: '/admin/payments',
         profile: '/profile',
         about: '/about',
         blog: '/blog',
