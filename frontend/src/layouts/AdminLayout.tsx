@@ -9,8 +9,7 @@ import {
   EditOutlined,
   GiftOutlined,
   StarOutlined,
-  MailOutlined,
-  DollarOutlined
+  MailOutlined
 } from '@ant-design/icons';
 import config from '../config';
 
@@ -97,9 +96,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
           </Menu.Item>
           <Menu.Item key={config.routes.admin_contacts} icon={<MailOutlined />}>
             <NavLink to={config.routes.admin_contacts}>Liên hệ</NavLink>
-          </Menu.Item>
-          <Menu.Item key={config.routes.admin_payments} icon={<DollarOutlined />}>
-            <NavLink to={config.routes.admin_payments}>Thanh toán</NavLink>
           </Menu.Item>
         </Menu>
       </Sider>

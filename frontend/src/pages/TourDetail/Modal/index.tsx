@@ -1,17 +1,18 @@
 import styled from "styled-components";
 import Button from "../../../Component/BaseComponent/Button/Button";
-import { RowBetween, Grid, GridCol, GridRow, Icon, Text } from "../../../styled";
+import { RowBetween, Grid, GridCol, GridRow, Icon } from "../../../styled";
 import { faCalendar } from "@fortawesome/free-regular-svg-icons";
 import { faTeletype } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import dayjs from 'dayjs';
-import type { Dayjs } from 'dayjs';
 import Counter from "./Counter";
 import TourInfo from "./TourInfo";
 import { useNavigate } from "react-router-dom";
-import { message, DatePicker, Input as AntInput } from "antd";
-import { GET_BOOKING, GET_CONTACT, GET_COUPON, GET_TOUR } from "../../../api";
+import { message } from "antd";
+import { GET_COUPON, GET_TOUR } from "../../../api";
 import axios from "axios";
+
+
 
 interface ModalProps {
     hideModal: () => void;
@@ -58,10 +59,7 @@ const Modal: React.FC<ModalProps> = ({ hideModal, data }) => {
         }
     }, [data?.id]);
 
-    // State cho tính năng yêu cầu ngày mới
-    const [requestDate, setRequestDate] = useState<Dayjs | null>(null);
-    const [requestNote, setRequestNote] = useState<string>('');
-    const [isSubmittingRequest, setIsSubmittingRequest] = useState(false);
+
 
     // Lấy tất cả các ngày khởi hành từ backend
     const rawDepartureDates = data && Array.isArray(data.departure_dates)
@@ -168,6 +166,10 @@ const Modal: React.FC<ModalProps> = ({ hideModal, data }) => {
 
 
     const handleSubmit = () => {
+        if (!selectedDateId) {
+            message.error("Vui lòng chọn ngày khởi hành hợp lệ trước khi thanh toán!");
+            return;
+        }
         if (adultCounter > 0 || childCounter > 0) {
             const userStr = localStorage.getItem('user');
             if (!userStr) {
@@ -197,45 +199,7 @@ const Modal: React.FC<ModalProps> = ({ hideModal, data }) => {
         }
     }
 
-    const handleRequestNewDate = async () => {
-        if (!requestDate) {
-            message.warning('Vui lòng chọn ngày bạn muốn khởi hành');
-            return;
-        }
 
-        const userStr = localStorage.getItem('user');
-        if (!userStr) {
-            message.warning('Vui lòng đăng nhập để gửi yêu cầu');
-            navigate('/login');
-            return;
-        }
-
-        const user = JSON.parse(userStr);
-        setIsSubmittingRequest(true);
-
-        try {
-            // Sử dụng API Contact để gửi yêu cầu ngày mới
-            const payload = {
-                name: `${user.lastName} ${user.firstName}`.trim(),
-                email: user.email,
-                phone: user.phone || '',
-                subject: `Yêu cầu ngày khởi hành mới cho tour: ${data.name}`,
-                message: `Khách hàng yêu cầu ngày khởi hành mới: ${requestDate.format('DD/MM/YYYY')}. 
-                Ghi chú: ${requestNote || 'Không có ghi chú'}. 
-                Tour ID: ${data.id}`
-            };
-
-            await axios.post(GET_CONTACT, payload);
-            message.success('Yêu cầu của bạn đã được gửi thành công! Chúng tôi sẽ phản hồi sớm nhất.');
-            setRequestDate(null);
-            setRequestNote('');
-        } catch (error) {
-            console.error('Lỗi khi gửi yêu cầu:', error);
-            message.error('Không thể gửi yêu cầu lúc này. Vui lòng thử lại sau.');
-        } finally {
-            setIsSubmittingRequest(false);
-        }
-    };
 
     const getAdultValue = (value:number) => {
         setAdultCost(value*adultCostInit);
@@ -263,7 +227,13 @@ const Modal: React.FC<ModalProps> = ({ hideModal, data }) => {
                                 </Step>
                                 <Step
                                     isActive={!isShowTimeBox}
-                                    onClick={() => setIsShowTimeBox(false)}
+                                    onClick={() => {
+                                        if (!selectedDateId) {
+                                            message.warning('Vui lòng chọn ngày khởi hành trước!');
+                                            return;
+                                        }
+                                        setIsShowTimeBox(false);
+                                    }}
                                 >
                                     <Icon icon={faTeletype} style={{ margin: '0 10px 0 0' }} />
                                     Loại gói
@@ -296,34 +266,9 @@ const Modal: React.FC<ModalProps> = ({ hideModal, data }) => {
                                                 </DateItem>
                                             ))
                                         ) : (
-                                            <RequestSection>
-                                                <Text style={{color: '#666', marginBottom: '15px', display: 'block'}}>
-                                                    Hiện tour này chưa có lịch khởi hành phù hợp? Hãy cho chúng tôi biết ngày bạn mong muốn:
-                                                </Text>
-                                                <DatePicker 
-                                                    style={{ width: '100%', marginBottom: '15px' }} 
-                                                    placeholder="Chọn ngày bạn muốn đi"
-                                                    format="DD/MM/YYYY"
-                                                    disabledDate={(current) => current && current < dayjs().startOf('day')}
-                                                    onChange={(date) => setRequestDate(date)}
-                                                    value={requestDate}
-                                                />
-                                                <AntInput.TextArea 
-                                                    placeholder="Lời nhắn hoặc số lượng người dự kiến (không bắt buộc)"
-                                                    rows={3}
-                                                    value={requestNote}
-                                                    onChange={(e) => setRequestNote(e.target.value)}
-                                                    style={{ marginBottom: '15px' }}
-                                                />
-                                                <Button 
-                                                    orange 
-                                                    style={{ width: '100%', borderRadius: 0 }}
-                                                    onClick={handleRequestNewDate}
-                                                    disabled={isSubmittingRequest}
-                                                >
-                                                    {isSubmittingRequest ? 'Đang gửi yêu cầu...' : 'Gửi yêu cầu ngày mới'}
-                                                </Button>
-                                            </RequestSection>
+                                            <NoDateMessage>
+                                                Hiện tại tour này không có lịch khởi hành khả dụng. Vui lòng quay lại sau!
+                                            </NoDateMessage>
                                         )}
                                     </DateList>
                                 </Setup>
@@ -377,7 +322,13 @@ const Modal: React.FC<ModalProps> = ({ hideModal, data }) => {
                             )}
                             <Bottom>
                                 {isShowTimeBox 
-                                    ? <Button orange onClick={() => setIsShowTimeBox(false)} style={{ margin: '60px 10px 0', borderRadius: 0, padding: '20px 50px' }}>Tiếp tục</Button>
+                                    ? <Button orange onClick={() => {
+                                        if (!selectedDateId) {
+                                            message.warning('Vui lòng chọn ngày khởi hành trước!');
+                                            return;
+                                        }
+                                        setIsShowTimeBox(false);
+                                    }} style={{ margin: '60px 10px 0', borderRadius: 0, padding: '20px 50px' }}>Tiếp tục</Button>
                                     :   <>
                                             <Button orange onClick={()=> setIsShowTimeBox(true)} style={{ margin: '60px 10px 0', borderRadius: 0, padding: '20px 50px' }}>Trở lại</Button>
                                             {/* <Link to={"/check_out"}> */}
@@ -519,12 +470,15 @@ const DefaultCost = styled.div`
     white-space: nowrap;
 `
 
-const RequestSection = styled.div`
+const NoDateMessage = styled.div`
     padding: 20px;
-    background: #fdfdfd;
-    border: 1px dashed #ff681a;
+    background: #fafafa;
+    border: 1px solid #ddd;
     border-radius: 8px;
+    text-align: center;
+    color: #666;
     margin-top: 10px;
+    font-size: 15px;
 `;
 
 const DiscountInfo = styled.div`

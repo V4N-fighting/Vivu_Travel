@@ -30,9 +30,16 @@ export class AdminBookingsRepository {
         SELECT b.*, 
                u.first_name || ' ' || u.last_name as customer_name,
                u.email as customer_email,
-               u.phone as customer_phone
+               u.phone as customer_phone,
+               p.id as payment_id,
+               p.amount as payment_amount,
+               p.method as payment_method,
+               p.status as payment_status,
+               p.transaction_id as payment_transaction_id,
+               p.paid_at as payment_paid_at
         FROM bookings b
         LEFT JOIN users u ON b.user_id = u.id
+        LEFT JOIN payments p ON p.booking_id = b.id
         WHERE b.tour_id = $1 AND b.departure_date_id = $2
         ORDER BY b.created_at DESC
       `;
@@ -44,8 +51,35 @@ export class AdminBookingsRepository {
   }
 
   async updateBookingStatus(id: number, status: string) {
-    const query = 'UPDATE bookings SET status = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING *';
-    const result = await this.pool.query(query, [status, id]);
-    return result.rows[0];
+    const client = await this.pool.connect();
+    try {
+      await client.query('BEGIN');
+      const query = 'UPDATE bookings SET status = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING *';
+      const result = await client.query(query, [status, id]);
+      
+      // Đồng bộ trạng thái thanh toán tương ứng
+      let paymentStatus = 'pending';
+      if (status === 'confirmed') {
+        paymentStatus = 'paid';
+      } else if (status === 'cancelled') {
+        paymentStatus = 'failed';
+      }
+      
+      const updatePaymentQuery = `
+        UPDATE payments 
+        SET status = $1::varchar, 
+            paid_at = CASE WHEN $1::varchar = 'paid' THEN CURRENT_TIMESTAMP ELSE paid_at END
+        WHERE booking_id = $2::integer
+      `;
+      await client.query(updatePaymentQuery, [paymentStatus, id]);
+      
+      await client.query('COMMIT');
+      return result.rows[0];
+    } catch (error) {
+      await client.query('ROLLBACK');
+      throw error;
+    } finally {
+      client.release();
+    }
   }
 }

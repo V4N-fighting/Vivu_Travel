@@ -65,21 +65,12 @@ let AdminPaymentsRepository = class AdminPaymentsRepository {
         return result.rows[0];
     }
     async updateStatus(id, status, transactionId) {
-        const query = `
-      UPDATE payments 
-      SET status = $1, 
-          transaction_id = COALESCE($2, transaction_id),
-          paid_at = CASE WHEN $1 = 'paid' THEN CURRENT_TIMESTAMP ELSE paid_at END,
-          updated_at = CURRENT_TIMESTAMP
-      WHERE id = $3
-      RETURNING *
-    `;
         const simpleQuery = `
       UPDATE payments 
-      SET status = $1, 
-          transaction_id = COALESCE($2, transaction_id),
-          paid_at = CASE WHEN $1 = 'paid' THEN CURRENT_TIMESTAMP ELSE paid_at END
-      WHERE id = $3
+      SET status = $1::varchar, 
+          transaction_id = COALESCE($2::varchar, transaction_id),
+          paid_at = CASE WHEN $1::varchar = 'paid' THEN CURRENT_TIMESTAMP ELSE paid_at END
+      WHERE id = $3::integer
       RETURNING *
     `;
         const result = await this.pool.query(simpleQuery, [status, transactionId || null, id]);

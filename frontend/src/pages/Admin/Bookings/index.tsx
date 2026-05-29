@@ -1,12 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Tag, Space, Typography, Select, message, Button } from 'antd';
-import { FilePdfOutlined } from '@ant-design/icons';
+import { 
+  FilePdfOutlined, PlusCircleOutlined,
+  DollarOutlined, BankOutlined, WalletOutlined, CreditCardOutlined
+} from '@ant-design/icons';
 import { adminService } from '../../../service/adminService';
 import dayjs from 'dayjs';
 
 // Khai báo kiểu cho jsPDF để tránh lỗi biên dịch
 const jsPDF = require('jspdf').jsPDF;
 const autoTable = require('jspdf-autotable').default;
+
+const PAYMENT_METHODS = [
+  { value: 'cash', label: 'Tiền mặt', icon: <DollarOutlined />, color: '#52c41a' },
+  { value: 'bank_transfer', label: 'Chuyển khoản', icon: <BankOutlined />, color: '#1890ff' },
+  { value: 'momo', label: 'Ví MoMo', icon: <WalletOutlined />, color: '#ae2d68' },
+  { value: 'vnpay', label: 'VNPay', icon: <CreditCardOutlined />, color: '#005baa' },
+  { value: 'credit_card', label: 'Thẻ tín dụng', icon: <CreditCardOutlined />, color: '#fa8c16' },
+];
+
+const PAYMENT_STATUSES = [
+  { value: 'pending', label: 'Chờ thanh toán', color: 'orange' },
+  { value: 'paid', label: 'Đã thanh toán', color: 'green' },
+  { value: 'failed', label: 'Thất bại', color: 'red' },
+  { value: 'refunded', label: 'Hoàn tiền', color: 'purple' },
+];
 
 const Bookings: React.FC = () => {
   const [bookingGroups, setBookingGroups] = useState<any[]>([]);
@@ -36,6 +54,21 @@ const Bookings: React.FC = () => {
       fetchBookings();
     } catch (error) {
       message.error('Lỗi khi cập nhật trạng thái');
+    }
+  };
+
+  const handleCreatePayment = async (bookingId: number, amount: number) => {
+    try {
+      await adminService.createPayment({
+        bookingId,
+        amount,
+        method: 'cash',
+        status: 'pending'
+      });
+      message.success('Khởi tạo thanh toán thành công!');
+      fetchBookings();
+    } catch {
+      message.error('Lỗi khi khởi tạo thanh toán');
     }
   };
 
@@ -188,6 +221,44 @@ const Bookings: React.FC = () => {
             ]}
           />
         ),
+      },
+      {
+        title: 'Phương thức TT',
+        key: 'payment_method',
+        render: (_: any, record: any) => {
+          if (!record.payment_id) return <span style={{ color: '#ccc' }}>N/A</span>;
+          const pm = PAYMENT_METHODS.find(p => p.value === record.payment_method);
+          if (!pm) return <span>{record.payment_method}</span>;
+          return (
+            <span style={{ color: pm.color, fontWeight: 500 }}>
+              {pm.icon} &nbsp;{pm.label}
+            </span>
+          );
+        }
+      },
+      {
+        title: 'Trạng thái TT',
+        key: 'payment_status',
+        render: (_: any, record: any) => {
+          if (!record.payment_id) {
+            return (
+              <Button 
+                type="dashed" 
+                size="small" 
+                icon={<PlusCircleOutlined />}
+                onClick={() => handleCreatePayment(record.id, record.total_price)}
+              >
+                Tạo thanh toán
+              </Button>
+            );
+          }
+          const ps = PAYMENT_STATUSES.find(s => s.value === record.payment_status);
+          return (
+            <Tag color={ps ? ps.color : 'orange'}>
+              {ps ? ps.label : record.payment_status || 'Chờ thanh toán'}
+            </Tag>
+          );
+        }
       },
       {
         title: 'Thao tác',

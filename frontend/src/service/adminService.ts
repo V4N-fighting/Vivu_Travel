@@ -435,6 +435,10 @@ export const adminService = {
     const res = await axios.get(`${ADMIN_URL}/payments/stats`, getAuthConfig());
     return res.data;
   },
+  createPayment: async (payload: any) => {
+    const res = await axios.post(`${ADMIN_URL}/payments`, payload, getAuthConfig());
+    return res.data;
+  },
   updatePaymentStatus: async (id: string | number, status: string, transactionId?: string) => {
     const res = await axios.put(`${ADMIN_URL}/payments/${id}/status`, { status, transactionId }, getAuthConfig());
     return res.data;

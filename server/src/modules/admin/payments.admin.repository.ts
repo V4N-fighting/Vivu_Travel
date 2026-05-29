@@ -60,22 +60,12 @@ export class AdminPaymentsRepository {
   }
 
   async updateStatus(id: number, status: string, transactionId?: string) {
-    const query = `
-      UPDATE payments 
-      SET status = $1, 
-          transaction_id = COALESCE($2, transaction_id),
-          paid_at = CASE WHEN $1 = 'paid' THEN CURRENT_TIMESTAMP ELSE paid_at END,
-          updated_at = CURRENT_TIMESTAMP
-      WHERE id = $3
-      RETURNING *
-    `;
-    // payments table may not have updated_at, handle gracefully
     const simpleQuery = `
       UPDATE payments 
-      SET status = $1, 
-          transaction_id = COALESCE($2, transaction_id),
-          paid_at = CASE WHEN $1 = 'paid' THEN CURRENT_TIMESTAMP ELSE paid_at END
-      WHERE id = $3
+      SET status = $1::varchar, 
+          transaction_id = COALESCE($2::varchar, transaction_id),
+          paid_at = CASE WHEN $1::varchar = 'paid' THEN CURRENT_TIMESTAMP ELSE paid_at END
+      WHERE id = $3::integer
       RETURNING *
     `;
     const result = await this.pool.query(simpleQuery, [status, transactionId || null, id]);
