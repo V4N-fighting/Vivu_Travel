@@ -6,7 +6,7 @@ import { PostgresModule } from './database/postgres.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ToursModule } from './modules/tours/tours.module';
 import { BookingsModule } from './modules/bookings/bookings.module';
-import { BannersModule } from './modules/banners/banners.module';
+
 import { ActivitiesModule } from './modules/activities/activities.module';
 import { CountriesModule } from './modules/countries/countries.module';
 import { TourTypesModule } from './modules/tour-types/tour-types.module';
@@ -34,7 +34,7 @@ import { ChatbotModule } from './modules/chatbot/chatbot.module';
     UsersModule,
     ToursModule,
     BookingsModule,
-    BannersModule,
+
     ActivitiesModule,
     CountriesModule,
     TourTypesModule,

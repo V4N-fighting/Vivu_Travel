@@ -285,68 +285,6 @@ export const adminService = {
     return res.data;
   },
 
-  // Banners
-  getBanners: async () => {
-    const res = await axios.get(`${ADMIN_URL}/banners`, getAuthConfig());
-    return res.data;
-  },
-  createBanner: async (payload: any) => {
-    const formData = new FormData();
-    Object.keys(payload).forEach(key => {
-      // first_image and second_image from ImageUpload are expected to be File objects (or strings if unchanged)
-      if ((key === 'first_image' || key === 'second_image') && payload[key] instanceof File) {
-        formData.append(key === 'first_image' ? 'firstImage' : 'secondImage', payload[key]);
-      } else if (payload[key] !== undefined && payload[key] !== null) {
-        // Map database-styled key fields to backend-expected camelCase properties
-        let apiKey = key;
-        if (key === 'first_image') apiKey = 'firstImage';
-        if (key === 'second_image') apiKey = 'secondImage';
-        if (key === 'text_content') apiKey = 'textContent';
-        if (key === 'sort_order') apiKey = 'sortOrder';
-        if (key === 'page_location') apiKey = 'page_location'; // Backend accepts page_location
-        formData.append(apiKey, payload[key]);
-      }
-    });
-
-    const res = await axios.post(`${ADMIN_URL}/banners`, formData, {
-      ...getAuthConfig(),
-      headers: { 
-        ...getAuthConfig().headers, 
-        'Content-Type': 'multipart/form-data' 
-      },
-    });
-    return res.data;
-  },
-  updateBanner: async (id: string | number, payload: any) => {
-    const formData = new FormData();
-    Object.keys(payload).forEach(key => {
-      if ((key === 'first_image' || key === 'second_image') && payload[key] instanceof File) {
-        formData.append(key === 'first_image' ? 'firstImage' : 'secondImage', payload[key]);
-      } else if (payload[key] !== undefined && payload[key] !== null) {
-        let apiKey = key;
-        if (key === 'first_image') apiKey = 'firstImage';
-        if (key === 'second_image') apiKey = 'secondImage';
-        if (key === 'text_content') apiKey = 'textContent';
-        if (key === 'sort_order') apiKey = 'sortOrder';
-        if (key === 'page_location') apiKey = 'page_location';
-        formData.append(apiKey, payload[key]);
-      }
-    });
-
-    const res = await axios.put(`${ADMIN_URL}/banners/${id}`, formData, {
-      ...getAuthConfig(),
-      headers: { 
-        ...getAuthConfig().headers, 
-        'Content-Type': 'multipart/form-data' 
-      },
-    });
-    return res.data;
-  },
-  deleteBanner: async (id: string | number) => {
-    const res = await axios.delete(`${ADMIN_URL}/banners/${id}`, getAuthConfig());
-    return res.data;
-  },
-
   getActivities: async () => {
     const res = await axios.get(`${ADMIN_URL}/activities`, getAuthConfig());
     return res.data;

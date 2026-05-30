@@ -15,7 +15,6 @@ const postgres_module_1 = require("./database/postgres.module");
 const auth_module_1 = require("./modules/auth/auth.module");
 const tours_module_1 = require("./modules/tours/tours.module");
 const bookings_module_1 = require("./modules/bookings/bookings.module");
-const banners_module_1 = require("./modules/banners/banners.module");
 const activities_module_1 = require("./modules/activities/activities.module");
 const countries_module_1 = require("./modules/countries/countries.module");
 const tour_types_module_1 = require("./modules/tour-types/tour-types.module");
@@ -46,7 +45,6 @@ exports.AppModule = AppModule = __decorate([
             users_module_1.UsersModule,
             tours_module_1.ToursModule,
             bookings_module_1.BookingsModule,
-            banners_module_1.BannersModule,
             activities_module_1.ActivitiesModule,
             countries_module_1.CountriesModule,
             tour_types_module_1.TourTypesModule,

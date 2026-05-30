@@ -1,6 +1,6 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, ParseIntPipe, UseGuards, Res, UseInterceptors, UploadedFiles, UploadedFile } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, ParseIntPipe, UseGuards, Res, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { RolesGuard } from '../auth/roles.guard';
@@ -16,7 +16,7 @@ import { CountriesRepository } from '../countries/countries.repository';
 import { ActivitiesRepository } from '../activities/activities.repository';
 import { ContactsRepository } from '../contacts/contacts.repository';
 import { BlogsRepository } from '../blogs/blogs.repository';
-import { BannersRepository } from '../banners/banners.repository';
+
 import { AdminPaymentsRepository } from './payments.admin.repository';
 import { Response } from 'express';
 
@@ -36,7 +36,7 @@ export class AdminController {
     private readonly activitiesRepo: ActivitiesRepository,
     private readonly contactsRepo: ContactsRepository,
     private readonly blogsRepo: BlogsRepository,
-    private readonly bannersRepo: BannersRepository,
+
     private readonly paymentsRepo: AdminPaymentsRepository,
   ) {}
 
@@ -515,85 +515,6 @@ export class AdminController {
     return this.blogsRepo.delete(id);
   }
 
-  // 12. Quản lý Banners
-  @Get('banners')
-  async getAllBanners() {
-    return this.bannersRepo.findAll();
-  }
-
-  @Post('banners')
-  @UseInterceptors(FileFieldsInterceptor(
-    [
-      { name: 'firstImage', maxCount: 1 },
-      { name: 'secondImage', maxCount: 1 },
-    ],
-    {
-      storage: diskStorage({
-        destination: './uploads/banners',
-        filename: (req, file, cb) => {
-          const uniqueSuffix = Math.floor(1000 + Math.random() * 9000);
-          const originalName = file.originalname.replace(/\s+/g, '-').split('.').slice(0, -1).join('.');
-          cb(null, `${originalName}-${uniqueSuffix}${extname(file.originalname)}`);
-        }
-      })
-    }
-  ))
-  async createBanner(
-    @UploadedFiles() files: { firstImage?: Express.Multer.File[]; secondImage?: Express.Multer.File[] },
-    @Body() data: any,
-  ) {
-    const payload = {
-      ...data,
-      textContent: data.textContent ?? data.title ?? '',
-      sortOrder: data.sortOrder ?? data.sort_order ?? 0,
-      isActive: data.isActive ?? (data.is_active === 'true' || data.is_active === true),
-      page_location: data.page_location ?? 'home',
-      firstImage: files?.firstImage?.[0]?.filename ?? data.firstImage ?? '',
-      secondImage: files?.secondImage?.[0]?.filename ?? data.secondImage ?? '',
-    };
-
-    return this.bannersRepo.create(payload);
-  }
-
-  @Put('banners/:id')
-  @UseInterceptors(FileFieldsInterceptor(
-    [
-      { name: 'firstImage', maxCount: 1 },
-      { name: 'secondImage', maxCount: 1 },
-    ],
-    {
-      storage: diskStorage({
-        destination: './uploads/banners',
-        filename: (req, file, cb) => {
-          const uniqueSuffix = Math.floor(1000 + Math.random() * 9000);
-          const originalName = file.originalname.replace(/\s+/g, '-').split('.').slice(0, -1).join('.');
-          cb(null, `${originalName}-${uniqueSuffix}${extname(file.originalname)}`);
-        }
-      })
-    }
-  ))
-  async updateBanner(
-    @Param('id', ParseIntPipe) id: number,
-    @UploadedFiles() files: { firstImage?: Express.Multer.File[]; secondImage?: Express.Multer.File[] },
-    @Body() data: any,
-  ) {
-    const payload = {
-      ...data,
-      textContent: data.textContent ?? data.title ?? '',
-      sortOrder: data.sortOrder ?? data.sort_order ?? 0,
-      isActive: data.isActive ?? (data.is_active === 'true' || data.is_active === true),
-      page_location: data.page_location ?? 'home',
-      firstImage: files?.firstImage?.[0]?.filename ?? data.firstImage ?? '',
-      secondImage: files?.secondImage?.[0]?.filename ?? data.secondImage ?? '',
-    };
-
-    return this.bannersRepo.update(id, payload);
-  }
-
-  @Delete('banners/:id')
-  async deleteBanner(@Param('id', ParseIntPipe) id: number) {
-    return this.bannersRepo.delete(id);
-  }
 
   // 13. Quản lý Payments
   @Get('payments')

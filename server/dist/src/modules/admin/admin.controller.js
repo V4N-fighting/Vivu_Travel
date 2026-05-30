@@ -31,10 +31,9 @@ const countries_repository_1 = require("../countries/countries.repository");
 const activities_repository_1 = require("../activities/activities.repository");
 const contacts_repository_1 = require("../contacts/contacts.repository");
 const blogs_repository_1 = require("../blogs/blogs.repository");
-const banners_repository_1 = require("../banners/banners.repository");
 const payments_admin_repository_1 = require("./payments.admin.repository");
 let AdminController = class AdminController {
-    constructor(adminRepo, toursRepo, bookingsRepo, usersRepo, couponsRepo, exportService, reviewsRepo, countriesRepo, activitiesRepo, contactsRepo, blogsRepo, bannersRepo, paymentsRepo) {
+    constructor(adminRepo, toursRepo, bookingsRepo, usersRepo, couponsRepo, exportService, reviewsRepo, countriesRepo, activitiesRepo, contactsRepo, blogsRepo, paymentsRepo) {
         this.adminRepo = adminRepo;
         this.toursRepo = toursRepo;
         this.bookingsRepo = bookingsRepo;
@@ -46,7 +45,6 @@ let AdminController = class AdminController {
         this.activitiesRepo = activitiesRepo;
         this.contactsRepo = contactsRepo;
         this.blogsRepo = blogsRepo;
-        this.bannersRepo = bannersRepo;
         this.paymentsRepo = paymentsRepo;
     }
     async getStats() {
@@ -277,36 +275,6 @@ let AdminController = class AdminController {
     }
     async deleteBlog(id) {
         return this.blogsRepo.delete(id);
-    }
-    async getAllBanners() {
-        return this.bannersRepo.findAll();
-    }
-    async createBanner(files, data) {
-        const payload = {
-            ...data,
-            textContent: data.textContent ?? data.title ?? '',
-            sortOrder: data.sortOrder ?? data.sort_order ?? 0,
-            isActive: data.isActive ?? (data.is_active === 'true' || data.is_active === true),
-            page_location: data.page_location ?? 'home',
-            firstImage: files?.firstImage?.[0]?.filename ?? data.firstImage ?? '',
-            secondImage: files?.secondImage?.[0]?.filename ?? data.secondImage ?? '',
-        };
-        return this.bannersRepo.create(payload);
-    }
-    async updateBanner(id, files, data) {
-        const payload = {
-            ...data,
-            textContent: data.textContent ?? data.title ?? '',
-            sortOrder: data.sortOrder ?? data.sort_order ?? 0,
-            isActive: data.isActive ?? (data.is_active === 'true' || data.is_active === true),
-            page_location: data.page_location ?? 'home',
-            firstImage: files?.firstImage?.[0]?.filename ?? data.firstImage ?? '',
-            secondImage: files?.secondImage?.[0]?.filename ?? data.secondImage ?? '',
-        };
-        return this.bannersRepo.update(id, payload);
-    }
-    async deleteBanner(id) {
-        return this.bannersRepo.delete(id);
     }
     async getAllPayments() {
         return this.paymentsRepo.findAll();
@@ -781,62 +749,6 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AdminController.prototype, "deleteBlog", null);
 __decorate([
-    (0, common_1.Get)('banners'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], AdminController.prototype, "getAllBanners", null);
-__decorate([
-    (0, common_1.Post)('banners'),
-    (0, common_1.UseInterceptors)((0, platform_express_1.FileFieldsInterceptor)([
-        { name: 'firstImage', maxCount: 1 },
-        { name: 'secondImage', maxCount: 1 },
-    ], {
-        storage: (0, multer_1.diskStorage)({
-            destination: './uploads/banners',
-            filename: (req, file, cb) => {
-                const uniqueSuffix = Math.floor(1000 + Math.random() * 9000);
-                const originalName = file.originalname.replace(/\s+/g, '-').split('.').slice(0, -1).join('.');
-                cb(null, `${originalName}-${uniqueSuffix}${(0, path_1.extname)(file.originalname)}`);
-            }
-        })
-    })),
-    __param(0, (0, common_1.UploadedFiles)()),
-    __param(1, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
-    __metadata("design:returntype", Promise)
-], AdminController.prototype, "createBanner", null);
-__decorate([
-    (0, common_1.Put)('banners/:id'),
-    (0, common_1.UseInterceptors)((0, platform_express_1.FileFieldsInterceptor)([
-        { name: 'firstImage', maxCount: 1 },
-        { name: 'secondImage', maxCount: 1 },
-    ], {
-        storage: (0, multer_1.diskStorage)({
-            destination: './uploads/banners',
-            filename: (req, file, cb) => {
-                const uniqueSuffix = Math.floor(1000 + Math.random() * 9000);
-                const originalName = file.originalname.replace(/\s+/g, '-').split('.').slice(0, -1).join('.');
-                cb(null, `${originalName}-${uniqueSuffix}${(0, path_1.extname)(file.originalname)}`);
-            }
-        })
-    })),
-    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
-    __param(1, (0, common_1.UploadedFiles)()),
-    __param(2, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Object, Object]),
-    __metadata("design:returntype", Promise)
-], AdminController.prototype, "updateBanner", null);
-__decorate([
-    (0, common_1.Delete)('banners/:id'),
-    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
-    __metadata("design:returntype", Promise)
-], AdminController.prototype, "deleteBanner", null);
-__decorate([
     (0, common_1.Get)('payments'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
@@ -894,7 +806,6 @@ exports.AdminController = AdminController = __decorate([
         activities_repository_1.ActivitiesRepository,
         contacts_repository_1.ContactsRepository,
         blogs_repository_1.BlogsRepository,
-        banners_repository_1.BannersRepository,
         payments_admin_repository_1.AdminPaymentsRepository])
 ], AdminController);
 //# sourceMappingURL=admin.controller.js.map

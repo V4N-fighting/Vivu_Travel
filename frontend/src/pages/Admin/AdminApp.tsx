@@ -6,7 +6,7 @@ import Tours from './Tours/index';
 import Bookings from './Bookings/index';
 import Users from './Users/index';
 import Blogs from './Blogs/index';
-import Banners from './Banners/index';
+
 import Coupons from './Coupons/index';
 import Countries from './Countries/index';
 import Reviews from './Reviews/index';
@@ -22,7 +22,7 @@ const AdminApp: React.FC = () => {
       <Route path="bookings" element={<Bookings />} />
       <Route path="users" element={<Users />} />
       <Route path="blogs" element={<Blogs />} />
-      <Route path="banners" element={<Banners />} />
+
       <Route path="coupons" element={<Coupons />} />
       <Route path="countries" element={<Countries />} />
       <Route path="reviews" element={<Reviews />} />

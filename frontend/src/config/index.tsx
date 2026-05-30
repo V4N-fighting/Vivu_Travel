@@ -16,7 +16,7 @@ const config = {
         admin_bookings: '/admin/bookings',
         admin_users: '/admin/users',
         admin_blogs: '/admin/blogs',
-        admin_banners: '/admin/banners',
+        admin_banners: '/admin/banners', // deprecated - banners table removed
         admin_coupons: '/admin/coupons',
         admin_countries: '/admin/countries',
         admin_reviews: '/admin/reviews',

@@ -11,7 +11,7 @@ import { CountriesRepository } from '../countries/countries.repository';
 import { ActivitiesRepository } from '../activities/activities.repository';
 import { ContactsRepository } from '../contacts/contacts.repository';
 import { BlogsRepository } from '../blogs/blogs.repository';
-import { BannersRepository } from '../banners/banners.repository';
+
 import { AdminPaymentsRepository } from './payments.admin.repository';
 
 @Module({
@@ -28,7 +28,7 @@ import { AdminPaymentsRepository } from './payments.admin.repository';
     ActivitiesRepository,
     ContactsRepository,
     BlogsRepository,
-    BannersRepository,
+
     AdminPaymentsRepository
   ],
   exports: [AdminRepository, AdminToursRepository, AdminBookingsRepository, AdminUsersRepository, AdminPaymentsRepository]
