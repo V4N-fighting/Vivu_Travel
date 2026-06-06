@@ -1,6 +1,6 @@
 const BASE_URL = "http://localhost:3000/api";
 
-export const GET_BANNER = `${BASE_URL}/banners`;
+
 export const GET_TOUR = `${BASE_URL}/tours`;
 export const GET_ACTIVITY = `${BASE_URL}/activities`;
 export const GET_COUNTRY = `${BASE_URL}/countries`;

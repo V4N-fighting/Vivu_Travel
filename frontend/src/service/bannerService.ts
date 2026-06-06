@@ -1,23 +1,14 @@
-import { GET_BANNER } from "../api";
-import { useFetch } from "../Hooks/useFetch";
-import BannerHomeItem from "../types/banner";
+// bannerService.ts - banners table has been removed
+// Returning empty stubs to avoid breaking existing imports
 
+export const useBanner = () => ({
+  banner: [],
+  isLoading: false,
+  isError: false,
+});
 
-
-export const useBanner = () => {
-    const { data, loading, error } = useFetch<BannerHomeItem[]>(GET_BANNER);
-    return {
-        banner: data, 
-        isLoading: loading,
-        isError: error
-    }
-}  
-
-export const useBannerByLocation = (location: string) => {
-    const { data, loading, error } = useFetch<BannerHomeItem[]>(`${GET_BANNER}?location=${location}`);
-    return {
-        banner: data,
-        isLoading: loading,
-        isError: error
-    }
-}
+export const useBannerByLocation = (_location: string) => ({
+  banner: [],
+  isLoading: false,
+  isError: false,
+});

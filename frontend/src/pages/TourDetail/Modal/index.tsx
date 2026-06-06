@@ -9,7 +9,7 @@ import Counter from "./Counter";
 import TourInfo from "./TourInfo";
 import { useNavigate } from "react-router-dom";
 import { message } from "antd";
-import { GET_COUPON, GET_TOUR } from "../../../api";
+import { GET_TOUR } from "../../../api";
 import axios from "axios";
 
 
@@ -34,9 +34,6 @@ const Modal: React.FC<ModalProps> = ({ hideModal, data }) => {
     const [total, setTotal] = useState<number>(0);
     const [originalTotal, setOriginalTotal] = useState<number>(0);
     const [selectedDateId, setSelectedDateId] = useState<number | null>(null);
-    const [couponCode, setCouponCode] = useState<string>('');
-    const [discount, setDiscount] = useState<number>(0);
-    const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
 
     // Dữ liệu hành trình
     const [itineraries, setItineraries] = useState<any[]>([]);
@@ -116,53 +113,8 @@ const Modal: React.FC<ModalProps> = ({ hideModal, data }) => {
     useEffect(() => {
         const newTotal = adultCost + childCost;
         setOriginalTotal(newTotal);
-        setTotal(newTotal - discount);
-    }, [adultCost, childCost, discount]);
-
-    const handleApplyCoupon = async () => {
-        if (!couponCode.trim()) {
-            message.warning('Vui lòng nhập mã giảm giá');
-            return;
-        }
-
-        setIsApplyingCoupon(true);
-        try {
-            console.log("Đang kiểm tra mã tại Modal:", couponCode);
-            const res = await axios.get(`${GET_COUPON}/${couponCode.trim()}`);
-            const coupon = res.data;
-            console.log("Dữ liệu Coupon nhận được tại Modal:", coupon);
-
-            const currentOriginalTotal = adultCost + childCost;
-
-            if (currentOriginalTotal < Number(coupon.min_order_value)) {
-                message.error(`Đơn hàng tối thiểu ${new Intl.NumberFormat('vi-VN').format(coupon.min_order_value)}đ để sử dụng mã này`);
-                setDiscount(0);
-                return;
-            }
-
-            let discountAmount = 0;
-            const discountValue = Number(coupon.discount_value);
-            
-            if (coupon.discount_type === 'percentage') {
-                discountAmount = (currentOriginalTotal * discountValue) / 100;
-                if (coupon.max_discount_amount && discountAmount > Number(coupon.max_discount_amount)) {
-                    discountAmount = Number(coupon.max_discount_amount);
-                }
-            } else {
-                discountAmount = discountValue;
-            }
-
-            setDiscount(discountAmount);
-            message.success(`Áp dụng mã thành công! Đã giảm ${new Intl.NumberFormat('vi-VN').format(discountAmount)}đ`);
-        } catch (error: any) {
-            console.error("Lỗi áp dụng mã tại Modal:", error);
-            const errorMsg = error.response?.data?.message || 'Mã giảm giá không hợp lệ hoặc đã hết hạn';
-            message.error(errorMsg);
-            setDiscount(0);
-        } finally {
-            setIsApplyingCoupon(false);
-        }
-    };
+        setTotal(newTotal);
+    }, [adultCost, childCost]);
 
 
     const handleSubmit = () => {
@@ -183,8 +135,8 @@ const Modal: React.FC<ModalProps> = ({ hideModal, data }) => {
                     myData: {
                         total, 
                         originalTotal,
-                        discount,
-                        couponCode,
+                        discount: 0,
+                        couponCode: '',
                         adultCounter, 
                         childCounter, 
                         data: {
@@ -299,25 +251,7 @@ const Modal: React.FC<ModalProps> = ({ hideModal, data }) => {
                                         <Counter value={childCounter} setValue={setChildCounter} onChangeValue={(newValue) => getChildValue(newValue)} />
                                     </RowBetween>
                                     
-                                    <CouponSection>
-                                        <Topic>Mã giảm giá</Topic>
-                                        <CouponInputWrapper>
-                                            <CouponInput 
-                                                type="text" 
-                                                placeholder="Nhập mã giảm giá..." 
-                                                value={couponCode}
-                                                onChange={(e) => setCouponCode(e.target.value)}
-                                            />
-                                            <CouponButton onClick={handleApplyCoupon} disabled={isApplyingCoupon}>
-                                                {isApplyingCoupon ? 'Đang áp dụng...' : 'Áp dụng'}
-                                            </CouponButton>
-                                        </CouponInputWrapper>
-                                        {discount > 0 && (
-                                            <DiscountInfo>
-                                                Đã giảm: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(discount)}
-                                            </DiscountInfo>
-                                        )}
-                                    </CouponSection>
+
                                 </Setup>
                             )}
                             <Bottom>
@@ -479,58 +413,6 @@ const NoDateMessage = styled.div`
     color: #666;
     margin-top: 10px;
     font-size: 15px;
-`;
-
-const DiscountInfo = styled.div`
-    color: #4caf50;
-    font-size: 13px;
-    margin-top: 5px;
-    font-weight: 500;
-`;
-
-const CouponSection = styled.div`
-    margin-top: 20px;
-    padding-top: 20px;
-    border-top: 1px dashed #ddd;
-`;
-
-const CouponInputWrapper = styled.div`
-    display: flex;
-    gap: 10px;
-    align-items: center;
-`;
-
-const CouponInput = styled.input`
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
-    
-    &:focus {
-        outline: none;
-        border-color: #ff5722;
-    }
-`;
-
-const CouponButton = styled.button`
-    padding: 10px 20px;
-    background-color: #333;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.2s;
-
-    &:hover {
-        background-color: #555;
-    }
-
-    &:disabled {
-        background-color: #ccc;
-        cursor: not-allowed;
-    }
 `;
 
 export default Modal;

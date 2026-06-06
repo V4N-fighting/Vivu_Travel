@@ -162,29 +162,29 @@ let AdminController = class AdminController {
     }
     async createCoupon(data) {
         const couponData = {
-            code: data.code,
+            code: data.code?.toUpperCase()?.trim(),
             discountType: data.discount_type,
-            discountValue: data.discount_value,
+            discountValue: Number(data.discount_value),
             validFrom: data.validFrom || null,
             validTo: data.validTo || null,
-            usageLimit: data.usage_limit || 100,
-            is_active: data.is_active !== undefined ? data.is_active : true,
-            min_order_value: data.min_order_value || 0,
-            max_discount_amount: data.max_discount_amount || null
+            usageLimit: data.usage_limit != null ? Number(data.usage_limit) : 100,
+            is_active: data.is_active === true || data.is_active === 'true',
+            min_order_value: Number(data.min_order_value) || 0,
+            max_discount_amount: data.max_discount_amount ? Number(data.max_discount_amount) : null
         };
         return this.couponsRepo.create(couponData);
     }
     async updateCoupon(id, data) {
         const couponData = {
-            code: data.code,
+            code: data.code?.toUpperCase()?.trim(),
             discountType: data.discount_type,
-            discountValue: data.discount_value,
+            discountValue: Number(data.discount_value),
             validFrom: data.validFrom || null,
             validTo: data.validTo || null,
-            usageLimit: data.usage_limit || 100,
-            is_active: data.is_active !== undefined ? data.is_active : true,
-            min_order_value: data.min_order_value || 0,
-            max_discount_amount: data.max_discount_amount || null
+            usageLimit: data.usage_limit != null ? Number(data.usage_limit) : 100,
+            is_active: data.is_active === true || data.is_active === 'true',
+            min_order_value: Number(data.min_order_value) || 0,
+            max_discount_amount: data.max_discount_amount ? Number(data.max_discount_amount) : null
         };
         return this.couponsRepo.update(id, couponData);
     }

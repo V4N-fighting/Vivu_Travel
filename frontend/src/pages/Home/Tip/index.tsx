@@ -7,7 +7,7 @@ import ScrollToShow from '../../../Component/ScrollToShow';
 import { useBlogs } from '../../../service/blogService';
 import { GET_IMAGE_URL } from '../../../api';
 import dayjs from 'dayjs';
-import { useBannerByLocation } from '../../../service/bannerService';
+import { useBannerByLocation } from '../../../service/bannerService'; // kept for compatibility, returns []
 
 const { Option } = Select;
 
@@ -15,16 +15,11 @@ interface TipProps {
   
 }
 
+const Tip: React.FC<TipProps> = () => {
+  const { blogs } = useBlogs();
 
-
-const Tip: React.FC<TipProps> = ({}) => {
-  const { blogs, isLoading: blogLoading, isError: blogError } = useBlogs();
-  const { banner, isLoading: bannerLoading, isError: bannerError } = useBannerByLocation('home');
-
-  // Lấy các bài viết (blogs) hoặc nếu không có thì dùng banner từ admin
-  // Banners đầu trang (index 0, 1) đã dùng ở component Banner, nên ở đây lấy từ index 2 trở đi
-  const tipBlogs = blogs?.slice(3, 5) || [];
-  const tipBanners = banner?.filter((b: any) => b.isActive).slice(2, 4) || []; 
+  // Lấy 2 bài blog mới nhất để hiển thị
+  const tipBlogs = blogs?.slice(0, 2) || []; 
 
   return (
     <Wrapper>
@@ -38,26 +33,17 @@ const Tip: React.FC<TipProps> = ({}) => {
         </ScrollToShow>
       </Header>
       
-      {/* Ưu tiên hiển thị Banner từ Admin nếu có, không thì dùng Blog */}
-      {(tipBanners.length > 0 ? tipBanners : tipBlogs).map((item, index) => {
-        const isBanner = !!(item as any).textContent;
-        const bannerItem = isBanner ? (item as any) : null;
-        const blogItem = !isBanner ? (item as any) : null;
-
-        const imageUrl = bannerItem 
-          ? getImageUrl(bannerItem.firstImage)
-          : (blogItem?.thumbnail ? getImageUrl(blogItem.thumbnail, 'blogs') : `./images/${index === 0 ? '6-2-705x540.jpg' : '7-2-705x540.jpg'}`);
-        
-        const title = bannerItem?.textContent || blogItem?.title || '';
-        const suptitle = bannerItem 
-          ? 'Mẹo du lịch' 
-          : (blogItem ? dayjs(blogItem.published_at).format('DD [Tháng] MM, YYYY') : '');
-        
-        const text = bannerItem 
-          ? 'Khám phá những mẹo du lịch hữu ích giúp chuyến đi của bạn trở nên tuyệt vời và tiết kiệm hơn bao giờ hết.'
-          : ((blogItem?.content ? blogItem.content.replace(/<[^>]*>?/gm, '').substring(0, 100) + '...' : ''));
-        
-        const label = bannerItem ? 'Vivu Travel' : (blogItem?.category || 'Mẹo du lịch');
+      {/* Hiển thị 2 bài blog mới nhất */}
+      {tipBlogs.map((item: any, index: number) => {
+        const imageUrl = item?.thumbnail 
+          ? getImageUrl(item.thumbnail, 'blogs') 
+          : `./images/${index === 0 ? '6-2-705x540.jpg' : '7-2-705x540.jpg'}`;
+        const title = item?.title || '';
+        const suptitle = item ? dayjs(item.published_at).format('DD [Tháng] MM, YYYY') : '';
+        const text = item?.content 
+          ? item.content.replace(/<[^>]*>?/gm, '').substring(0, 100) + '...'
+          : '';
+        const label = item?.category || 'Mẹo du lịch';
 
         return (
           <div key={item.id} style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>

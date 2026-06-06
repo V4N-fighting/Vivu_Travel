@@ -21,8 +21,9 @@ const PurifyItem: React.FC<PurifyItemProps> = ({
   onChange,
 }) => {
   // type guard (bộ kiểm tra kiểu) dùng để kiểm tra xem một giá trị có phải là một kiểu cụ thể hay không
-  const isRangeOption = (opt: any): opt is {label: any; min: number; max?: number } =>
-      "min" in opt;
+  const isRangeOption = (
+    opt: any,
+  ): opt is { label: any; min: number; max?: number } => "min" in opt;
 
   const displayOptions =
     optionsValue?.map((item: any) =>
@@ -31,7 +32,7 @@ const PurifyItem: React.FC<PurifyItemProps> = ({
             label: item.label,
             value: JSON.stringify({ min: item.min, max: item.max }),
           }
-        : item
+        : item,
     ) ?? [];
 
   return (
@@ -39,7 +40,9 @@ const PurifyItem: React.FC<PurifyItemProps> = ({
       size="large"
       width={width}
       showSearch
-      placeholder={<PlaceholderWithIcon Icon={Icon} placeholder={placeholder} />}
+      placeholder={
+        <PlaceholderWithIcon Icon={Icon} placeholder={placeholder} />
+      }
       filterOption={(input, option) =>
         (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
       }

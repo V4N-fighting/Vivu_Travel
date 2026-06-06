@@ -1,9 +1,6 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import config from "../../config";
-import { useBannerByLocation } from "../../service/bannerService";
-import { GET_IMAGE_URL } from "../../api";
-
 
 interface BannerProps {
     background: string,
@@ -12,22 +9,12 @@ interface BannerProps {
     pageLocation?: string
 }
 
-const Banner: React.FC<BannerProps> = ({background, pageName, thisPage, pageLocation}) => {
-    const { banner } = useBannerByLocation(pageLocation || '');
-    
-    // Nếu có banner từ admin cho page này, dùng ảnh đó; nếu không, dùng prop background
-    const activeBanner = banner && banner.length > 0 ? banner[0] : null;
-    const bgUrl = activeBanner?.firstImage 
-        ? (activeBanner.firstImage.startsWith('http') ? activeBanner.firstImage : `${GET_IMAGE_URL}/banners/${activeBanner.firstImage}`)
-        : background;
-    
-    const displayName = activeBanner?.textContent || pageName;
-
-    return ( 
-        <Wrapper url={bgUrl}>
+const Banner: React.FC<BannerProps> = ({ background, pageName, thisPage }) => {
+    return (
+        <Wrapper url={background}>
             <Overlay />
             <Contain>
-                <PageName>{displayName}</PageName>
+                <PageName>{pageName}</PageName>
                 <Navigate>
                     <LinkPage to={config.routes.home}>Trang chủ</LinkPage>
                     <Space>/</Space>
@@ -35,7 +22,7 @@ const Banner: React.FC<BannerProps> = ({background, pageName, thisPage, pageLoca
                 </Navigate>
             </Contain>
         </Wrapper>
-     );
+    );
 }
 
 const Wrapper = styled.div<{url: string}>`
@@ -91,6 +78,5 @@ const LinkPage = styled(Link)`
 const Space = styled.div`
     margin: 0 10px;
 `
-
 
 export default Banner;

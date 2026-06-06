@@ -48,14 +48,19 @@ export class BookingsRepository {
       // 2. Tạo mã đặt chỗ ngẫu nhiên
       const bookingCode = `VV-${Math.floor(100000 + Math.random() * 900000)}`;
 
+      const paymentMethod = bookingData.paymentMethod || 'cash';
+      const isOnlinePayment = ['momo', 'vnpay', 'credit_card'].includes(paymentMethod);
+      const bookingStatus = isOnlinePayment ? 'confirmed' : 'pending';
+      const paymentStatus = isOnlinePayment ? 'paid' : 'pending';
+
       // 3. Chèn vào bảng bookings
       const bookingQuery = `
         INSERT INTO bookings (booking_code, user_id, tour_id, departure_date_id, adult_count, child_count, total_price, note, status)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'confirmed')
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
         RETURNING *
       `;
       const bookingRes = await client.query(bookingQuery, [
-        bookingCode, userId, tourId, departureDateId, adultCount, childCount, totalPrice, note
+        bookingCode, userId, tourId, departureDateId, adultCount, childCount, totalPrice, note, bookingStatus
       ]);
       const booking = bookingRes.rows[0];
 
@@ -77,10 +82,9 @@ export class BookingsRepository {
       );
 
       // 6. Tạo bản ghi payment kèm phương thức thanh toán
-      const paymentMethod = bookingData.paymentMethod || 'cash';
       await client.query(
-        `INSERT INTO payments (booking_id, amount, method, status) VALUES ($1, $2, $3, 'pending')`,
-        [booking.id, totalPrice, paymentMethod]
+        `INSERT INTO payments (booking_id, amount, method, status, paid_at) VALUES ($1, $2, $3, $4, $5)`,
+        [booking.id, totalPrice, paymentMethod, paymentStatus, isOnlinePayment ? new Date() : null]
       );
 
       await client.query('COMMIT');

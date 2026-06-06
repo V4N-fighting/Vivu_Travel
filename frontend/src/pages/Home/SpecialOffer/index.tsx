@@ -2,40 +2,25 @@ import React from "react";
 import Button from "../../../Component/BaseComponent/Button/Button";
 import { RowBetween, SupTitle, Title, Wrapper, Text } from "../../../styled";
 import styled from 'styled-components';
-import { useBannerByLocation } from "../../../service/bannerService";
-import { GET_IMAGE_URL } from "../../../api";
 
-interface SpecialOfferProps {
-  
-}
-
-const SpecialOffer: React.FC<SpecialOfferProps> = () => {
-  const { banner } = useBannerByLocation('home');
-  
-  // Lấy banner ở index 1 chẳng hạn (sau banner chính ở index 0)
-  const offerBanner = banner?.[1];
-  
-  const imageUrl = offerBanner?.firstImage 
-    ? (offerBanner.firstImage.startsWith('http') ? offerBanner.firstImage : `${GET_IMAGE_URL}/banners/${offerBanner.firstImage}`)
-    : "./images/offer-1-1.png";
-
+const SpecialOffer: React.FC = () => {
   return (
     <Wrap>
       <Wrapper>
         <RowBetween>
-        <Content>
-            <SupTitle white small>Go & Discover</SupTitle>
-            <Title white big>{offerBanner?.textContent || "Ưu đãi đặt biệt"}</Title>
+          <Content>
+            <SupTitle white small>Go &amp; Discover</SupTitle>
+            <Title white big>Ưu đãi đặc biệt</Title>
             <Text white small>Khám phá những ưu đãi đặc biệt độc đáo và tiết kiệm hấp dẫn chỉ dành riêng cho bạn.</Text>
-            <Button white >Đặt vé ngay</Button>
+            <Button white>Đặt vé ngay</Button>
           </Content>
           <Content>
             <ImageBox>
               <Box1>
-                <Image src={imageUrl}></Image>
+                <Image src="./images/offer-1-1.png" />
               </Box1>
               <Box2>
-                <Image src="./images/bag.png"></Image>
+                <Image src="./images/bag.png" />
               </Box2>
             </ImageBox>
           </Content>
@@ -47,7 +32,7 @@ const SpecialOffer: React.FC<SpecialOfferProps> = () => {
 
 const Wrap = styled.div`
   padding: 120px 0 90px;
-  background-image: url('./images/offer-bg.jpg') ;
+  background-image: url('./images/offer-bg.jpg');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
@@ -59,27 +44,20 @@ const Content = styled.div`
   width: 41.67%;
   padding: 15px;
 `
-const ImageBox = styled.div`
-
-`
-const Box1 = styled.div`
-`
+const ImageBox = styled.div``
+const Box1 = styled.div``
 const Box2 = styled.div`
   position: absolute;
-    right: 0;
-    bottom: 0;
-    width: 320px;
+  right: 0;
+  bottom: 0;
+  width: 320px;
 `
 const Image = styled.img`
-    max-width: 100%;
-    height: auto;
-    border: none;
-    border-radius: 0;
-    box-shadow: none;
+  max-width: 100%;
+  height: auto;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
 `
-
-
-
-
 
 export default SpecialOffer;

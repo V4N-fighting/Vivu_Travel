@@ -42,7 +42,19 @@ let CouponsRepository = class CouponsRepository {
         await this.pool.query(query, [id]);
     }
     async findAll() {
-        return (await this.pool.query('SELECT * FROM coupons ORDER BY created_at DESC')).rows;
+        const result = await this.pool.query(`
+      SELECT *,
+        CASE
+          WHEN is_active = FALSE THEN FALSE
+          WHEN valid_to IS NOT NULL AND valid_to < CURRENT_DATE THEN FALSE
+          WHEN valid_from IS NOT NULL AND valid_from > CURRENT_DATE THEN FALSE
+          WHEN usage_limit IS NOT NULL AND used_count >= usage_limit THEN FALSE
+          ELSE TRUE
+        END AS is_active
+      FROM coupons
+      ORDER BY created_at DESC
+    `);
+        return result.rows;
     }
     async create(data) {
         const query = `

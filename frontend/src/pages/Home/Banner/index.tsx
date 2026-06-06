@@ -1,85 +1,39 @@
-import React, { useEffect, useState, useRef, useMemo } from "react";
+import React from "react";
 import styled from "styled-components";
 import { SupTitle, Title, Text, Wrapper } from "../../../styled";
 import Button from "../../../Component/BaseComponent/Button/Button";
-import Purify from "./Purify";
 import { Link } from "react-router-dom";
-import { useBannerByLocation } from "../../../service/bannerService";
 import config from "../../../config";
-import { GET_IMAGE_URL } from "../../../api";
-
-
-const TIME_CHANGE = 4000;
-const DEFAULT_BANNER_INDEX = 0;
 
 const Banner: React.FC = () => {
-  const [activeIndex, setActiveIndex] = useState<number>(DEFAULT_BANNER_INDEX);
-
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const { banner, isLoading, isError } = useBannerByLocation('home')
-
-  // Banners đầu trang - lấy các banner active có hình ảnh (lên đến 2 banner)
-  const activeBanners = useMemo(() => 
-    banner?.filter((b: any) => b.isActive !== false && b.firstImage) || [],
-    [banner]
-  );
-
-  useEffect(() => {
-    if (activeBanners.length <= 1) {
-      setActiveIndex(0);
-      return;
-    }
-
-    intervalRef.current = setInterval(() => {
-      setActiveIndex((prevIndex) => (prevIndex + 1) % activeBanners.length);
-    }, TIME_CHANGE);
-
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, [activeBanners]); 
-
-  const handleClick = (index: number) => {
-    setActiveIndex(index); // Cập nhật active index
-  };
-  
-
-  // Xử lý trạng thái tải hoặc lỗi
-  if (isLoading) return <p>Đang tải dữ liệu...</p>;
-  if (isError) return <p>Lỗi: {isError}</p>;
-  if (activeBanners.length === 0) return null;
-
-  const activeContent = activeBanners[activeIndex];
-
-  const getImageUrl = (url: string) => {
-    if (!url) return '';
-    return url.startsWith('http') ? url : `${GET_IMAGE_URL}/banners/${url}`;
-  };
-
   return (
     <BannerWrapper>
       <Wrapper>
         <Container>
-          <Content style={{ width: '100%', maxWidth: '800px', margin: '0 auto', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <SupTitle medium orange>Lên đường ngay</SupTitle>
-            <AnimatedTitle big>{activeContent?.textContent}</AnimatedTitle>
-            <Text style={{ textAlign: 'center' }}>Thiên nhiên đẹp mê hồn với rừng cây xanh mướt, dòng suối trong vắt và những cánh hoa rực rỡ.</Text>
+          <Content
+            style={{
+              width: "100%",
+              maxWidth: "800px",
+              margin: "0 auto",
+              textAlign: "center",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <SupTitle medium orange>
+              Lên đường ngay
+            </SupTitle>
+            <AnimatedTitle big>Khám Phá Thế Giới Cùng Vivu Travel</AnimatedTitle>
+            <Text style={{ textAlign: "center" }}>
+              Thiên nhiên đẹp mê hồn với rừng cây xanh mướt, dòng suối trong vắt
+              và những cánh hoa rực rỡ.
+            </Text>
             <Link to={config.routes.trip}>
               <Button orange>Đặt vé ngay</Button>
             </Link>
           </Content>
         </Container>
-        {activeBanners.length > 1 && (
-          <WrapperPavigation>
-            <BannerPavigation>
-              {activeBanners.map((item, index) => (
-                <PavigationBtn key={item.id} onClick={() => handleClick(index)} style={{ backgroundColor: activeIndex === index ? '#FF681A' : '#ffffff', color:  activeIndex === index ? '#fff' : '#FF681A'}}>
-                  {index + 1}
-                </PavigationBtn>
-              ))}
-            </BannerPavigation>
-          </WrapperPavigation>
-        )}
       </Wrapper>
     </BannerWrapper>
   );
@@ -88,7 +42,7 @@ const Banner: React.FC = () => {
 const BannerWrapper = styled.div`
   padding-top: 100px;
   padding-bottom: 80px;
-  background-image: url('/images/banner-bg-1.png');
+  background-image: url("/images/banner-bg-1.png");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
@@ -112,75 +66,5 @@ const Content = styled.div`
 `;
 
 const AnimatedTitle = styled(Title)``;
-
-const ImgWrapper1 = styled.div`
-  width: 70%;
-`;
-
-const ImgWrapper2 = styled.div`
-  width: 50%;
-  position: absolute;
-  top: 60%;
-  right: 0;
-  transform: translateY(-50%);
-`;
-
-const AnimatedImg = styled.img`
-  width: 100%;
-  border-radius: 340px;
-  background-color: white;
-  border: 20px solid white;
-  display: inline-block;
-`;
-
-const WrapperPavigation = styled.div`
-  margin-top: 60px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const PavigationBtn = styled.button`
-  position: relative;
-  text-decoration: none;
-  text-align: center;
-  font-weight: 900;
-  font-size: 20px;
-  line-height: 1;
-  outline: 0;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  border-radius: 99px;
-  border: none;
-  vertical-align: middle;
-  display: inline-block;
-  width: 60px;
-  height: 60px;
-  margin: 0 15px;
-  z-index: 1;
-  overflow: hidden;
-  cursor: pointer;
-  transition: 0.3s ease all;
-
-  &:hover, &:focus {
-    color: #FFF;
-    background-color: #FF681A;
-  }
-`;
-
-const BannerPavigation = styled.div`
-  position: relative;
-
-  &::before {
-    content: "";
-    position: absolute;
-    width: calc(15px * 4 + 60px * 2);
-    height: 4px;
-    background-color: #FF681A;
-    display: block;
-    left: 40px;
-    top: 30px;
-  }
-`;
 
 export default Banner;
