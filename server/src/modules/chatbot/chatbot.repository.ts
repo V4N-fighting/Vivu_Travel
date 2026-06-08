@@ -215,6 +215,10 @@ export class ChatbotRepository {
       WHERE t.is_active = TRUE
     `;
 
+    if (filters.id) {
+      params.push(filters.id);
+      query += ` AND t.id = $${params.length}`;
+    }
     if (filters.searchText) {
       params.push(filters.searchText);
       query += ` AND (
@@ -430,4 +434,13 @@ export class ChatbotRepository {
     return result.rows;
   }
 
+  async getTourReviewComments(tourId: number, limit = 8): Promise<string[]> {
+    const result = await this.pool.query(
+      `SELECT rating, comment FROM reviews WHERE tour_id = $1 AND comment IS NOT NULL AND comment != '' ORDER BY created_at DESC LIMIT $2`,
+      [tourId, limit]
+    );
+    return result.rows.map((row) => `[Rating: ${row.rating}/5] ${row.comment}`);
+  }
+
 }
+

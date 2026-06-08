@@ -41,7 +41,7 @@ const Contain: React.FC<ContainProps> = ({formRef, data}) => {
         tab: "FAQs"
     },
     {
-        id: 5, value: <Map  content={data && data.price}/>, // thêm html của map
+        id: 5, value: <Map  data={data}/>, // thêm html của map
         tab: "Map"
     },
     {

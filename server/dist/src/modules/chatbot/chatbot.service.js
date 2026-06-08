@@ -50,7 +50,7 @@ let ChatbotService = class ChatbotService {
         const memory = session.memory || {};
         const schemaContext = await this.repository.getSchemaContext();
         const plan = await this.ai.plan(message, memory, schemaContext);
-        const context = await this.retrieve(message, plan, memory);
+        const context = await this.retrieve(message, plan, memory, request.currentTourId);
         let fullAnswer = '';
         try {
             for await (const chunk of this.ai.streamAnswer({
@@ -99,7 +99,7 @@ let ChatbotService = class ChatbotService {
             messages,
         };
     }
-    async retrieve(message, plan, memory) {
+    async retrieve(message, plan, memory, currentTourId) {
         const searchText = this.getSearchText(message, plan);
         const filters = {
             ...(plan.filters || {}),
@@ -110,20 +110,56 @@ let ChatbotService = class ChatbotService {
             this.repository.searchToursBySql(filters, 10),
             this.repository.getActiveCoupons(),
         ]);
+        let currentTour = undefined;
+        if (currentTourId) {
+            try {
+                const currentTours = await this.repository.searchToursBySql({ id: currentTourId }, 1);
+                if (currentTours && currentTours.length > 0) {
+                    currentTour = currentTours[0];
+                }
+            }
+            catch (err) {
+                this.repository.logAnalytics({
+                    userMessage: `Failed to retrieve currentTourId ${currentTourId}`,
+                    error: err.message,
+                });
+            }
+        }
         const toursForRanking = rawTours.length ? rawTours : await this.repository.getFeaturedTours(6);
-        const tourIds = Array.from(new Set(toursForRanking.map((tour) => Number(tour.id)).filter(Boolean))).slice(0, 6);
+        let combinedTours = [...toursForRanking];
+        if (currentTour) {
+            const alreadyExists = combinedTours.some((t) => Number(t.id) === Number(currentTourId));
+            if (!alreadyExists) {
+                combinedTours.unshift(currentTour);
+            }
+        }
+        const tourIds = Array.from(new Set(combinedTours.map((tour) => Number(tour.id)).filter(Boolean))).slice(0, 7);
         const tourDetails = await this.repository.getTourDetails(tourIds);
+        if (currentTour) {
+            currentTour.details = tourDetails.find((detail) => detail.id === currentTour.id);
+            try {
+                currentTour.reviews = await this.repository.getTourReviewComments(currentTour.id, 8);
+            }
+            catch (err) {
+                this.repository.logAnalytics({
+                    userMessage: `Failed to retrieve review comments for tour ${currentTour.id}`,
+                    error: err.message,
+                });
+            }
+        }
+        const toursWithDetails = combinedTours.map((tour) => ({
+            ...tour,
+            details: tourDetails.find((detail) => detail.id === tour.id),
+        }));
         return {
             documents,
-            tours: this.recommendation.rank(toursForRanking, plan, memory).slice(0, 6).map((tour) => ({
-                ...tour,
-                details: tourDetails.find((detail) => detail.id === tour.id),
-            })),
+            tours: this.recommendation.rank(toursWithDetails, plan, memory).slice(0, 7),
             coupons,
             policyFacts: [
                 'Use bookings, payments, contacts, and coupons tables as source of truth when data is available.',
                 'If cancellation/payment policy is not present in database context, say that staff confirmation is required.',
             ],
+            currentTour,
         };
     }
     looksLikePromptInjection(message) {

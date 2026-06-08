@@ -1,6 +1,8 @@
 import React, { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { CHATBOT_STREAM_URL } from '../../api';
+import { CHATBOT_STREAM_URL, GET_TOUR, GET_IMAGE_URL } from '../../api';
+import { Link, useLocation } from 'react-router-dom';
+import axios from 'axios';
 
 type ChatRole = 'user' | 'assistant';
 
@@ -29,6 +31,13 @@ const suggestedPrompts = [
   'Có tour gia đình nào phù hợp cho trẻ em?',
 ];
 
+const tourContextualPrompts = [
+  'Tóm tắt đánh giá tour này như thế nào?',
+  'Lịch trình chi tiết của tour này như thế nào?',
+  'Giá vé trẻ em & người lớn của tour này?',
+  'Tour này khởi hành vào những ngày nào?',
+];
+
 function createId() {
   return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
@@ -41,6 +50,16 @@ function ChatBoxAI(): JSX.Element {
   const [isOpen, setIsOpen] = useState(false);
   const [isDark, setIsDark] = useState(() => localStorage.getItem(THEME_KEY) === 'dark');
   const [sessionId, setSessionId] = useState(() => localStorage.getItem(SESSION_KEY) || createSessionId());
+
+  const location = useLocation();
+  const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
+  const currentTourId = useMemo(() => {
+    return location.pathname === '/tour_detail' ? searchParams.get('tourId') : null;
+  }, [location.pathname, searchParams]);
+
+  const activeSuggestions = useMemo(() => {
+    return currentTourId ? tourContextualPrompts : suggestedPrompts;
+  }, [currentTourId]);
   const [messages, setMessages] = useState<ChatMessage[]>(() => {
     const stored = localStorage.getItem(HISTORY_KEY);
     if (stored) {
@@ -128,6 +147,7 @@ function ChatBoxAI(): JSX.Element {
         body: JSON.stringify({
           sessionId,
           message: trimmed,
+          currentTourId: currentTourId ? Number(currentTourId) : undefined,
           locale: isVietnameseText(trimmed) || navigator.language?.startsWith('vi') ? 'vi' : 'en',
         }),
         signal: controller.signal,
@@ -224,16 +244,21 @@ function ChatBoxAI(): JSX.Element {
               return (
                 <MessageRow key={message.id} $role={message.role} $grouped={grouped}>
                   {!grouped && <Avatar $role={message.role}>{message.role === 'user' ? 'You' : 'AI'}</Avatar>}
-                  <MessageBubble $role={message.role} $grouped={grouped}>
-                    {message.content ? <MarkdownText content={message.content} /> : <TypingDots><span /><span /><span /></TypingDots>}
-                  </MessageBubble>
+                  <BubbleContainer $role={message.role} $grouped={grouped}>
+                    <MessageBubble $role={message.role}>
+                      {message.content ? <MarkdownText content={message.content} /> : <TypingDots><span /><span /><span /></TypingDots>}
+                    </MessageBubble>
+                    {message.role === 'assistant' && message.content && (
+                      <RenderMessageTours content={message.content} />
+                    )}
+                  </BubbleContainer>
                 </MessageRow>
               );
             })}
           </Messages>
 
           <SuggestionList>
-            {suggestedPrompts.map((suggestion) => (
+            {activeSuggestions.map((suggestion) => (
               <SuggestionButton
                 key={suggestion}
                 type="button"
@@ -280,8 +305,11 @@ function MarkdownText({ content }: { content: string }) {
   return (
     <>
       {blocks.map((line, index) => {
-        if (!line.trim()) return <br key={index} />;
-        if (line.startsWith('- ')) return <Bullet key={index}>{renderInline(line.slice(2))}</Bullet>;
+        const trimmedLine = line.trim();
+        if (!trimmedLine) return <br key={index} />;
+        if (line.startsWith('- ') || line.startsWith('* ')) {
+          return <Bullet key={index}>{renderInline(line.slice(2))}</Bullet>;
+        }
         if (/^#{1,3}\s/.test(line)) return <StrongLine key={index}>{renderInline(line.replace(/^#{1,3}\s/, ''))}</StrongLine>;
         return <Paragraph key={index}>{renderInline(line)}</Paragraph>;
       })}
@@ -289,12 +317,58 @@ function MarkdownText({ content }: { content: string }) {
   );
 }
 
-function renderInline(text: string) {
-  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+function renderInline(text: string): React.ReactNode[] {
+  const regex = /(\*\*.*?\*\*|\[.*?\]\(.*?\))/g;
+  const parts = text.split(regex);
+
   return parts.map((part, index) => {
     if (part.startsWith('**') && part.endsWith('**')) {
-      return <strong key={index}>{part.slice(2, -2)}</strong>;
+      const inner = part.slice(2, -2);
+      return <strong key={index}>{renderInline(inner)}</strong>;
     }
+
+    if (part.startsWith('[') && part.includes('](') && part.endsWith(')')) {
+      const idx = part.indexOf('](');
+      const linkText = part.slice(1, idx);
+      const url = part.slice(idx + 2, -1);
+
+      if (url.includes('#show-map')) {
+        const query = url.split('?q=')[1] || '';
+        return (
+          <MapIframeWrapper key={index}>
+            <MapIframe 
+              src={`https://maps.google.com/maps?q=${query}&output=embed`}
+              title="Tour Location Map"
+              loading="lazy"
+            />
+          </MapIframeWrapper>
+        );
+      }
+
+      if (url.startsWith('/')) {
+        const isBookingTrigger = url.includes('#book-now');
+        return (
+          <Link
+            key={index}
+            to={url}
+            onClick={() => {
+              if (isBookingTrigger) {
+                window.dispatchEvent(new CustomEvent('vivu-trigger-booking'));
+              }
+            }}
+          >
+            {renderInline(linkText)}
+          </Link>
+        );
+      }
+
+      return (
+        <a key={index} href={url} target="_blank" rel="noopener noreferrer">
+          {renderInline(linkText)}
+        </a>
+      );
+    }
+
     return <React.Fragment key={index}>{part}</React.Fragment>;
   });
 }
@@ -411,10 +485,16 @@ const Avatar = styled.div<{ $role: ChatRole }>`
   font-weight: 800;
 `;
 
-const MessageBubble = styled.div<{ $role: ChatRole; $grouped: boolean }>`
+const BubbleContainer = styled.div<{ $role: ChatRole; $grouped: boolean }>`
+  display: flex;
+  flex-direction: column;
   max-width: ${({ $grouped }) => ($grouped ? 'calc(88% - 38px)' : '88%')};
   margin-left: ${({ $role, $grouped }) => ($role === 'assistant' && $grouped ? '38px' : 0)};
   margin-right: ${({ $role, $grouped }) => ($role === 'user' && $grouped ? '38px' : 0)};
+  width: 100%;
+`;
+
+const MessageBubble = styled.div<{ $role: ChatRole }>`
   padding: 10px 12px;
   border-radius: 8px;
   background: ${({ $role }) => ($role === 'user' ? '#ff681a' : 'var(--chat-bg)')};
@@ -423,6 +503,15 @@ const MessageBubble = styled.div<{ $role: ChatRole; $grouped: boolean }>`
   font-size: 14px;
   line-height: 1.48;
   overflow-wrap: anywhere;
+
+  a {
+    color: ${({ $role }) => ($role === 'user' ? '#ffffff' : '#37d4d9')};
+    text-decoration: underline;
+    font-weight: 700;
+    &:hover {
+      color: ${({ $role }) => ($role === 'user' ? '#ffffff' : '#ff681a')};
+    }
+  }
 `;
 
 const Paragraph = styled.p`
@@ -585,6 +674,176 @@ const ToggleButton = styled.button`
   font-size: 18px;
   box-shadow: 0 12px 30px rgba(255, 104, 26, 0.36);
   cursor: pointer;
+`;
+
+// Subcomponents and styled elements for Recommended Rich Tour Cards
+const RecommendedToursGrid = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+  width: 100%;
+`;
+
+const MiniTourCard = styled(Link)`
+  display: flex;
+  gap: 10px;
+  padding: 8px;
+  background: var(--chat-bg);
+  border: 1px solid var(--chat-border);
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--chat-text);
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: #ff681a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+`;
+
+const MiniTourCardPlaceholder = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  background: var(--chat-bg);
+  border: 1px dashed var(--chat-border);
+  border-radius: 8px;
+  font-size: 12px;
+  color: var(--chat-muted);
+`;
+
+const MiniTourImage = styled.div<{ $src: string }>`
+  width: 60px;
+  height: 60px;
+  border-radius: 6px;
+  background-image: url(${({ $src }) => $src});
+  background-size: cover;
+  background-position: center;
+  flex-shrink: 0;
+`;
+
+const MiniTourInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+  min-width: 0;
+`;
+
+const MiniTourName = styled.div`
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--chat-text);
+`;
+
+const MiniTourMeta = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: var(--chat-muted);
+`;
+
+const MiniTourPrice = styled.div`
+  font-size: 12px;
+  font-weight: 700;
+  color: #ff681a;
+`;
+
+function TourCardItem({ id }: { id: string }) {
+  const [tour, setTour] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    setLoading(true);
+    axios.get(`${GET_TOUR}/${id}`)
+      .then((res) => {
+        if (active) setTour(res.data);
+      })
+      .catch((err) => console.error("Error loading mini tour card", err))
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [id]);
+
+  if (loading) {
+    return (
+      <MiniTourCardPlaceholder>
+        <span>Đang tải thông tin tour...</span>
+      </MiniTourCardPlaceholder>
+    );
+  }
+
+  if (!tour) return null;
+
+  const priceFormatted = tour.price_adult 
+    ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(tour.price_adult) 
+    : 'Đang cập nhật';
+  const imgUrl = tour.image 
+    ? (tour.image.startsWith('http') 
+        ? tour.image 
+        : `${GET_IMAGE_URL}/tours/${tour.image}`) 
+    : '';
+
+  return (
+    <MiniTourCard to={`/tour_detail?tourId=${id}`}>
+      {imgUrl && <MiniTourImage $src={imgUrl} />}
+      <MiniTourInfo>
+        <MiniTourName>{tour.name}</MiniTourName>
+        <MiniTourMeta>
+          <span>⏱ {tour.duration || 'N/A'}</span>
+          <MiniTourPrice>{priceFormatted}</MiniTourPrice>
+        </MiniTourMeta>
+      </MiniTourInfo>
+    </MiniTourCard>
+  );
+}
+
+function RenderMessageTours({ content }: { content: string }) {
+  // Find all matches for tourDetail URL using standard regex loop compatible with ES5
+  const tourIds: string[] = [];
+  const regex = /\/tour_detail\?tourId=(\d+)/g;
+  let match;
+  while ((match = regex.exec(content)) !== null) {
+    if (match[1] && !tourIds.includes(match[1])) {
+      tourIds.push(match[1]);
+    }
+  }
+
+  if (tourIds.length === 0) return null;
+
+  return (
+    <RecommendedToursGrid>
+      {tourIds.map((id) => (
+        <TourCardItem key={id} id={id} />
+      ))}
+    </RecommendedToursGrid>
+  );
+}
+
+const MapIframeWrapper = styled.div`
+  margin-top: 8px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--chat-border);
+  width: 100%;
+  height: 200px;
+`;
+
+const MapIframe = styled.iframe`
+  width: 100%;
+  height: 100%;
+  border: 0;
 `;
 
 export default ChatBoxAI;

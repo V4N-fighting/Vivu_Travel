@@ -28,4 +28,5 @@ export declare class ChatbotRepository {
     getTourDetails(tourIds: number[]): Promise<any[]>;
     getActiveCoupons(): Promise<any[]>;
     getFeaturedTours(limit?: number): Promise<TourCandidate[]>;
+    getTourReviewComments(tourId: number, limit?: number): Promise<string[]>;
 }

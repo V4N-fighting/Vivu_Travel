@@ -28,6 +28,22 @@ const TourDetail: React.FC<TourDetailProps> = () => {
             setTourData(tours[0]);
         }
     }, [tours]);
+
+    useEffect(() => {
+        const handleTrigger = () => {
+            if (tourData && tourData.is_active !== false) {
+                setShowModal(true);
+            }
+        };
+        window.addEventListener('vivu-trigger-booking', handleTrigger);
+        return () => window.removeEventListener('vivu-trigger-booking', handleTrigger);
+    }, [tourData]);
+
+    useEffect(() => {
+        if (location.hash === '#book-now' && tourData && tourData.is_active !== false) {
+            setShowModal(true);
+        }
+    }, [location.hash, tourData]);
    
     const formRef = useRef<HTMLFormElement | null>(null);
 

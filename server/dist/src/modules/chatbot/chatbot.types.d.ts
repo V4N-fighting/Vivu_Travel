@@ -8,6 +8,7 @@ export interface ChatRequest {
     sessionId?: string;
     userId?: number;
     locale?: string;
+    currentTourId?: number;
 }
 export interface UserMemory {
     budget?: number;
@@ -51,12 +52,14 @@ export interface TourCandidate {
     transportations?: string[];
     score?: number;
     details?: any;
+    reviews?: string[];
 }
 export interface RetrievalContext {
     documents: TravelDocument[];
     tours: TourCandidate[];
     coupons: any[];
     policyFacts: string[];
+    currentTour?: TourCandidate;
 }
 export interface IntentPlan {
     language: string;

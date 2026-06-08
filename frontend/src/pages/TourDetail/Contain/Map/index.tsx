@@ -1,16 +1,21 @@
 import styled from "styled-components"
-import { Text, Title } from "../../../../styled"
+import { Title } from "../../../../styled"
 
 interface MapProps {
-    content: string,
+    data: any;
 }
 
-export const Map:React.FC<MapProps> = ({content}) => {
+export const Map:React.FC<MapProps> = ({data}) => {
+    const query = encodeURIComponent(data?.name || "");
+    const mapUrl = query 
+        ? `https://maps.google.com/maps?q=${query}&output=embed` 
+        : "https://maps.google.com/maps?q=Vietnam&output=embed";
+
     return (
         <Wrap>
-            <Title small>Map</Title>
+            <Title small>Bản đồ lộ trình - {data?.name || ""}</Title>
             <StyledIframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.9078174334218!2d106.67313687442847!3d10.818366258419962!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3175291dfa96f209%3A0x5cba9b5f3bf3ab28!2zNDM5IE5ndXnhu4VuIFbEg24gQ8O0bmcsIFBoxrDhu51uZyAzLCBHw7IgVuG6pXAsIEjhu5MgQ2jDrSBNaW5oLCBWaeG7h3QgTmFt!5e0!3m2!1svi!2s!4v1736763212684!5m2!1svi!2s"
+                src={mapUrl}
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
