@@ -1,14 +1,13 @@
-// src/pages/Login.tsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Icons from "../../Component/BaseComponent/Icons";
-import { login } from "../../service/authService";
+import GoogleAuthButton from "../../Component/GoogleAuthButton";
+import { login, loginWithGoogle } from "../../service/authService";
 import config from "../../config";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../app/store";
 import { setUser } from "../../features/user/userSlice";
-
 
 interface LoginForm {
   email: string;
@@ -24,9 +23,7 @@ const Login: React.FC = () => {
   });
 
   const navigate = useNavigate();
-
   const dispatch = useDispatch<AppDispatch>();
-
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -36,27 +33,36 @@ const Login: React.FC = () => {
     }));
   };
 
+  const finishLogin = (user: any) => {
+    dispatch(setUser(user));
+
+    if (user?.role === "admin") {
+      window.location.href = "/admin/dashboard";
+    } else {
+      navigate(config.routes.home);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const user = await login(form.email, form.password);
-  
-      // login() đã lưu localStorage rồi
       localStorage.setItem("rememberMe", JSON.stringify(form.rememberMe));
-  
-      // cập nhật vào Redux Store trực tiếp (không cần fetch lại)
-      dispatch(setUser(user));
-
-      if (user?.role === 'admin') {
-        window.location.href = '/admin/dashboard'; // Dùng location.href để reset lại toàn bộ state và chặn truy cập home
-      } else {
-        navigate(config.routes.home);
-      }
+      finishLogin(user);
     } catch (err: any) {
       alert(err.message);
     }
   };
-  
+
+  const handleGoogleSuccess = async (credential: string) => {
+    try {
+      const user = await loginWithGoogle(credential);
+      localStorage.setItem("rememberMe", JSON.stringify(form.rememberMe));
+      finishLogin(user);
+    } catch (err: any) {
+      alert(err.message);
+    }
+  };
 
   return (
     <LoginContainer>
@@ -68,8 +74,7 @@ const Login: React.FC = () => {
           <header>Login</header>
         </Top>
         <InputBox>
-          <Icons.UserIcon white/>
-
+          <Icons.UserIcon white />
           <Input
             type='text'
             name='email'
@@ -80,8 +85,7 @@ const Login: React.FC = () => {
           />
         </InputBox>
         <InputBox>
-          <Icons.LockIcon white/>
-
+          <Icons.LockIcon white />
           <Input
             type='password'
             name='password'
@@ -92,6 +96,9 @@ const Login: React.FC = () => {
           />
         </InputBox>
         <Submit type='submit' value='Sign In' />
+        <GoogleContainer>
+          <GoogleAuthButton onSuccess={handleGoogleSuccess} />
+        </GoogleContainer>
         <TwoCol>
           <div className='one'>
             <input
@@ -158,7 +165,6 @@ const InputBox = styled.div`
   background: rgba(255, 255, 255, 0.2);
   border-radius: 30px;
   padding: 0 10px;
-
 `;
 
 const Input = styled.input`
@@ -173,7 +179,6 @@ const Input = styled.input`
   color: #ffffff;
   caret-color: #fff;
 
-
   &:-webkit-autofill,
   &:-webkit-autofill:hover,
   &:-webkit-autofill:focus,
@@ -185,7 +190,6 @@ const Input = styled.input`
     box-shadow: 0 0 0px 1000px transparent inset !important;
   }
 `;
-
 
 const Submit = styled.input`
   font-size: 15px;
@@ -230,4 +234,18 @@ const TwoCol = styled.div`
       text-decoration: underline;
     }
   }
+`;
+
+const GoogleContainer = styled.div`
+  width: 100%;
+  height: 50px;
+  margin-top: 15px;
+  border-radius: 30px;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(255, 255, 255, 0.2);
 `;

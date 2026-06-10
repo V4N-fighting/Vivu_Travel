@@ -15,4 +15,10 @@ export class AuthController {
   async login(@Body() loginDto: any) {
     return this.authService.login(loginDto);
   }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('google')
+  async googleLogin(@Body() googleDto: any) {
+    return this.authService.googleLogin(googleDto);
+  }
 }

@@ -11,6 +11,9 @@ declare const _default: () => {
         secret: string;
         expiresIn: string;
     };
+    google: {
+        clientId: string;
+    };
     cors: {
         origin: string;
     };

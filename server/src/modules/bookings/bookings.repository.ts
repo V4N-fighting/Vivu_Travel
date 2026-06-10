@@ -112,9 +112,16 @@ export class BookingsRepository {
 
   async findById(id: number) {
     const query = `
-      SELECT b.*, t.name as tour_name, d.departure_date 
+      SELECT b.*,
+             t.name as tour_name,
+             t.duration,
+             c.name as country_name,
+             tt.name as tour_type_name,
+             d.departure_date
       FROM bookings b
       JOIN tours t ON b.tour_id = t.id
+      LEFT JOIN countries c ON t.country_id = c.id
+      LEFT JOIN tour_types tt ON t.tour_type_id = tt.id
       JOIN tour_departure_dates d ON b.departure_date_id = d.id
       WHERE b.id = $1
     `;
@@ -122,9 +129,24 @@ export class BookingsRepository {
     const booking = bookingResult.rows[0];
 
     if (booking) {
-      const travelersQuery = 'SELECT * FROM travelers WHERE booking_id = $1';
+      const travelersQuery = `
+        SELECT *
+        FROM travelers
+        WHERE booking_id = $1
+        ORDER BY CASE WHEN type = 'adult' THEN 0 ELSE 1 END, id ASC
+      `;
       const travelersResult = await this.pool.query(travelersQuery, [id]);
       booking.travelers = travelersResult.rows;
+
+      const paymentsQuery = `
+        SELECT *
+        FROM payments
+        WHERE booking_id = $1
+        ORDER BY created_at DESC
+      `;
+      const paymentsResult = await this.pool.query(paymentsQuery, [id]);
+      booking.payments = paymentsResult.rows;
+      booking.payment = paymentsResult.rows[0] || null;
     }
 
     return booking;

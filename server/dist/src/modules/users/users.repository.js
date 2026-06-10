@@ -31,10 +31,10 @@ let UsersRepository = class UsersRepository {
         return result.rows[0];
     }
     async create(data) {
-        const { firstName, lastName, email, password, phone, role } = data;
+        const { firstName, lastName, email, password, phone, role, avatar } = data;
         const query = `
-      INSERT INTO users (first_name, last_name, email, password, phone, role, is_active)
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      INSERT INTO users (first_name, last_name, email, password, phone, avatar, role, is_active)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
       RETURNING *
     `;
         const result = await this.pool.query(query, [
@@ -43,6 +43,7 @@ let UsersRepository = class UsersRepository {
             email,
             password,
             phone,
+            avatar,
             role || 'customer',
             true
         ]);

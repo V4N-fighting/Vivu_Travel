@@ -1,9 +1,12 @@
-// src/pages/Register.tsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { register } from "../../service/authService";
+import { useDispatch } from "react-redux";
 import Icons from "../../Component/BaseComponent/Icons";
+import GoogleAuthButton from "../../Component/GoogleAuthButton";
+import { loginWithGoogle, register } from "../../service/authService";
+import { AppDispatch } from "../../app/store";
+import { setUser } from "../../features/user/userSlice";
 import config from "../../config";
 
 interface RegisterForm {
@@ -12,9 +15,8 @@ interface RegisterForm {
   email: string;
   password: string;
   rememberMe: boolean;
-  avatar: File | null; 
+  avatar: File | null;
 }
-
 
 const Register: React.FC = () => {
   const [form, setForm] = useState<RegisterForm>({
@@ -23,10 +25,11 @@ const Register: React.FC = () => {
     email: "",
     password: "",
     rememberMe: false,
-    avatar: null
+    avatar: null,
   });
 
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -46,7 +49,6 @@ const Register: React.FC = () => {
     });
   };
 
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -61,11 +63,21 @@ const Register: React.FC = () => {
         lastName: form.lastName,
         email: form.email,
         password: form.password,
-        avatar: avatarBase64, 
+        avatar: avatarBase64,
       });
 
-      alert("Đăng ký thành công!");
+      alert("Dang ky thanh cong!");
       navigate(config.routes.login);
+    } catch (err: any) {
+      alert(err.message);
+    }
+  };
+
+  const handleGoogleSuccess = async (credential: string) => {
+    try {
+      const user = await loginWithGoogle(credential);
+      dispatch(setUser(user));
+      navigate(config.routes.home);
     } catch (err: any) {
       alert(err.message);
     }
@@ -82,7 +94,7 @@ const Register: React.FC = () => {
         </Top>
         <TwoForms>
           <InputBox>
-            <Icons.UserIcon white/>
+            <Icons.UserIcon white />
             <Input
               type='text'
               name='firstName'
@@ -91,10 +103,9 @@ const Register: React.FC = () => {
               onChange={handleChange}
               required
             />
-            
           </InputBox>
           <InputBox>
-            <Icons.UserIcon white/>
+            <Icons.UserIcon white />
             <Input
               type='text'
               name='lastName'
@@ -106,7 +117,7 @@ const Register: React.FC = () => {
           </InputBox>
         </TwoForms>
         <InputBox>
-          <Icons.EnvelopeIcon white/>
+          <Icons.EnvelopeIcon white />
           <Input
             type='email'
             name='email'
@@ -115,10 +126,9 @@ const Register: React.FC = () => {
             onChange={handleChange}
             required
           />
-          
         </InputBox>
         <InputBox>
-          <Icons.LockIcon white/>
+          <Icons.LockIcon white />
           <Input
             type='password'
             name='password'
@@ -149,11 +159,16 @@ const Register: React.FC = () => {
         </InputBox>
 
         <Submit type='submit' value='Register' />
+        <GoogleContainer>
+          <GoogleAuthButton
+            text='signup_with'
+            onSuccess={handleGoogleSuccess}
+          />
+        </GoogleContainer>
         <TwoCol>
-          <div className='one'>
-          </div>
+          <div className='one'></div>
           <div className='two'>
-            <a href='#'>Terms & conditions</a>
+            <button type='button'>Terms & conditions</button>
           </div>
         </TwoCol>
       </form>
@@ -212,7 +227,6 @@ const InputBox = styled.div`
   background: rgba(255, 255, 255, 0.2);
   border-radius: 30px;
   padding: 0 10px;
-
 `;
 
 const Input = styled.input`
@@ -226,7 +240,6 @@ const Input = styled.input`
   transition: 0.2s ease;
   color: #ffffff;
   caret-color: #fff;
-
 
   &:-webkit-autofill,
   &:-webkit-autofill:hover,
@@ -271,12 +284,29 @@ const TwoCol = styled.div`
     gap: 5px;
   }
 
-  .two a {
-    text-decoration: none;
+  .two button {
+    background: transparent;
+    border: none;
+    padding: 0;
     color: #fff;
+    cursor: pointer;
 
     &:hover {
       text-decoration: underline;
     }
   }
+`;
+
+const GoogleContainer = styled.div`
+  width: 100%;
+  height: 50px;
+  margin-top: 15px;
+  border-radius: 30px;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(255, 255, 255, 0.2);
 `;

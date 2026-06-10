@@ -13,6 +13,18 @@ export declare class AuthController {
             firstName: any;
             lastName: any;
             email: any;
+            avatar: any;
+            role: any;
+        };
+    }>;
+    googleLogin(googleDto: any): Promise<{
+        access_token: string;
+        user: {
+            id: any;
+            firstName: any;
+            lastName: any;
+            email: any;
+            avatar: any;
             role: any;
         };
     }>;

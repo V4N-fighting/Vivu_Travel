@@ -6,7 +6,6 @@ import {
 import { BookingsRepository } from "./bookings.repository";
 import { CouponsRepository } from "../coupons/coupons.repository";
 import { EmailService } from "../email/email.service";
-import { ToursRepository } from "../tours/tours.repository";
 import { UsersRepository } from "../users/users.repository";
 
 @Injectable()
@@ -15,7 +14,6 @@ export class BookingsService {
     private readonly bookingsRepository: BookingsRepository,
     private readonly couponsRepository: CouponsRepository,
     private readonly emailService: EmailService,
-    private readonly toursRepository: ToursRepository,
     private readonly usersRepository: UsersRepository,
   ) {}
 
@@ -66,7 +64,7 @@ export class BookingsService {
       });
 
       // 3. Gửi email xác nhận (Chạy bất đồng bộ, không đợi để tránh làm chậm response)
-      this.sendEmailSafely(booking, bookingData.userId);
+      this.sendEmailSafely(booking.id, bookingData.userId);
 
       return {
         message: "Booking created successfully",
@@ -82,18 +80,25 @@ export class BookingsService {
     }
   }
 
-  private async sendEmailSafely(booking: any, userId: number) {
+  private async sendEmailSafely(bookingId: number, userId: number) {
     try {
-      const [tour, user] = await Promise.all([
-        this.toursRepository.findById(booking.tour_id),
+      const [booking, user] = await Promise.all([
+        this.bookingsRepository.findById(bookingId),
         this.usersRepository.findById(userId),
       ]);
 
-      if (tour && user) {
-        await this.emailService.sendBookingConfirmation(booking, tour, {
+      if (booking && user) {
+        await this.emailService.sendBookingConfirmation(booking, {
+          name: booking.tour_name,
+          duration: booking.duration,
+          country_name: booking.country_name,
+          tour_type_name: booking.tour_type_name,
+        }, {
           firstName: user.first_name,
           lastName: user.last_name,
           email: user.email,
+          phone: user.phone,
+          address: user.address,
         });
         console.log(`Email xác nhận đã gửi đến: ${user.email}`);
       }

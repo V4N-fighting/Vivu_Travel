@@ -14,14 +14,12 @@ const common_1 = require("@nestjs/common");
 const bookings_repository_1 = require("./bookings.repository");
 const coupons_repository_1 = require("../coupons/coupons.repository");
 const email_service_1 = require("../email/email.service");
-const tours_repository_1 = require("../tours/tours.repository");
 const users_repository_1 = require("../users/users.repository");
 let BookingsService = class BookingsService {
-    constructor(bookingsRepository, couponsRepository, emailService, toursRepository, usersRepository) {
+    constructor(bookingsRepository, couponsRepository, emailService, usersRepository) {
         this.bookingsRepository = bookingsRepository;
         this.couponsRepository = couponsRepository;
         this.emailService = emailService;
-        this.toursRepository = toursRepository;
         this.usersRepository = usersRepository;
     }
     async create(bookingData) {
@@ -54,7 +52,7 @@ let BookingsService = class BookingsService {
                 ...bookingData,
                 totalPrice: finalPrice,
             });
-            this.sendEmailSafely(booking, bookingData.userId);
+            this.sendEmailSafely(booking.id, bookingData.userId);
             return {
                 message: "Booking created successfully",
                 booking,
@@ -67,17 +65,24 @@ let BookingsService = class BookingsService {
             throw error;
         }
     }
-    async sendEmailSafely(booking, userId) {
+    async sendEmailSafely(bookingId, userId) {
         try {
-            const [tour, user] = await Promise.all([
-                this.toursRepository.findById(booking.tour_id),
+            const [booking, user] = await Promise.all([
+                this.bookingsRepository.findById(bookingId),
                 this.usersRepository.findById(userId),
             ]);
-            if (tour && user) {
-                await this.emailService.sendBookingConfirmation(booking, tour, {
+            if (booking && user) {
+                await this.emailService.sendBookingConfirmation(booking, {
+                    name: booking.tour_name,
+                    duration: booking.duration,
+                    country_name: booking.country_name,
+                    tour_type_name: booking.tour_type_name,
+                }, {
                     firstName: user.first_name,
                     lastName: user.last_name,
                     email: user.email,
+                    phone: user.phone,
+                    address: user.address,
                 });
                 console.log(`Email xác nhận đã gửi đến: ${user.email}`);
             }
@@ -103,7 +108,6 @@ exports.BookingsService = BookingsService = __decorate([
     __metadata("design:paramtypes", [bookings_repository_1.BookingsRepository,
         coupons_repository_1.CouponsRepository,
         email_service_1.EmailService,
-        tours_repository_1.ToursRepository,
         users_repository_1.UsersRepository])
 ], BookingsService);
 //# sourceMappingURL=bookings.service.js.map

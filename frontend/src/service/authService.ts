@@ -15,37 +15,52 @@ export interface User {
   avatarFile?: File;
 }
 
+const persistAuth = (data: any) => {
+  if (data.access_token) {
+    localStorage.setItem("token", data.access_token);
+    localStorage.setItem("user", JSON.stringify({ ...data.user, access_token: data.access_token }));
+  }
+
+  return { ...data.user, access_token: data.access_token };
+};
+
 export const register = async (user: User): Promise<void> => {
   try {
     await axios.post(`${AUTH_URL}/register`, user);
   } catch (error: any) {
     if (error.response?.status === 409) {
-      throw new Error("Email đã tồn tại");
+      throw new Error("Email da ton tai");
     }
-    throw new Error("Có lỗi xảy ra khi đăng ký");
+    throw new Error("Co loi xay ra khi dang ky");
   }
 };
 
 export const login = async (email: string, password: string): Promise<any> => {
   try {
     const res = await axios.post(`${AUTH_URL}/login`, { email, password });
-    
-    // Lưu Token vào localStorage
-    if (res.data.access_token) {
-      localStorage.setItem("token", res.data.access_token);
-      localStorage.setItem("user", JSON.stringify({ ...res.data.user, access_token: res.data.access_token }));
-    }
-    
-    return { ...res.data.user, access_token: res.data.access_token };
+    return persistAuth(res.data);
   } catch (error: any) {
     if (error.response?.status === 401) {
-      throw new Error("Sai email hoặc mật khẩu");
+      throw new Error("Sai email hoac mat khau");
     }
-    throw new Error("Có lỗi xảy ra khi đăng nhập");
+    throw new Error("Co loi xay ra khi dang nhap");
+  }
+};
+
+export const loginWithGoogle = async (credential: string): Promise<any> => {
+  try {
+    const res = await axios.post(`${AUTH_URL}/google`, { credential });
+    return persistAuth(res.data);
+  } catch (error: any) {
+    if (error.response?.status === 401) {
+      throw new Error("Khong the xac thuc tai khoan Google");
+    }
+    throw new Error("Co loi xay ra khi dang nhap bang Google");
   }
 };
 
 export const logout = () => {
   localStorage.removeItem("user");
+  localStorage.removeItem("token");
   localStorage.removeItem("rememberMe");
 };
